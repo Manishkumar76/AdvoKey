@@ -1,3 +1,4 @@
+import '../app/global.css';
 
 export default function RootLayout({
   children,
@@ -6,7 +7,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="bg-white h-full w-full"
+      <body className="h-full w-full"
       >
         {children}
       </body>
