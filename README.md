@@ -1,6 +1,3 @@
-Here’s an updated version of your `README.md` file with a more structured and detailed explanation of your project. This version includes sections for **Project Overview**, **Features**, **Installation**, **Usage**, **Environment Variables**, **Deployment**, and **Contributing**.
-
----
 
 # Next.js Project
 
@@ -148,7 +145,3 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
-
----
-
-This updated `README.md` provides a comprehensive guide for setting up, using, and contributing to your project. Let me know if you need further assistance!
