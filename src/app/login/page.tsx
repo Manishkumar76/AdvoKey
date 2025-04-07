@@ -6,6 +6,9 @@ import axios from "axios";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import toast, { Toaster } from "react-hot-toast"; // Import Toaster
+import bg_image from "../assets/images/web_bg.jpg";
+import Lottie from "lottie-react";
+import loadingAnmimation from "../assets/animation/loading.json";
 
 export default function Login() {
     const router = useRouter();
@@ -74,12 +77,14 @@ export default function Login() {
             toast.success(response.data.message); // This should work now
             console.log("Login successful", response.data);
 
-            router.push("/"); // Redirect to home page after login
+            // router.push("/"); // Redirect to home page after login
         } catch (error: any) {
             toast.error(error.response?.data?.error || "Login failed"); // This should work now
             console.error("Login error:", error.message);
+            setButtonDisabled(false);
         } finally {
             setLoading(false);
+            setButtonDisabled(true);
         }
     };
 
@@ -114,9 +119,15 @@ export default function Login() {
             <Toaster position="top-right" />
 
             {/* Animated Cursor */}
-            <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50"></div>
-            <div className="h-screen bg-gray-900 flex items-center justify-center relative">
-                <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-800 text-white shadow-blue-500">
+            <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 "></div>
+            <div className={`h-screen flex items-center justify-center relative `}>
+                <img src={bg_image.src} alt="" className="h-screen absolute w-full " />
+                {
+                    loading &&(<div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 ">
+                    <Lottie animationData={loadingAnmimation}  className="w-1/2 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                </div>)
+                }
+                <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-600 text-white shadow-blue-600 bg-opacity-30 backdrop-blur">
                     <h1 className="text-xl font-bold mb-4">Login Page</h1>
 
                     <input
@@ -152,7 +163,6 @@ export default function Login() {
                     >
                         Login
                     </button>
-
                     <div className="my-2 py-2">
                         <span>Don't have an account? </span>
                         <Link className="text-blue-400 mt-4 hover:underline" href="/signup">Sign Up</Link>

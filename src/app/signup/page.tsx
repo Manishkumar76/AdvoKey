@@ -2,11 +2,13 @@
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
-import axios from "axios";
+import axios, { formToJSON } from "axios";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
+import { json } from "stream/consumers";
+import bg_image from "../assets/images/web_bg.jpg";
 
 export default function Signup() {
     const router = useRouter();
@@ -84,12 +86,12 @@ const [loading, setLoading] = useState(false);
         try {
             setLoading(true);
             const response = await axios.post("/api/users/signup", user);
-            toast.success("Signup successful", { duration: 4000 });
+            toast.success("Signup successful", { duration: 5000 });
             console.log("Signup successful", response.data);
             
             router.push("/login"); // Redirect to login page after signup
         } catch (error:any) {
-            toast.error("Signup error", { duration: 4000 });
+            toast.error(error.message, { duration: 5000 });
             
         }
     };
@@ -108,7 +110,7 @@ const [loading, setLoading] = useState(false);
         };
         window.addEventListener('mousemove', mousemove);
         return () => window.removeEventListener('mousemove', mousemove);
-    }, []);
+    }, [mousePosition]);
 
     useGSAP(() => {
         gsap.to('.cursor', {
@@ -121,15 +123,16 @@ const [loading, setLoading] = useState(false);
 
     return (
         <div className="relative">
-              <Toaster position="top-right" />
+              <Toaster position="top-right"  />
             {/* Animated Cursor */}
             <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none"></div>
             <div className="h-screen bg-gray-900 flex items-center justify-center relative">
-                <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-800 text-white shadow-blue-500">
+            <img src={bg_image.src} alt="" className="h-screen absolute w-full " />
+                <div className="flex flex-col items-center w-96 p-6 rounded-lg bg-gray-600 text-white bg-opacity-30 backdrop-blur">
                     <h1 className="text-xl font-bold mb-4">Signup Page</h1>
 
                     <input
-                        className="w-full p-2 border border-gray-600 rounded-lg mb-4 bg-gray-700 focus:outline-none focus:border-blue-400"
+                        className="w-full p-2 border border-gray-600 rounded-lg mb-4 text-black focus:outline-none focus:border-blue-400"
                         id="username"
                         type="text"
                         placeholder="Username"
@@ -142,7 +145,7 @@ const [loading, setLoading] = useState(false);
                     )}
 
                     <input
-                        className="w-full p-2 border border-gray-600 rounded-lg mb-4 bg-gray-700 focus:outline-none focus:border-blue-400"
+                        className="w-full p-2 border border-gray-600 rounded-lg mb-4 text-black focus:outline-none focus:border-blue-400"
                         id="email"
                         type="email"
                         placeholder="Email"
@@ -155,7 +158,7 @@ const [loading, setLoading] = useState(false);
                     )}
 
                     <input
-                        className="w-full p-2 border border-gray-600 rounded-lg mb-4 bg-gray-700 focus:outline-none focus:border-blue-400"
+                        className="w-full p-2 border border-gray-600 rounded-lg mb-4 text-black focus:outline-none focus:border-blue-400"
                         id="password"
                         type="password"
                         placeholder="Password"
