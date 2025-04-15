@@ -77,14 +77,14 @@ export default function Login() {
             toast.success(response.data.message); // This should work now
             console.log("Login successful", response.data);
 
-            // router.push("/"); // Redirect to home page after login
+            router.push("/"); // Redirect to home page after login
         } catch (error: any) {
             toast.error(error.response?.data?.error || "Login failed"); // This should work now
             console.error("Login error:", error.message);
             setButtonDisabled(false);
         } finally {
             setLoading(false);
-            setButtonDisabled(true);
+            setButtonDisabled(false);
         }
     };
 

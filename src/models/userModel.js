@@ -4,12 +4,15 @@ username:{
     type:String,
     required:[true, "Please provide a username"],
     unique:true,
-},
+     },
 email:{
     type:String,
     required:[true,"Please provide a email"],
     unique:true
-},
+    },
+phone: { type: String },
+profile_image_url: { type: String },
+location_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
 password:{
     type:String,
     required:[true],
@@ -19,7 +22,8 @@ isAdmin:{
     type:Boolean,
     default:false
 },
-role:['user'],
+role:{
+    type:String, enum:['Client','Lawyer','Admin'],default:'Client'},
 isverify:{
     type:Boolean,
     default:false

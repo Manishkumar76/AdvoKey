@@ -1,29 +1,35 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
- 
-// This function can be marked `async` if using `await` inside
+
 export function middleware(request: NextRequest) {
-    const path= request.nextUrl.pathname;
+    const path = request.nextUrl.pathname;
 
-  const isPublicPath= path === '/login' || path === '/signup';
-    
-    const token = request.cookies.get('token')?.value|| '';
+    // Include '/' in public paths
+    const isPublicPath = path === '/login' || path === '/signup' || path === '/';
 
+    const token = request.cookies.get('token')?.value || '';
+
+    // Redirect to login if trying to access private route without token
     if (!token && !isPublicPath) {
-        return NextResponse.redirect(new URL('/login', request.nextUrl))
+        return NextResponse.redirect(new URL('/login', request.nextUrl));
     }
-    if (token && isPublicPath) {
-        return NextResponse.redirect(new URL('/', request.nextUrl)) 
+
+    // Redirect to dashboard if token exists and user is trying to access a public path
+    if (token && (path === '/login' || path === '/signup')) {
+        return NextResponse.next();
     }
+
+    // Let the request through
+    return NextResponse.next();
 }
- 
-// See "Matching Paths" below to learn more
+
 export const config = {
-  matcher: [
-    '/',
-    '/profile',
-    '/login',
-    '/signup',
-    
-  ],
-}
+    matcher: [
+        '/',
+        '/profile',
+        '/login',
+        '/signup',
+        '/dashboard',
+        '/api/socket/io'
+    ],
+};

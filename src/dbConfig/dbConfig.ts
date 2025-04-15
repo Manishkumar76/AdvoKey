@@ -24,21 +24,9 @@ export async function connect() {
             process.exit(1); // Exit with failure
         });
 
-        // Log disconnection events
-        connection.on("disconnected", () => {
-            console.warn("MongoDB disconnected");
-        });
-
-        // Log when the connection is reestablished
-        connection.on("reconnected", () => {
-            console.log("MongoDB reconnected");
-        });
 
     } catch (err) {
         console.error("Failed to connect to MongoDB:", err);
-        return err;
-        process.exit(1); // Exit with failure
-        
-       
+        return err; 
     }
 }

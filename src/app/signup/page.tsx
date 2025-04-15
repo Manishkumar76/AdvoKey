@@ -9,6 +9,9 @@ import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import { json } from "stream/consumers";
 import bg_image from "../assets/images/web_bg.jpg";
+import Lottie from "lottie-react";
+import loadingAnmimation from "../assets/animation/loading.json";
+
 
 export default function Signup() {
     const router = useRouter();
@@ -91,8 +94,11 @@ const [loading, setLoading] = useState(false);
             
             router.push("/login"); // Redirect to login page after signup
         } catch (error:any) {
-            toast.error(error.message, { duration: 5000 });
+            toast.error(error.error.message, { duration: 5000 });
             
+        }finally {
+            setLoading(false);
+            setButtonDisabled(true);
         }
     };
 
@@ -128,6 +134,11 @@ const [loading, setLoading] = useState(false);
             <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none"></div>
             <div className="h-screen bg-gray-900 flex items-center justify-center relative">
             <img src={bg_image.src} alt="" className="h-screen absolute w-full " />
+            {
+                    loading &&(<div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 ">
+                    <Lottie animationData={loadingAnmimation}  className="w-1/2 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
+                </div>)
+                }
                 <div className="flex flex-col items-center w-96 p-6 rounded-lg bg-gray-600 text-white bg-opacity-30 backdrop-blur">
                     <h1 className="text-xl font-bold mb-4">Signup Page</h1>
 

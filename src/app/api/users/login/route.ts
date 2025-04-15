@@ -26,22 +26,24 @@ try{
     //create token data
     const tokenData={
         id:user._id,
-        email:user.email
+        email:user.email,
+        userType:user.role
     };
-
-    //create token
-   const token = await jwt.sign(tokenData,process.env.TOKEN_SECRET!,{
-    expiresIn:'1d'})
-
-    const response= NextResponse.json({
-        message:"Login Success!",
-        status:200,
-        success:true  
-    })
-   
-    response.cookies.set("token",token,{
-        httpOnly:true,
-    })
+    
+      const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
+        expiresIn: '1d',
+      });
+    
+      const response = NextResponse.json({
+        message: 'Login Success!',
+        status: 200,
+        success: true,
+      });
+    
+      response.cookies.set('token', token, {
+        httpOnly: true 
+      });
+    
     return response; 
 }
 catch(err:any){

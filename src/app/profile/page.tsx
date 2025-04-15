@@ -19,7 +19,7 @@ const [userData,setUserData]=useState();
             profile Page
             <div>
                 <h1>User Details</h1>
-                <h3>User ID: <Link href={`/profile/${userData}`}></Link></h3>
+                <h3>User ID: <Link href={``}> id</Link></h3>
             </div>
             <button onClick={getUserData} >Get user's Details</button>
         </div>
