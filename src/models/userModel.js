@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { stringifyError } from "next/dist/shared/lib/utils";
 const userSchema= new mongoose.Schema({
 username:{
     type:String,
@@ -13,6 +14,8 @@ email:{
 phone: { type: String },
 profile_image_url: { type: String },
 location_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
+fullName:String,
+age:Number,
 password:{
     type:String,
     required:[true],

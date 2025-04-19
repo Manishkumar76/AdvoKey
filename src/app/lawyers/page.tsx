@@ -6,34 +6,9 @@ import 'aos/dist/aos.css';
 import FilterPanel, { FilterOptions } from '@/app/components/core/lawyers_page/FilterPanel';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-
-interface Lawyer {
-  _id: string;
-  specialization: string;
-  rating: number;
-  availability: string;
-  years_of_experience: number;
-  location?: {
-    city: string;
-    state: string;
-    country: string;
-  };
-  user: {
-    username: string;
-    email: string;
-    phone: string;
-    role: string;
-    profile_image_url: string;
-    isverify: boolean;
-  };
-}
-
-interface Location {
-  _id: string;
-  city: string;
-  state: string;
-  country: string;
-}
+import { Lawyer } from '@/helpers/interfaces/lawyer';
+import Lottie from "lottie-react";
+import loadingAnimation from '@/app/assets/animation/page_loading.json';
 
 const defaultFilters: FilterOptions = {
   specialization: '',
@@ -44,7 +19,7 @@ const defaultFilters: FilterOptions = {
 };
 
 const LawyersPage: React.FC = () => {
-  const router = new useRouter();
+  const router = useRouter();
   const [filters, setFilters] = useState<FilterOptions>(defaultFilters);
   const [searchTerm, setSearchTerm] = useState('');
   const [lawyers, setLawyers] = useState<Lawyer[]>([]);
@@ -98,6 +73,22 @@ const LawyersPage: React.FC = () => {
     setFilters(defaultFilters);
     setSearchTerm('');
   };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-black pt-20">
+        <Lottie animationData={loadingAnimation} loop />
+      </div>
+    );
+  }
+
+  if (error || !lawyers) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-black">
+        <p className="text-red-500 text-lg">{error || 'Lawyer not found'}</p>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-black p-6">

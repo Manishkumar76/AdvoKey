@@ -2,7 +2,7 @@ import "./global.css";
 import { Inter } from "next/font/google";
 import NavbarWrapper from "@/app/components/core/Navbar/NavbarWrapper";
 import type { Metadata } from "next";
-import Footer from "./components/core/footer";
+import FooterWrap from "./components/core/Footer/footer_wrap";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +21,7 @@ export default function RootLayout({
       <body className={`${inter.className} bg-gray-900`}>
         <NavbarWrapper />
         <main className="min-h-[calc(100vh-160px)] pt-18">{children}</main>
-        <Footer />
+        <FooterWrap />
       </body>
     </html>
   );

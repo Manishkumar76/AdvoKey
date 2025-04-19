@@ -4,6 +4,8 @@ import { useEffect } from 'react';
 import Image from 'next/image';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import Link from 'next/link';
+import AdvoKey_Logo from '@/app/assets/images/Advokey.png';
 
 export default function Footer() {
   useEffect(() => {
@@ -17,16 +19,15 @@ export default function Footer() {
         className="container mx-auto flex flex-col items-center justify-between px-6 space-y-6 sm:space-y-0 sm:flex-row"
       >
         {/* Logo */}
-        <a href="#" className="hover:opacity-80 transition">
+        <Link href="/" className="flex items-center gap-2">
           <Image
-            src="https://merakiui.com/images/full-logo.svg"
-            alt="Logo"
-            width={140}
-            height={28}
+            src={AdvoKey_Logo}
+            alt="AdvoKey Logo"
+            className="h-10 w-auto drop-shadow-lg shadow-white"
             priority
-            className="invert"
           />
-        </a>
+
+        </Link>
 
         {/* Copyright */}
         <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} All Rights Reserved.</p>

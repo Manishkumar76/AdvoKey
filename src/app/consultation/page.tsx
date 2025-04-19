@@ -1,4 +1,6 @@
 'use client';
+import { getDataFromToken } from '@/helpers/getDataFromToken';
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 
 export default function BookConsultation() {
@@ -14,7 +16,7 @@ export default function BookConsultation() {
   useEffect(() => {
     const fetchLawyers = async () => {
       try {
-        const res = await fetch('/api/lawyers/index');
+        const res = await fetch('/api/lawyers');
         const data = await res.json();
         setLawyers(data);
       } catch (error) {
@@ -33,25 +35,23 @@ export default function BookConsultation() {
 
     setLoading(true);
     try {
-      const res = await fetch('/api/consultations/index', {
-        method: 'POST',
+      const res = await axios.post('/api/consultations', {
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          ...form,
-          client: '64fe3e5ec2b23ff6451fbf63', // TODO: Replace with real user from session or context
+          ...form
         }),
       });
 
-      if (res.ok) {
+      if (res.data) {
         alert('✅ Consultation booked!');
         setForm({ lawyer: '', scheduledAt: '', durationMinutes: '', notes: '' });
       } else {
-        const err = await res.json();
-        alert(`❌ Failed: ${err.error || 'Unknown error'}`);
+       
+        alert(`❌ Failed: ${'Unknown error'}`);
       }
-    } catch (error) {
+    } catch (error:any) {
       console.error('Booking error:', error);
       alert('❌ Something went wrong.');
     } finally {
@@ -61,9 +61,9 @@ export default function BookConsultation() {
 
   return (
     <div className="p-6 max-w-xl mx-auto">
-      <h1 className="text-2xl mb-4 font-semibold">Book a Consultation</h1>
+      <h1 className=" text-white text-2xl mb-4 font-semibold">Book a Consultation</h1>
 
-      <label className="block mb-1 font-medium">Select Lawyer</label>
+      <label className="text-white block mb-1 font-medium">Select Lawyer</label>
       <select
         className="w-full p-2 mb-3 border rounded"
         value={form.lawyer}
@@ -72,12 +72,12 @@ export default function BookConsultation() {
         <option value="">-- Choose a Lawyer --</option>
         {lawyers.map(l => (
           <option key={l._id} value={l._id}>
-            {l?.user?.fullName || 'Unnamed Lawyer'}
+            {l?.user?.username || 'Unnamed Lawyer'}
           </option>
         ))}
       </select>
 
-      <label className="block mb-1 font-medium">Date & Time</label>
+      <label className="text-white block mb-1 font-medium">Date & Time</label>
       <input
         type="datetime-local"
         className="w-full p-2 mb-3 border rounded"
@@ -85,7 +85,7 @@ export default function BookConsultation() {
         onChange={e => setForm({ ...form, scheduledAt: e.target.value })}
       />
 
-      <label className="block mb-1 font-medium">Duration (minutes)</label>
+      <label className="text-white block mb-1 font-medium">Duration (minutes)</label>
       <input
         type="number"
         className="w-full p-2 mb-3 border rounded"
@@ -94,7 +94,7 @@ export default function BookConsultation() {
         onChange={e => setForm({ ...form, durationMinutes: e.target.value })}
       />
 
-      <label className="block mb-1 font-medium">Notes (Optional)</label>
+      <label className=" text-white block mb-1 font-medium">Notes (Optional)</label>
       <textarea
         className="w-full p-2 mb-3 border rounded"
         placeholder="Anything specific you want to discuss?"

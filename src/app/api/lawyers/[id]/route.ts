@@ -11,7 +11,7 @@ export async function GET(
   await connect();
 
   try {
-    const { id } = context.params;
+    const { id } = await context.params;
     const lawyer = await LawyerProfile.findById(id).populate('user');
 
     if (!lawyer) {

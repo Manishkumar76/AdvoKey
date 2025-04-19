@@ -6,32 +6,14 @@ import toast from 'react-hot-toast';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import axios from 'axios';
-import Lottie from 'lottie-react';
+import Lottie from "lottie-react";
 import loadingAnimation from '@/app/assets/animation/page_loading.json';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
+import lawyer_vector from '@/app/assets/images/lawyer_vector.jpeg';
+import { Lawyer } from '@/helpers/interfaces/lawyer';
 
-export interface Lawyer {
-  _id: string;
-  specialization: string;
-  rating: number;
-  bio: string;
-  availability: string;
-  years_of_experience: number;
-  location?: {
-    city: string;
-    state: string;
-    country: string;
-  };
-  user: {
-    username: string;
-    email: string;
-    phone: string;
-    role: string;
-    profile_image_url: string;
-    isverify: boolean;
-  };
-}
+
 
 export default function LawyerProfile() {
   const { id } = useParams<{ id: string }>();
@@ -97,13 +79,13 @@ export default function LawyerProfile() {
         {/* Profile Header */}
         <div className="flex flex-col md:flex-row items-center mb-8">
           <img
-            src={lawyer.user.profile_image_url || '/default-profile.png'}
+            src={lawyer.user.profile_image_url || lawyer_vector.toString()}
             alt={`${lawyer.user.username}'s profile`}
             className="w-32 h-32 rounded-full border-4 border-blue-500 shadow-lg"
           />
           <div className="md:ml-6 mt-4 md:mt-0 text-center md:text-left">
             <h1 className="text-3xl font-bold">{lawyer.user.username}</h1>
-            {lawyer.user.isverify && (
+            {lawyer.isverify && (
               <span className="text-green-500 font-semibold">✅ Verified Lawyer</span>
             )}
             <p className="mt-2 text-gray-400">{lawyer.specialization}</p>

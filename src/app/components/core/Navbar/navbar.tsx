@@ -7,14 +7,9 @@ import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
 import AdvoKey_Logo from '@/app/assets/images/Advokey.png';
-import UserDropdown from './profile_menu';
+import UserDropdown from './drop_down';
 
-
-interface User {
-  username: string;
-  email?: string;
-  role?: string;
-}
+import { User } from '@/helpers/interfaces/user';
 
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
@@ -48,8 +43,8 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-white/10">
-      <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center text-white">
+    <header className=" fixed top-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-white/10 border-1 rounded-bl-xl rounded-br-xl">
+      <nav className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center text-white ">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <Image
@@ -70,7 +65,7 @@ export default function Navbar() {
           {user ? (
             <>
               <UserDropdown
-                user={{ username: user.username, avatar: 'https://i.pravatar.cc/150?img=3' }}
+                user={{id:user._id, username: user.username, avatar: user.profile_image_url }}
                 handleLogout={() => handleLogout()}
               />
 

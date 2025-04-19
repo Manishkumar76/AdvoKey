@@ -8,11 +8,8 @@ connect();
 
 export async function GET(request: NextRequest) {
   try {
-    const token = request.cookies.get("token")?.value;
-    if (!token) {
-      return NextResponse.json({ message: "Unauthorized: No token" }, { status: 401 });
-    }
-    const userId = await getDataFromToken(token);
+    
+    const userId = await getDataFromToken();
     const user = await User.findOne({ _id: userId }).select("-password");
     if (!user) {
       return NextResponse.json({ message: "User not found" }, { status: 404 });
@@ -25,3 +22,5 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ message: error.message || "Unauthorized" }, { status: 401 });
   }
 }
+
+
