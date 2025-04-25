@@ -1,5 +1,6 @@
 // File: src/app/consultation/[id]/page.tsx
 
+import axios from 'axios';
 import { notFound } from 'next/navigation';
 
 interface Params {
@@ -9,15 +10,13 @@ interface Params {
 }
 
 export default async function ConsultationPage({ params }: Params) {
-  const res = await fetch(`./api/consultations/${params.id}`, {
-    cache: 'no-store',
-  });
+  const res = await axios.get(`/api/consultations/${params.id}`);
 
-  if (!res.ok) {
+  if (!res) {
     notFound(); // or show an error page
   }
 
-  const consultation = await res.json();
+  const consultation = await res.data;
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-6">

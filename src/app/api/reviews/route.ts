@@ -5,7 +5,7 @@ import Review from '@/models/Review';
 export async function GET() {
   await connect();
   try {
-    const reviews = await Review.find().populate('client_id').populate('lawyer_id').populate('consultation_id');
+    const reviews = await Review.find().populate('client_id').populate('lawyer_id');
     return NextResponse.json(reviews);
   } catch (error:any) {
     return NextResponse.json({ error: error.message }, { status: 500 });

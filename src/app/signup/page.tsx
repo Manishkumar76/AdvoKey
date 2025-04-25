@@ -94,7 +94,7 @@ const [loading, setLoading] = useState(false);
             
             router.push("/login"); // Redirect to login page after signup
         } catch (error:any) {
-            toast.error(error.error.message, { duration: 5000 });
+            toast.error(error.response?.data?.error , { duration: 5000 });
             
         }finally {
             setLoading(false);
@@ -128,10 +128,10 @@ const [loading, setLoading] = useState(false);
     }, [mousePosition]);
 
     return (
-        <div className="relative">
+        <div className="relative min-h-screen ">
               <Toaster position="top-right"  />
             {/* Animated Cursor */}
-            <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none"></div>
+            <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none "></div>
             <div className="h-screen bg-gray-900 flex items-center justify-center relative">
             <img src={bg_image.src} alt="" className="h-screen absolute w-full " />
             {

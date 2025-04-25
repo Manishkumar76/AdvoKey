@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
+import Lottie from "lottie-react";
+import loadingAnimation from '@/app/assets/animation/page_loading.json';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -146,7 +148,13 @@ export default function SettingsPage() {
     }
   };
 
-  if (loading) return <div className="text-white p-6">Loading...</div>;
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-900 pt-20">
+        <Lottie animationData={loadingAnimation} loop />
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen p-10 text-white bg-gray-900 space-y-10">
@@ -242,7 +250,7 @@ export default function SettingsPage() {
 
       {/* 🔔 Modal for Delete Confirmation */}
       {showDeleteModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+        <div className="fixed min-h-screen inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
           <div className="bg-white rounded-lg p-6 text-black w-full max-w-sm">
             <h3 className="text-xl font-semibold mb-4">Are you sure?</h3>
             <p className="mb-6">This will permanently delete your account.</p>

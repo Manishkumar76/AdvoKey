@@ -1,4 +1,3 @@
-// src/app/chat/[chatId]/page.tsx
 'use client'
 
 import { JSX, useEffect, useState } from 'react'
@@ -8,54 +7,52 @@ import { Message } from '@/helpers/interfaces/message'
 import axios from 'axios'
 
 export default function ChatPage(): JSX.Element {
-  const { chatId } = useParams<{ chatId: string }>()
-  const socket = useSocket()
-  const [messages, setMessages] = useState<Message[]>([])
-  const [newMessage, setNewMessage] = useState<string>('')
+  const { chatId } = useParams() as { chatId: string };
+  const socket = useSocket();
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [newMessage, setNewMessage] = useState<string>('');
 
   useEffect(() => {
-    if (!socket || !chatId) return
+    if (!socket || !chatId) return;
 
-    socket.emit('joinRoom', { chatId })
+    socket.emit('joinRoom', { chatId });
 
     const handleReceiveMessage = (message: Message) => {
-      setMessages((prev) => [...prev, message])
-    }
+      setMessages((prev) => [...prev, message]);
+    };
 
-    socket.on('receiveMessage', handleReceiveMessage)
+    socket.on('receiveMessage', handleReceiveMessage);
 
     return () => {
-      socket.off('receiveMessage', handleReceiveMessage)
-    }
-  }, [socket, chatId])
+      socket.off('receiveMessage', handleReceiveMessage);
+    };
+  }, [socket, chatId]);
 
   const sendMessage = async () => {
-    if (!newMessage.trim()) return
+    if (!newMessage.trim()) return;
 
     const message: Message = {
-      senderId: 'clientId123', // Replace with dynamic session ID
-      receiverId: 'lawyerId456', // Replace with dynamic target
+      senderId: 'clientId123',
+      receiverId: 'lawyerId456',
       chatId,
       text: newMessage,
       timestamp: new Date().toISOString(),
-    }
+    };
 
-    socket?.emit('sendMessage', message)
+    socket?.emit('sendMessage', message);
 
     try {
-      await axios.post('/api/messages', message)
-      setMessages((prev) => [...prev, message])
-      setNewMessage('')
+      await axios.post('/api/messages', message);
+      setMessages((prev) => [...prev, message]);
+      setNewMessage('');
     } catch (error) {
-      console.error('Failed to send message:', error)
+      console.error('Failed to send message:', error);
     }
-  }
+  };
 
   return (
     <div className="flex h-screen">
-      <aside className="w-1/4 p-4 border-r hidden md:block">
-        Chat List
-      </aside>
+      <aside className="w-1/4 p-4 border-r hidden md:block">Chat List</aside>
 
       <main className="flex-1 p-4 flex flex-col">
         <div className="flex-1 overflow-y-auto space-y-2">
@@ -89,5 +86,5 @@ export default function ChatPage(): JSX.Element {
         </div>
       </main>
     </div>
-  )
+  );
 }

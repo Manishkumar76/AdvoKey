@@ -3,6 +3,8 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import ConsultationCharts from './insights';
+import Lottie from "lottie-react";
+import loadingAnimation from '@/app/assets/animation/page_loading.json';
 
 export default function DashboardPage() {
   const [consultations, setConsultations] = useState([]);
@@ -23,6 +25,14 @@ export default function DashboardPage() {
     fetchConsultations();
   }, []);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen bg-gray-900 pt-20">
+        <Lottie animationData={loadingAnimation} loop />
+      </div>
+    );
+  }
+
   return (
     <div className="flex-col p-6 min-w-screen min-h-screen text-white mx-auto pt-20 bg-gray-900 gap-y-4">
        <h1 className="text-3xl font-bold mb-6">📊 Consultation Insights</h1>
@@ -32,8 +42,11 @@ export default function DashboardPage() {
       <h1 className="text-3xl font-bold mb-6">🗓️ My Consultations</h1>
 
       {loading ? (
-
-        <div className=''>loading...</div>
+      
+        <div className="flex items-center justify-center h-screen bg-black pt-20">
+          <Lottie animationData={loadingAnimation} loop />
+        </div>
+      
       ):( consultations.length === 0?  
         <div className=''>Not found any consultation</div>:
        <div className="container p-2 mx-auto sm:p-4 dark:text-gray-800">

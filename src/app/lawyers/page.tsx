@@ -59,9 +59,9 @@ const LawyersPage: React.FC = () => {
         (!filters.availability || lawyer.availability === filters.availability) &&
         (!filters.experience || lawyer.years_of_experience >= filters.experience) &&
         (!filters.location ||
-          (lawyer.location?.city.toLowerCase().includes(filters.location.toLowerCase()) ||
-            lawyer.location?.state.toLowerCase().includes(filters.location.toLowerCase()) ||
-            lawyer.location?.country.toLowerCase().includes(filters.location.toLowerCase()))) &&
+          (lawyer.user.location?.city.toLowerCase().includes(filters.location.toLowerCase()) ||
+            lawyer.user.location?.state.toLowerCase().includes(filters.location.toLowerCase()) ||
+            lawyer.user.location?.country.toLowerCase().includes(filters.location.toLowerCase()))) &&
         (!searchTerm || lawyer.user.username.toLowerCase().includes(searchTerm.toLowerCase())) // Fixed here
       );
     });
@@ -91,7 +91,7 @@ const LawyersPage: React.FC = () => {
   }
 
   return (
-    <div className="min-h-screen bg-black p-6">
+    <div className="min-h-screen bg-gray-900 p-6 pt-20">
       <h1 className="text-3xl font-bold mb-6 text-center text-white">Find Lawyers</h1>
 
       {/* Search Input */}
@@ -126,27 +126,27 @@ const LawyersPage: React.FC = () => {
                 router.push(`/lawyers/${lawyer._id}`); // Use Next.js router for navigation
               }}
                 key={index}
-                className="flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gray-900/70 border border-gray-700 p-6 rounded-xl shadow-xl transition-all duration-300 transform hover:scale-[1.03] hover:border-purple-500"
+                className="flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gray-800/70 border border-gray-700 p-6 rounded-xl shadow-xl transition-all duration-300 delay-200 ease-in-out  transform hover:scale-[1.03] hover:border-gray-500"
                 data-aos="fade-up"
               >
                 {/* Lawyer Image */}
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-purple-500 flex-shrink-0">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-gray-700 flex-shrink-0">
                   <img
-                    src={lawyer.user.profile_image_url || '../assets/images/Vector-Lawyer.png'}
+                    src={lawyer?.user.profile_image_url || '/lawyer_vector.jpeg'}
                     alt={lawyer.user.username}
                     className="w-full h-full object-cover"
                   />
                 </div>
 
                 {/* Lawyer Info */}
-                <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-2xl font-bold text-purple-400">{lawyer.user.username}</h3>
+                <div className="flex-1 text-center md:text-left ">
+                  <h3 className="text-2xl font-bold text-blue-500">{lawyer.user.username}</h3>
                   <p className="text-sm mt-2">📘 Specialization: {lawyer.specialization}</p>
                   <p className="text-sm">⭐ Rating: {lawyer.rating}</p>
                   <p className="text-sm">📅 Availability: {lawyer.availability}</p>
                   <p className="text-sm">⏳ Experience: {lawyer.years_of_experience} years</p>
                   <p className="text-sm">
-                    📍 Location: {lawyer.location?.city || 'N/A'}, {lawyer.location?.state || 'N/A'}, {lawyer.location?.country || 'N/A'}
+                    📍 Location: {lawyer.user.location?.city || 'N/A'}, {lawyer.user.location?.state || 'N/A'}, {lawyer.user.location?.country || 'N/A'}
                   </p>
                   <p className="text-sm">📧 Email: {lawyer.user.email}</p>
                   <p className="text-sm">📱 Phone: {lawyer.user.phone}</p>

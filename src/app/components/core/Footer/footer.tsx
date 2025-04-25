@@ -29,6 +29,8 @@ export default function Footer() {
 
         </Link>
 
+          <Link href='/admin/login' className="text-sm text-gray-400 hover:text-white transition duration-200">Are You Admin?</Link>
+
         {/* Copyright */}
         <p className="text-sm text-gray-400">&copy; {new Date().getFullYear()} All Rights Reserved.</p>
 

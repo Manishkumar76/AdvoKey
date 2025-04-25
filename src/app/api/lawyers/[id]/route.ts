@@ -33,7 +33,7 @@ export async function PUT(
   ) {
     await connect();
     try {
-      const { id } = context.params;
+      const { id } = await context.params;
       const body = await req.json();
       const updated = await LawyerProfile.findByIdAndUpdate(id, body, { new: true });
   
@@ -54,7 +54,7 @@ export async function PUT(
   ) {
     await connect();
     try {
-      const { id } = context.params;
+      const { id } = await context.params;
       const deleted = await LawyerProfile.findByIdAndDelete(id);
   
       if (!deleted) {

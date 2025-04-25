@@ -75,12 +75,12 @@ export default function Login() {
             setLoading(true);
             const response = await axios.post("/api/users/login", user);
             toast.success(response.data.message); // This should work now
-            console.log("Login successful", response.data);
+            // console.log("Login successful", response.data);
 
             router.push("/"); // Redirect to home page after login
         } catch (error: any) {
             toast.error(error.response?.data?.error || "Login failed"); // This should work now
-            console.error("Login error:", error.message);
+            // console.error("Login error:", error.message);
             setButtonDisabled(false);
         } finally {
             setLoading(false);

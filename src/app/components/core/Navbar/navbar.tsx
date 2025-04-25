@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
-import AdvoKey_Logo from '@/app/assets/images/Advokey.png';
+import AdvoKey_Logo from '@/app/assets/images/Logo.png';
 import UserDropdown from './drop_down';
 
 import { User } from '@/helpers/interfaces/user';
@@ -50,7 +50,7 @@ export default function Navbar() {
           <Image
             src={AdvoKey_Logo}
             alt="AdvoKey Logo"
-            className="h-10 w-auto drop-shadow-lg shadow-white"
+            className="h-10 w-auto   drop-shadow-cyan-500/50"
             priority
           />
 

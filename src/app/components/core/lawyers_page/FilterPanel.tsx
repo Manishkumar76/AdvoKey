@@ -50,7 +50,7 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
       {/* Toggle Button */}
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="fixed top-4 left-4 z-50 bg-blue-600 text-white p-2 rounded-full shadow-lg md:hidden"
+        className="fixed top-20 left-4 z-50 bg-gray-600 text-white p-2 rounded-full shadow-lg md:hidden"
       >
         {isOpen ? <FaTimes /> : <FaFilter />}
       </button>
@@ -58,20 +58,20 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
       {/* Sidebar */}
       <div
         className={clsx(
-          "fixed top-0 left-0 h-full bg-white shadow-2xl p-6 w-72 transform transition-transform duration-300 z-40 overflow-y-auto",
+          "fixed top-20 bg-gray-900 text-white left-0 h-full shadow-2xl p-6 w-72 transform transition-transform duration-300 z-40 overflow-y-auto ",
           isOpen ? "translate-x-0" : "-translate-x-full",
-          "md:relative md:translate-x-0 md:block md:w-72 md:h-auto md:shadow-none md:bg-transparent"
+          "md:relative md:translate-x-0 md:block md:w-72 md:h-auto md:shadow-none md:bg-gray-900 md:text-white md:top-0"
         )}
       >
         <div className="space-y-6">
-          <h2 className="text-lg font-bold text-gray-800 flex items-center gap-2">
+          <h2 className="text-lg font-bold flex items-center gap-2">
             <FaFilter className="text-blue-600" />
             Filters
           </h2>
 
           {/* Specialization */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-1 text-gray-700">
+            <label className="flex items-center gap-2 text-sm font-medium mb-1 ">
               <FaSearch /> Specialization
             </label>
             <input
@@ -84,7 +84,7 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
 
           {/* Minimum Rating */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-1 text-gray-700">
+            <label className="flex items-center gap-2 text-sm font-medium mb-1 ">
               <FaStar /> Minimum Rating
             </label>
             <input
@@ -99,7 +99,7 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
 
           {/* Availability */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-1 text-gray-700">
+            <label className="flex items-center gap-2 text-sm font-medium mb-1 ">
               <FaClock /> Availability
             </label>
             <select
@@ -115,7 +115,7 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
 
           {/* Experience */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-1 text-gray-700">
+            <label className="flex items-center gap-2 text-sm font-medium mb-1 ">
               <FaBriefcase /> Years of Experience
             </label>
             <input
@@ -129,7 +129,7 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
 
           {/* Location */}
           <div>
-            <label className="flex items-center gap-2 text-sm font-medium mb-1 text-gray-700">
+            <label className="flex items-center gap-2 text-sm font-medium mb-1 ">
               <FaMapMarkerAlt /> Location
             </label>
             <select
