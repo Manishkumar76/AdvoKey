@@ -30,16 +30,16 @@ const dashboardData = [
   },
 ];
 
-interface ChartDataPoint {
-  date: string;
-  count: number;
-}
+// interface ChartDataPoint {
+//   date: string;
+//   count: number;
+// }
 
-interface DashboardPageProps {
-  data: ChartDataPoint[];
-}
+// interface DashboardPageProps {
+//   data: ChartDataPoint[];
+// }
 
-export default function DashboardPage({ data }: DashboardPageProps) {
+export default function DashboardPage() {
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-6 text-gray-800">Admin Dashboard</h1>
@@ -68,15 +68,15 @@ export default function DashboardPage({ data }: DashboardPageProps) {
       <Card className="shadow-md rounded-2xl border border-gray-100">
         <CardContent className="p-6">
           <h2 className="text-lg font-semibold mb-4">Consultations Over Time</h2>
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data}>
+          {/* <ResponsiveContainer width="100%" height={300}>
+             <LineChart data={data}> 
               <Line type="monotone" dataKey="count" stroke="#2563eb" strokeWidth={2} />
               <CartesianGrid stroke="#ccc" />
               <XAxis dataKey="date" />
               <YAxis allowDecimals={false} />
               <Tooltip />
             </LineChart>
-          </ResponsiveContainer>
+          </ResponsiveContainer> */}
         </CardContent>
       </Card>
     </div>
