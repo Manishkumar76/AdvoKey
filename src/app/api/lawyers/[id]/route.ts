@@ -2,6 +2,7 @@
 
 import { connect } from '@/dbConfig/dbConfig';
 import LawyerProfile from '@/models/LawyerProfile';
+import exp from 'constants';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(
@@ -27,6 +28,9 @@ export async function GET(
     );
   }
 }
+
+
+
 export async function PUT(
     req: NextRequest,
     context: { params: { id: string } }

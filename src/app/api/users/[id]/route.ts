@@ -5,12 +5,12 @@ import { NextRequest, NextResponse } from "next/server";
 // GET user by ID
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }  // ✅ correct destructuring
+  context: { params: { id: string } }
 ) {
   try {
     await connect();
 
-    const userId = params.id; // ✅ this is safe and synchronous
+    const userId = await context.params.id;
 
     const user = await User.findById(userId).select("-password");
 
@@ -30,12 +30,12 @@ export async function GET(
 // PUT update user by ID
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } }
+   params : { params: { id: string } }
 ) {
   try {
     await connect();
 
-    const userId = params.id;
+    const userId = params.params.id;
     const body = await req.json();
 
     const updatedUser = await User.findByIdAndUpdate(
@@ -57,12 +57,12 @@ export async function PUT(
 // DELETE user by ID
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { id: string } }
+   params : { params: { id: string } }
 ) {
   try {
     await connect();
 
-    const userId = await params.id;
+    const userId = params.params.id;
     await User.findByIdAndDelete(userId);
 
     return NextResponse.json({ message: "User deleted successfully" });

@@ -14,6 +14,7 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET!,
 });
 
+
 // Disable body parser
 export const config = {
   api: {
@@ -21,11 +22,11 @@ export const config = {
   },
 };
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest,  params : { params: { id: string } }) {
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File;
-
+    const userId =   params.params.id;
     if (!file) {
       return NextResponse.json({ message: 'No file uploaded' }, { status: 400 });
     }
@@ -38,8 +39,9 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     await writeFile(tempFilePath, buffer);
 
     const result = await cloudinary.uploader.upload(tempFilePath, {
+      resource_type: 'image',
       folder: 'profile_pictures',
-      public_id: `user_${params.id}`,
+      public_id: `user_${userId}`,
       overwrite: true,
     });
 
@@ -47,11 +49,12 @@ export async function POST(req: NextRequest, { params }: { params: { id: string 
     fs.unlinkSync(tempFilePath);
 
     //update user profile picture in database
-    const userId = await params.id;
+    
     // Assuming you have a User model and a function to update the user
-    const Response = await User.findByIdAndUpdate(userId, { profile_img_url: result.secure_url.toString() });
+    const Response = await User.findByIdAndUpdate(userId, { profile_image_url: result.secure_url.toString() });
 
-    return NextResponse.json({url:Response.profile_image_url}, { status: 200 });
+    return NextResponse.json({ url: Response.profile_image_url }, { status: 200 });
+
   } catch (error) {
     console.error('Upload failed:', error);
     return NextResponse.json({ message: 'Upload failed' }, { status: 500 });

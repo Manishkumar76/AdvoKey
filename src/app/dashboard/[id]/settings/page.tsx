@@ -34,7 +34,6 @@ export default function SettingsPage() {
           axios.get('/api/location'),
         ]);
         const user = userRes.data;
-        setProfilePicPreview(await user.profile_image_url);
         setForm({
           fullName: user.username || '',
           age: user.age || '',
@@ -172,9 +171,9 @@ export default function SettingsPage() {
               </div>
             ) : (
               <img
-                src={profilePicPreview || 'https://via.placeholder.com/150'}
+                src={form!.profilePic.toString() || profilePicPreview! }
                 onError={(e) => {
-                  (e.target as HTMLImageElement).src = 'https://via.placeholder.com/150';
+                  (e.target as HTMLImageElement).src = '/user.jpg';
                 }}
                 className="w-40 h-40 object-cover rounded-full border-4 border-gray-700 transition-transform duration-300 group-hover:scale-105 shadow-lg"
               />

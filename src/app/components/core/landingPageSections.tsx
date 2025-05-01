@@ -113,7 +113,7 @@ export default function LandingPageSections() {
             Find a Lawyer Now
           </Link>
           <Link
-            href="/join"
+            href="/joinAsLawyer"
             className="bg-white text-blue-600 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
           >
             Join as a Lawyer

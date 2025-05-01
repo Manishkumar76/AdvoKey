@@ -14,7 +14,7 @@ export async function GET() {
             .populate({
                 path: 'user', // Reference to the User model
                 model: 'User', // Populate user data
-                select: 'username email phone profile_image_url location_id role isverify' // Select required user fields
+                select: 'username email phone profile_img_url location_id role isverify' // Select required user fields
             })
             .populate({
                 path: 'user.location_id', // Reference to the Location model
@@ -35,39 +35,29 @@ export async function POST(request: NextRequest) {
     try {
         await connect();
         const reqBody = await request.json();
-        const { username, email, password, phone, profile_image_url, location_id, bio, years_of_experience, hourly_rate, level, proof_documents } = reqBody;
+        const { email, bio, years_of_experience, hourly_rate, level, proof_documents } = reqBody;
 
-        // Check if the user already exists
+        // Check if the user exists by email
         const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            return NextResponse.json({ message: "User already exists" }, { status: 400 });
+        if (!existingUser) {
+            return NextResponse.json({ message: "User not found" }, { status: 400 });
         }
 
-        // Hash password
-        const salt = await bcryptjs.genSalt(10);
-        const hashedPassword = await bcryptjs.hash(password, salt);
-
-        // Create new user with role: Lawyer
-        const newUser = new User({
-            username,
-            email,
-            password: hashedPassword,
-            phone,
-            profile_image_url,
-            location_id,
-            role: 'Lawyer'
-        });
-
-        const savedUser = await newUser.save();
+        // Check if the user already has a lawyer profile
+        const existingProfile = await LawyerProfile.findOne({ user: existingUser._id });
+        if (existingProfile) {
+            return NextResponse.json({ message: "User is already registered as a lawyer" }, { status: 400 });
+        }
 
         // Create Lawyer Profile
         const newProfile = new LawyerProfile({
-            lawyer_id: savedUser._id,
+            user: existingUser._id, // Use the existing user's _id
             bio,
             years_of_experience,
             hourly_rate,
             level,
             proof_documents,
+            isVerified: false // Default as not verified
         });
 
         const savedProfile = await newProfile.save();
@@ -75,11 +65,11 @@ export async function POST(request: NextRequest) {
         // Return the created profile along with user and location details
         const populatedProfile = await LawyerProfile.findById(savedProfile._id)
             .populate({
-                path: 'lawyer_id',
+                path: 'user',
                 select: 'username email phone profile_image_url location_id role isverify'
             })
             .populate({
-                path: 'lawyer_id.location_id',
+                path: 'user.location_id',
                 model: 'Location',
                 select: 'city state country'
             });
@@ -87,6 +77,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json(populatedProfile, { status: 201 });
 
     } catch (error: any) {
+        console.error(error);
         return NextResponse.json({ error: error.message || 'Failed to create lawyer profile' }, { status: 500 });
     }
 }

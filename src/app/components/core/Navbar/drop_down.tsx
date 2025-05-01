@@ -35,7 +35,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ user, handleLogout }) => {
         className="flex items-center space-x-2 rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500 hover:scale-105 transition-transform duration-200"
       >
         <img
-          src={user.avatar || '/default-avatar.png'}
+          src={user.avatar || '/user.jpg'}
           alt="User Avatar"
           className="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover"
         />
