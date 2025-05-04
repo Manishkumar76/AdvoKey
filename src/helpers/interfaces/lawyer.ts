@@ -10,4 +10,5 @@ export interface Lawyer {
     location:Location;
     isverify: boolean;
     user: User;
+    
   }

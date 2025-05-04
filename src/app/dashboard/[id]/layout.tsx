@@ -60,7 +60,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                   {name}
                 </Link>
               )
-            )}
+            )
+            }
 
             <hr className="my-4 border-gray-400" />
 

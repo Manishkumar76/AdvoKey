@@ -80,14 +80,9 @@ const LawyersPage: React.FC = () => {
       <div className="min-h-screen bg-gray-900 p-6 pt-20">
         <h1 className="text-3xl font-bold mb-6 text-center text-white">Find Lawyers</h1>
 
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6"> 
-          <FilterPanel
-            filters={filters}
-            setFilters={setFilters}
-            clearFilters={clearFilters}/>
-          
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
           <div className="hidden md:block" />
-          
+          {/* Loading Skeletons */}
           <div className="md:col-span-3 space-y-6">
             {[...Array(4)].map((_, idx) => (
               <div
