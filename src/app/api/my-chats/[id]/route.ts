@@ -6,7 +6,7 @@ import User from '@/models/userModel';
 import Message from '@/models/Message';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 
-export async function DELETE(req: Request, { params }: { params: { id: string } }) {
+export async function DELETE(req: Request, { params }:any) {
   await connect();
   const userId = await getDataFromToken();
   if (!userId) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from "next/server";
 // GET user by ID
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: any
 ) {
   try {
     await connect();

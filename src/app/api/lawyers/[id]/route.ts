@@ -2,9 +2,11 @@ import { connect } from '@/dbConfig/dbConfig';
 import LawyerProfile from '@/models/LawyerProfile';
 import { NextRequest, NextResponse } from 'next/server';
 
+
+
 export async function GET(
   req: NextRequest,
-  context: { params: { id: string } }
+  context:any
 ) {
   await connect();
   try {
@@ -24,7 +26,7 @@ export async function GET(
 
 export async function PUT(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: any
 ) {
   await connect();
   try {
@@ -45,7 +47,7 @@ export async function PUT(
 
 export async function DELETE(
   req: NextRequest,
-  context: { params: { id: string } }
+  context: any
 ) {
   await connect();
   try {

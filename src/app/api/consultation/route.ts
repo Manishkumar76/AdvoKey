@@ -5,16 +5,18 @@ import { getDataFromToken } from '@/helpers/getDataFromToken';
 
 export async function GET(req: NextRequest) {
   await connect();
+
   try {
-    const userId = await getDataFromToken();
-    const consultations = await Consultation.find({ client_id: userId })
-      .populate({ path: 'client_id' })
+    const consultations = await Consultation.find()
+      .populate({
+        path: 'client_id'
+      })
       .populate({
         path: 'lawyer_id',
-        populate: { path: 'user' }, // If lawyer has user profile
+        populate: { path: 'user' },
       });
 
-    return NextResponse.json({data:consultations});
+    return NextResponse.json({ data: consultations });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

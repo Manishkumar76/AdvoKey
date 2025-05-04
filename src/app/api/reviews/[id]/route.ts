@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
 import Review from '@/models/Review';
 
-export async function DELETE(_: NextRequest,  params : { params: { id: string } }) {
+export async function DELETE(_: NextRequest,  params :any) {
   await connect();
   try {
     const Id=  params.params.id;

@@ -5,7 +5,7 @@ import bcrypt from 'bcryptjs';
 
 export async function PUT(
   req: Request,
-  context: { params: { id: string } }
+  context: any
 ) {
   try {
     await connect();

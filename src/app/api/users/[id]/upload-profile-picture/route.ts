@@ -22,7 +22,7 @@ export const config = {
   },
 };
 
-export async function POST(req: NextRequest,  params : { params: { id: string } }) {
+export async function POST(req: NextRequest,  params : any) {
   try {
     const formData = await req.formData();
     const file = formData.get('file') as File;
