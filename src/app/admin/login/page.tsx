@@ -5,9 +5,7 @@ import { useRouter } from 'next/navigation';
 import axios from "axios";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import toast, { Toaster } from "react-hot-toast"; 
-import Lottie from "lottie-react";
-import loadingAnmimation from "../../assets/animation/loading.json";
+import toast, { Toaster } from "react-hot-toast";
 
 export default function Login() {
     const router = useRouter();
@@ -120,12 +118,15 @@ export default function Login() {
             {/* Animated Cursor */}
             <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 "></div>
             <div className={`h-screen flex items-center justify-center relative `}>
-            <img src="/assets/images/Bg_image.jpeg" alt="" className="h-screen absolute w-full" />
+                {/* <img src="/assets/images/Bg_image.jpeg" alt="" className="h-screen absolute w-full" /> */}
                 {
-                    loading &&(<div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 ">
-                    <Lottie animationData={loadingAnmimation}  className="w-1/2 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
-                </div>)
+                    loading && (
+                        <div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 flex items-center justify-center">
+                            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </div>
+                    )
                 }
+
                 <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-600 text-white shadow-blue-600 bg-opacity-30 backdrop-blur">
                     <h1 className="text-xl font-bold mb-4">Login Page</h1>
 
