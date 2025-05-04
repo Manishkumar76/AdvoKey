@@ -7,8 +7,6 @@ import FilterPanel, { FilterOptions } from '@/app/components/core/lawyers_page/F
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
 import { Lawyer } from '@/helpers/interfaces/lawyer';
-import Lottie from "lottie-react";
-import loadingAnimation from '@/app/assets/animation/page_loading.json';
 
 const defaultFilters: FilterOptions = {
   specialization: '',
@@ -53,16 +51,19 @@ const LawyersPage: React.FC = () => {
 
   const applyFilters = () => {
     const filtered = lawyers.filter((lawyer) => {
+      const user = lawyer?.user;
+      const location = user?.location;
+
       return (
-        (!filters.specialization || lawyer.specialization.toLowerCase().includes(filters.specialization.toLowerCase())) &&
+        (!filters.specialization || lawyer.specialization?.toLowerCase().includes(filters.specialization.toLowerCase())) &&
         (!filters.rating || lawyer.rating >= filters.rating) &&
         (!filters.availability || lawyer.availability === filters.availability) &&
         (!filters.experience || lawyer.years_of_experience >= filters.experience) &&
         (!filters.location ||
-          (lawyer.user.location?.city.toLowerCase().includes(filters.location.toLowerCase()) ||
-            lawyer.user.location?.state.toLowerCase().includes(filters.location.toLowerCase()) ||
-            lawyer.user.location?.country.toLowerCase().includes(filters.location.toLowerCase()))) &&
-        (!searchTerm || lawyer.user.username.toLowerCase().includes(searchTerm.toLowerCase())) // Fixed here
+          (location?.city?.toLowerCase().includes(filters.location.toLowerCase()) ||
+           location?.state?.toLowerCase().includes(filters.location.toLowerCase()) ||
+           location?.country?.toLowerCase().includes(filters.location.toLowerCase()))) &&
+        (!searchTerm || user?.username?.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     });
 
@@ -76,8 +77,35 @@ const LawyersPage: React.FC = () => {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-black pt-20">
-        <Lottie animationData={loadingAnimation} loop />
+      <div className="min-h-screen bg-gray-900 p-6 pt-20">
+        <h1 className="text-3xl font-bold mb-6 text-center text-white">Find Lawyers</h1>
+
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6"> 
+          <FilterPanel
+            filters={filters}
+            setFilters={setFilters}
+            clearFilters={clearFilters}/>
+          
+          <div className="hidden md:block" />
+          
+          <div className="md:col-span-3 space-y-6">
+            {[...Array(4)].map((_, idx) => (
+              <div
+                key={idx}
+                className="animate-pulse flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gray-800/70 border border-gray-700 p-6 rounded-xl shadow-xl"
+              >
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gray-700 flex-shrink-0" />
+                <div className="flex-1 space-y-2">
+                  <div className="h-6 bg-gray-700 rounded w-3/4" />
+                  <div className="h-4 bg-gray-700 rounded w-1/2" />
+                  <div className="h-4 bg-gray-700 rounded w-1/3" />
+                  <div className="h-4 bg-gray-700 rounded w-2/3" />
+                  <div className="h-4 bg-gray-700 rounded w-1/2" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
     );
   }
@@ -114,42 +142,35 @@ const LawyersPage: React.FC = () => {
         />
 
         <div className="md:col-span-3 space-y-6">
-          {loading ? (
-            <div className="text-center text-purple-400">Loading lawyers...</div>
-          ) : error ? (
-            <div className="text-center text-red-500">{error}</div>
-          ) : filteredLawyers.length > 0 ? (
+          {filteredLawyers.length > 0 ? (
             filteredLawyers.map((lawyer, index) => (
               <div
-              onClick={()=>{
-                // window.location.href = `/lawyers/${lawyer._id}`; // Redirect to lawyer's profile page
-                router.push(`/lawyers/${lawyer._id}`); // Use Next.js router for navigation
-              }}
+                onClick={() => router.push(`/lawyers/${lawyer._id}`)}
                 key={index}
-                className="flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gray-800/70 border border-gray-700 p-6 rounded-xl shadow-xl transition-all duration-300 delay-200 ease-in-out  transform hover:scale-[1.03] hover:border-gray-500"
+                className="flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gray-800/70 border border-gray-700 p-6 rounded-xl shadow-xl transition-all duration-300 delay-200 ease-in-out transform hover:scale-[1.03] hover:border-gray-500"
                 data-aos="fade-up"
               >
                 {/* Lawyer Image */}
                 <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-gray-700 flex-shrink-0">
                   <img
-                    src={lawyer?.user.profile_image_url || '/lawyer_vector.jpeg'}
-                    alt={lawyer.user.username}
+                    src={lawyer?.user?.profile_image_url || '/lawyer_vector.jpeg'}
+                    alt={lawyer?.user?.fullname || 'Lawyer'}
                     className="w-full h-full object-cover"
                   />
                 </div>
 
                 {/* Lawyer Info */}
-                <div className="flex-1 text-center md:text-left ">
-                  <h3 className="text-2xl font-bold text-blue-500">{lawyer.user.username}</h3>
+                <div className="flex-1 text-center md:text-left">
+                  <h3 className="text-2xl font-bold text-blue-500">{lawyer?.user?.fullname}</h3>
                   <p className="text-sm mt-2">📘 Specialization: {lawyer.specialization}</p>
                   <p className="text-sm">⭐ Rating: {lawyer.rating}</p>
                   <p className="text-sm">📅 Availability: {lawyer.availability}</p>
                   <p className="text-sm">⏳ Experience: {lawyer.years_of_experience} years</p>
                   <p className="text-sm">
-                    📍 Location: {lawyer.user.location?.city || 'N/A'}, {lawyer.user.location?.state || 'N/A'}, {lawyer.user.location?.country || 'N/A'}
+                    📍 Location: {lawyer.user?.location?.city || 'N/A'}, {lawyer.user?.location?.state || 'N/A'}, {lawyer.user?.location?.country || 'N/A'}
                   </p>
-                  <p className="text-sm">📧 Email: {lawyer.user.email}</p>
-                  <p className="text-sm">📱 Phone: {lawyer.user.phone}</p>
+                  <p className="text-sm">📧 Email: {lawyer.user?.email}</p>
+                  <p className="text-sm">📱 Phone: {lawyer.user?.phone}</p>
                 </div>
               </div>
             ))
