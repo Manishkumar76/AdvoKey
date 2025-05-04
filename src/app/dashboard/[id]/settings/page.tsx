@@ -4,8 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams, useRouter } from 'next/navigation';
 import toast, { Toaster } from 'react-hot-toast';
-import Lottie from "lottie-react";
-import loadingAnimation from '@/app/assets/animation/page_loading.json';
+
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -150,7 +149,7 @@ export default function SettingsPage() {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-900 pt-20">
-        <Lottie animationData={loadingAnimation} loop />
+     
       </div>
     );
   }
@@ -171,7 +170,7 @@ export default function SettingsPage() {
               </div>
             ) : (
               <img
-                src={form!.profilePic.toString() || profilePicPreview! }
+                src={form!.profilePic || profilePicPreview! }
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = '/user.jpg';
                 }}

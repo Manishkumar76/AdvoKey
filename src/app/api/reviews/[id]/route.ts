@@ -2,10 +2,11 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
 import Review from '@/models/Review';
 
-export async function DELETE(_: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(_: NextRequest,  params : { params: { id: string } }) {
   await connect();
   try {
-    const deleted = await Review.findByIdAndDelete(params.id);
+    const Id=  params.params.id;
+    const deleted = await Review.findByIdAndDelete(Id);
     if (!deleted) {
       return NextResponse.json({ error: 'Review not found' }, { status: 404 });
     }
