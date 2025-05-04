@@ -30,7 +30,7 @@ export async function GET(
 // PUT update user by ID
 export async function PUT(
   req: NextRequest,
-   params : { params: { id: string } }
+   params :any
 ) {
   try {
     await connect();
@@ -57,7 +57,7 @@ export async function PUT(
 // DELETE user by ID
 export async function DELETE(
   req: NextRequest,
-   params : { params: { id: string } }
+   params : any
 ) {
   try {
     await connect();
