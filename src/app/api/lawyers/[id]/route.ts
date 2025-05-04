@@ -2,17 +2,21 @@
 
 import { connect } from '@/dbConfig/dbConfig';
 import LawyerProfile from '@/models/LawyerProfile';
-import exp from 'constants';
 import { NextRequest, NextResponse } from 'next/server';
 
-export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
-) {
+
+type Context = {
+  params: {
+    id: string;
+  };
+};
+
+
+export async function GET(req: NextRequest, { params }: Context) {
   await connect();
 
   try {
-    const  id  =  context.params.id;
+    const id = params.id;
     const lawyer = await LawyerProfile.findById(id).populate('user');
 
     if (!lawyer) {
@@ -31,44 +35,38 @@ export async function GET(
 
 
 
-export async function PUT(
-    req: NextRequest,
-    context: { params: { id: string } }
-  ) {
-    await connect();
-    try {
-      const { id } = await context.params;
-      const body = await req.json();
-      const updated = await LawyerProfile.findByIdAndUpdate(id, body, { new: true });
-  
-      if (!updated) {
-        return NextResponse.json({ error: 'Lawyer not found for update' }, { status: 404 });
-      }
-  
-      return NextResponse.json(updated);
-    } catch (error: any) {
-      console.error('PUT error:', error);
-      return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+
+export async function PUT(req: NextRequest, { params }: Context) {
+  await connect();
+  try {
+    const { id } = params;
+    const body = await req.json();
+    const updated = await LawyerProfile.findByIdAndUpdate(id, body, { new: true });
+
+    if (!updated) {
+      return NextResponse.json({ error: 'Lawyer not found for update' }, { status: 404 });
     }
+
+    return NextResponse.json(updated);
+  } catch (error: any) {
+    console.error('PUT error:', error);
+    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
   }
-  
-  export async function DELETE(
-    req: NextRequest,
-    context: { params: { id: string } }
-  ) {
-    await connect();
-    try {
-      const { id } = await context.params;
-      const deleted = await LawyerProfile.findByIdAndDelete(id);
-  
-      if (!deleted) {
-        return NextResponse.json({ error: 'Lawyer not found for deletion' }, { status: 404 });
-      }
-  
-      return new NextResponse(null, { status: 204 });
-    } catch (error: any) {
-      console.error('DELETE error:', error);
-      return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
+}
+
+export async function DELETE(req: NextRequest, { params }: Context) {
+  await connect();
+  try {
+    const { id } = params;
+    const deleted = await LawyerProfile.findByIdAndDelete(id);
+
+    if (!deleted) {
+      return NextResponse.json({ error: 'Lawyer not found for deletion' }, { status: 404 });
     }
+
+    return new NextResponse(null, { status: 204 });
+  } catch (error: any) {
+    console.error('DELETE error:', error);
+    return NextResponse.json({ error: error.message || 'Internal Server Error' }, { status: 500 });
   }
-  
+}
