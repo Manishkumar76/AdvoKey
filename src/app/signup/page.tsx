@@ -1,12 +1,11 @@
-'use client'; // This file is client-side only
+'use client'; 
 import Link from "next/link";
 import React, { useState, useEffect } from "react";
 import { useRouter } from 'next/navigation';
 import axios from "axios";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
-import Skeleton from "react-loading-skeleton"; // Import Skeleton for loading animation
-import bg_image from "../assets/images/web_bg.jpg";
+import Skeleton from "react-loading-skeleton"; 
 
 export default function Signup() {
   const router = useRouter();
@@ -108,7 +107,7 @@ export default function Signup() {
       {/* Skeleton loader background */}
       <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none"></div>
       <div className="h-screen bg-gray-900 flex items-center justify-center relative">
-        <img src={bg_image.src} alt="" className="h-screen absolute w-full" />
+        <img src="../assets/images/Bg_image.jpeg" alt="" className="h-screen absolute w-full" />
         {loading && (
           <div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 flex items-center justify-center">
             {/* Skeleton Animation */}
