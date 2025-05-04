@@ -10,7 +10,7 @@ export async function GET(
   try {
     await connect();
 
-    const userId = await context.params.id;
+    const userId = context.params.id;
 
     const user = await User.findById(userId).select("-password");
 

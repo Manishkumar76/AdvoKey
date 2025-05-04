@@ -4,8 +4,6 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import Link from 'next/link';
 import { Trash2 } from 'lucide-react';
-import Lottie from "lottie-react";
-import loadingAnimation from '@/app/assets/animation/page_loading.json';
 
 interface Chat {
   _id: string;
@@ -65,16 +63,42 @@ export default function ChatsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-screen bg-gray-900 pt-20">
-        <Lottie animationData={loadingAnimation} loop />
+      <div className="pt-20 px-4 max-w-screen mx-auto bg-gray-900 min-h-screen text-white">
+        <h1 className="text-3xl font-bold mb-6 text-center">💬 Chats</h1>
+
+        <div className="space-y-4">
+          {/* Skeleton Loader for Chat Items */}
+          {[...Array(3)].map((_, idx) => (
+            <div
+              key={idx}
+              className="bg-gray-700 rounded-2xl shadow border p-4 flex items-center gap-4 animate-pulse"
+            >
+              <div className="w-12 h-12 rounded-full bg-gray-500"></div>
+              <div className="flex-1 min-w-0">
+                <div className="flex justify-between items-center">
+                  <div className="h-5 bg-gray-500 rounded w-3/4"></div>
+                  <div className="h-3 bg-gray-500 rounded w-1/4"></div>
+                </div>
+
+                <div className="h-3 bg-gray-500 rounded mt-1 w-2/3"></div>
+
+                <div className="flex mt-2 gap-4">
+                  <div className="h-3 bg-gray-500 rounded w-24"></div>
+                  <div className="w-5 h-5 rounded-full bg-gray-500"></div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
+
   if (error) return <div className="text-center pt-20 text-red-600">{error}</div>;
 
   return (
     <div className="pt-20 px-4 max-w-screen mx-auto bg-gray-900 min-h-screen text-white">
-      <h1 className="text-3xl font-bold mb-6 text-center ">💬 Chats</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">💬 Chats</h1>
 
       <div className="flex flex-col gap-3">
         {chats.length === 0 ? (

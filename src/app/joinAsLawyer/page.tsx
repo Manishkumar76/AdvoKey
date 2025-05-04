@@ -44,7 +44,7 @@ const JoinAsLawyer = () => {
       setMessage(data.message);
 
       if (res.status === 201) {
-        router.push(`/lawyers/${userId}/dashboard`); 
+        router.push(`/lawyers/dashboard/${userId}`); 
       }
     } catch (error) {
       console.error(error);
