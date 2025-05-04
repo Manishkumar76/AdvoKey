@@ -35,14 +35,13 @@ export default function BookConsultation() {
 
     setLoading(true);
     try {
-      const res = await axios.post('/api/consultations', {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          ...form
-        }),
+     const res= await axios.post('/api/consultations', {
+        lawyer_id: form.lawyer,
+        scheduledAt: form.scheduledAt,
+        durationMinutes: form.durationMinutes,
+        notes: form.notes,
       });
+      
 
       if (res.data) {
         alert('✅ Consultation booked!');
@@ -51,9 +50,9 @@ export default function BookConsultation() {
        
         alert(`❌ Failed: ${'Unknown error'}`);
       }
-    } catch (error:any) {
+    } catch (error: any) {
       console.error('Booking error:', error);
-      alert('❌ Something went wrong.');
+      alert(`❌ Booking failed: ${error?.response?.data?.error || 'Unknown error'}`);
     } finally {
       setLoading(false);
     }

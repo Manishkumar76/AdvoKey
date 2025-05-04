@@ -109,7 +109,7 @@ const LawyerDetail = () => {
 
   const handleBookConsultation = () => {
     if (id) {
-      router.push(`/consultation/${id}`);
+      router.push(`/consultation/${lawyer?._id}`);
     }
   };
 
@@ -126,8 +126,8 @@ const LawyerDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#121212] text-white px-4 pt-20 pb-10 animate-pulse">
-        <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-[#1E1E1E] p-6 rounded-2xl shadow-lg">
+      <div className="min-h-screen bg-gray-900 text-white px-4 pt-20 pb-10 animate-pulse">
+        <div className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-gray-700 p-6 rounded-2xl shadow-lg">
           <div className="flex flex-col items-center bg-[#2C2C2C] rounded-xl p-6 w-full md:w-1/2">
             <div className="w-48 h-48 rounded-full bg-gray-700 mb-4" />
             <div className="h-6 bg-gray-700 rounded w-32 mb-2" />
@@ -176,14 +176,14 @@ const LawyerDetail = () => {
   }
 
   return (
-    <div className="min-h-screen bg-[#121212] text-white px-4 pt-20 pb-10">
+    <div className="min-h-screen bg-gray-900 text-white px-4 pt-20 pb-10">
       <Toaster position="top-right" />
       <div
-        className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-[#1E1E1E] p-6 rounded-2xl shadow-lg"
+        className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-gray-700 p-6 rounded-2xl shadow-lg"
         ref={gsapRef}
       >
         {/* Left Panel: Lawyer Info */}
-        <div className="flex flex-col items-center bg-[#2C2C2C] rounded-xl p-6 w-full md:w-1/2">
+        <div className="flex flex-col items-center bg-gray-900 rounded-xl p-6 w-full md:w-1/2">
           <img
             src={lawyer.user?.profile_image_url || "/lawyer_vector.jpeg"}
             alt={lawyer.user?.username}
@@ -215,12 +215,12 @@ const LawyerDetail = () => {
 
         {/* Right Panel: Bio & Reviews */}
         <div className="w-full md:w-1/2 flex flex-col gap-6">
-          <div className="bg-[#2C2C2C] p-4 rounded-xl">
+          <div className="bg-gray-900 p-4 rounded-xl">
             <h2 className="text-xl font-semibold mb-2">About</h2>
             <p className="text-gray-300">{lawyer.bio}</p>
           </div>
 
-          <div className="bg-[#2C2C2C] p-4 rounded-xl">
+          <div className="bg-gray-900p-4 rounded-xl">
             <div className="flex justify-between items-center mb-3">
               <h2 className="text-xl font-semibold">Client Reviews</h2>
               {userId &&(
@@ -249,7 +249,7 @@ const LawyerDetail = () => {
             ) : (
               <ul className="space-y-4">
                 {reviews.map((review) => (
-                  <li key={review._id} className="bg-[#1A1A1A] p-4 rounded-lg">
+                  <li key={review._id} className="bg-gray-800 p-4 rounded-lg">
                     <div className="flex justify-between items-center">
                       <h3 className="text-lg font-semibold">{review.client_id.username}</h3>
                       <span className="text-yellow-400">⭐ {review.rating}</span>

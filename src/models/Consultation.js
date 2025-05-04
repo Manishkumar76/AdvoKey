@@ -1,11 +1,36 @@
 import mongoose from 'mongoose';
 
-const consultationSchema = new mongoose.Schema({
-  client_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-  lawyer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'LawyerProfile' },
-  timeslot_id: { type: mongoose.Schema.Types.ObjectId, ref: 'TimeSlot' },
-  status: { type: String, enum: ['pending', 'confirmed', 'completed', 'cancelled'], default: 'pending' },
-  notes: String,
-}, { timestamps: { createdAt: 'created_at' } });
+const ConsultationSchema = new mongoose.Schema({
+  client_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: true,
+  },
+  lawyer_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Lawyer',
+    required: true,
+  },
+  scheduledAt: {
+    type: Date,
+    required: true,
+  },
+  time: {
+    type: String,
+    required: true,
+  },
+  durationMinutes: {
+    type: Number,
+    required: true,
+  },
+  notes: {
+    type: String,
+  },
+  status: {
+    type: String,
+    enum: ['Scheduled', 'Completed', 'Cancelled'],
+    default: 'Scheduled',
+  },
+});
 
-export default mongoose.models.Consultation || mongoose.model('Consultation', consultationSchema);
+export default mongoose.models.Consultation || mongoose.model('Consultation', ConsultationSchema);

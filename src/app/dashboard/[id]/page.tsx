@@ -33,8 +33,8 @@ export default function DashboardPage() {
     // Fetch consultations
     const fetchConsultations = async () => {
       try {
-        const res = await axios.get('/api/my-consultation');
-        setConsultations(res.data);
+        const res = await axios.get('/api/consultation');
+        setConsultations(res.data.data.filter((c: any) => c.client_id === userData?._id));
       } catch (error) {
         console.error('Failed to fetch consultations:', error);
       } finally {
@@ -84,11 +84,9 @@ export default function DashboardPage() {
       <h1 className="text-3xl font-bold mb-6">🗓️ My Consultations</h1>
 
       {loading ? (
-        <div className="flex items-center justify-center h-screen bg-black pt-20">
+        <div className="flex items-center justify-center h-screen bg-gray-900 pt-20">
           <Skeleton count={5} height={50} width="100%" />
         </div>
-      ) : consultations.length === 0 ? (
-        <div className=''>Not found any consultation</div>
       ) : (
         <div className="container p-2 mx-auto sm:p-4 dark:text-gray-800">
           <div className="overflow-x-auto">
@@ -133,7 +131,7 @@ export default function DashboardPage() {
                           <p>{idx + 1}</p>
                         </td>
                         <td className="p-3">
-                          <p>{c.lawyer?.user?.fullName || 'Unknown'}</p>
+                          <p>{c.lawyer?.user?.username || 'Unknown'}</p>
                         </td>
                         <td className="p-3">
                           <p>{new Date(c.scheduledAt).toLocaleDateString()}</p>
