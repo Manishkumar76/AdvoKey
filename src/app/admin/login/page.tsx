@@ -5,8 +5,7 @@ import { useRouter } from 'next/navigation';
 import axios from "axios";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import toast, { Toaster } from "react-hot-toast"; // Import Toaster
-import bg_image from "../../assets/images/Bg_image.jpeg"
+import toast, { Toaster } from "react-hot-toast"; 
 import Lottie from "lottie-react";
 import loadingAnmimation from "../../assets/animation/loading.json";
 
@@ -121,7 +120,7 @@ export default function Login() {
             {/* Animated Cursor */}
             <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 "></div>
             <div className={`h-screen flex items-center justify-center relative `}>
-                <img src={bg_image.src} alt="" className="h-screen absolute w-full " />
+            <img src="/assets/images/Bg_image.jpeg" alt="" className="h-screen absolute w-full" />
                 {
                     loading &&(<div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 ">
                     <Lottie animationData={loadingAnmimation}  className="w-1/2 h-auto absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2" />
