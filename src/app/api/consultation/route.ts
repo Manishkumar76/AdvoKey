@@ -2,39 +2,48 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
 import Consultation from '@/models/Consultation';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
+import { FaArrowAltCircleLeft } from 'react-icons/fa';
 
 export async function GET(req: NextRequest) {
   await connect();
 
   try {
+    const userId = await getDataFromToken(); // <--- Make sure token comes from the request
+
     const consultations = await Consultation.find()
-      .populate({
-        path: 'client_id'
-      })
+      .populate('client_id')
       .populate({
         path: 'lawyer_id',
-        populate: { path: 'user' },
-      });
+        model: 'LawyerProfile',
+        populate: { path: 'user', model: 'User' },
+      })
+      .lean();
 
-    return NextResponse.json({ data: consultations });
+    const userConsultations = consultations.filter(
+      (consultation) => consultation.client_id?._id?.toString() === userId
+    );
+
+    return NextResponse.json({ consultations, userConsultations }, { status: 200 });
   } catch (error: any) {
+    console.error('Error fetching consultations:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
 
+
 export async function POST(req: NextRequest) {
   await connect();
   try {
-    const userId = await getDataFromToken();
+   
     const body = await req.json();
-    const { lawyer_id, scheduledAt, time, durationMinutes, notes } = body;
-
+    const {user_id, lawyer_id, scheduledAt, time, durationMinutes, notes } = body;
+     
     if (!lawyer_id || !scheduledAt || !time || !durationMinutes) {
       return NextResponse.json({ error: 'Missing required fields' }, { status: 400 });
     }
 
     const consultation = new Consultation({
-      client_id: userId,
+      client_id: user_id,
       lawyer_id,
       scheduledAt: new Date(scheduledAt),
       time,

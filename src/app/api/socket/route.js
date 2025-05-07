@@ -1,4 +1,3 @@
-// src/app/api/socket/route.js
 import { Server } from 'socket.io'
 
 let io

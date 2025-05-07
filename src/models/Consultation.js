@@ -8,7 +8,7 @@ const ConsultationSchema = new mongoose.Schema({
   },
   lawyer_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'Lawyer',
+    ref: 'LawyerProfile',
     required: true,
   },
   scheduledAt: {

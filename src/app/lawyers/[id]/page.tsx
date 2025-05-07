@@ -25,6 +25,46 @@ const LawyerDetail = () => {
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(5);
   const gsapRef = useRef(null);
+  const [isBookingModalOpen, setIsBookingModalOpen] = useState(false);
+  const [selectedSlot, setSelectedSlot] = useState("");
+  const [consultDate, setConsultDate] = useState("");
+  const [consultTime, setConsultTime] = useState("");
+  const [durationMinutes, setDurationMinutes] = useState(30);
+  const [notes, setNotes] = useState("");
+
+  const handleBookConsultationSubmit = async () => {
+    if (!consultDate || !consultTime || !durationMinutes) {
+      toast.error("Please fill in all required fields.");
+      return;
+    }
+  
+    try {
+      const response = await axios.post("/api/consultation", {
+        user_id: userId,
+        lawyer_id: lawyer?._id,
+        scheduledAt: consultDate,
+        time: consultTime,
+        durationMinutes,
+        notes,
+      });
+
+      if (response.status !== 200) {
+        toast.error("Failed to book consultation.");
+        return;
+      }
+  
+      toast.success("Consultation booked successfully!");
+      setIsBookingModalOpen(false);
+      setConsultDate("");
+      setConsultTime("");
+      setDurationMinutes(30);
+      setNotes("");
+    } catch (err) {
+      console.error("Booking failed:", err);
+      toast.error("Failed to book consultation.");
+    }
+  };
+  
 
   useEffect(() => {
     Aos.init({ duration: 1000 });
@@ -72,11 +112,11 @@ const LawyerDetail = () => {
       console.error("Failed to fetch reviews:", err);
     }
   };
-  
+
 
   const handleSubmitReview = async () => {
     try {
-      if(!userId) {
+      if (!userId) {
         toast.error("You must be logged in to submit a review.");
         return;
       }
@@ -88,7 +128,7 @@ const LawyerDetail = () => {
         toast.error("Rating must be between 1 and 5.");
         return;
       }
-      
+
       const { data } = await axios.post("/api/reviews", {
         client_id: userId,
         lawyer_id: id,
@@ -136,7 +176,7 @@ const LawyerDetail = () => {
             <div className="h-4 bg-gray-700 rounded w-28 mb-4" />
             <div className="h-10 w-36 bg-gray-700 rounded" />
           </div>
-  
+
           <div className="w-full md:w-1/2 flex flex-col gap-6">
             <div className="bg-[#2C2C2C] p-4 rounded-xl space-y-3">
               <div className="h-6 bg-gray-700 rounded w-40" />
@@ -144,7 +184,7 @@ const LawyerDetail = () => {
               <div className="h-4 bg-gray-700 rounded w-5/6" />
               <div className="h-4 bg-gray-700 rounded w-2/3" />
             </div>
-  
+
             <div className="bg-[#2C2C2C] p-4 rounded-xl space-y-4">
               <div className="h-6 bg-gray-700 rounded w-40" />
               <div className="space-y-3">
@@ -165,7 +205,7 @@ const LawyerDetail = () => {
       </div>
     );
   }
-  
+
 
   if (error || !lawyer) {
     return (
@@ -206,11 +246,21 @@ const LawyerDetail = () => {
           ) : (
             <button
               className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded"
-              onClick={handleBookConsultation}
+              onClick={() => setIsBookingModalOpen(true)}
+
             >
               Book Consultation
             </button>
           )}
+          {/* show all consulation booked by user with this lawyer */}
+          <div className="mt-4 flex gap-2">
+            <button
+              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded"
+              onClick={() => router.push(`/consultation/${lawyer?._id}`)}
+            >
+              View All Consultations
+            </button>
+            </div>
         </div>
 
         {/* Right Panel: Bio & Reviews */}
@@ -223,25 +273,25 @@ const LawyerDetail = () => {
           <div className="bg-gray-900p-4 rounded-xl">
             <div className="flex justify-between items-center mb-3">
               <h2 className="text-xl font-semibold">Client Reviews</h2>
-              {userId &&(
+              {userId && (
                 owner ? (
-                <button
-                  onClick={() => router.push(`/dashboard/${userId}`)}
-                  className="bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-700"
-                >
-                  View All Reviews
-                </button>
-              ):(
+                  <button
+                    onClick={() => router.push(`/dashboard/${userId}`)}
+                    className="bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-700"
+                  >
+                    View All Reviews
+                  </button>
+                ) : (
 
-                <button
-                  onClick={() => setIsModalOpen(true)}
-                  className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
-                >
-                  + Add Review
-                </button>)
-              
+                  <button
+                    onClick={() => setIsModalOpen(true)}
+                    className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                  >
+                    + Add Review
+                  </button>)
+
               )}
-            
+
             </div>
 
             {reviews.length === 0 ? (
@@ -309,6 +359,64 @@ const LawyerDetail = () => {
           </div>
         </div>
       )}
+      {/* Modal for Consultation Booking */}
+      {owner === false && isBookingModalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
+          <div className="bg-white text-black rounded-lg w-full max-w-md p-6 shadow-xl">
+            <h3 className="text-lg font-semibold mb-4">Book a Consultation</h3>
+
+            <label className="block text-sm font-medium mb-1">Date</label>
+            <input
+              type="date"
+              className="w-full border border-gray-300 rounded p-2 mb-4"
+              value={consultDate}
+              onChange={(e) => setConsultDate(e.target.value)}
+            />
+
+            <label className="block text-sm font-medium mb-1">Time</label>
+            <input
+              type="time"
+              className="w-full border border-gray-300 rounded p-2 mb-4"
+              value={consultTime}
+              onChange={(e) => setConsultTime(e.target.value)}
+            />
+
+            <label className="block text-sm font-medium mb-1">Duration (minutes)</label>
+            <input
+              type="number"
+              className="w-full border border-gray-300 rounded p-2 mb-4"
+              value={durationMinutes}
+              onChange={(e) => setDurationMinutes(Number(e.target.value))}
+              placeholder="e.g., 30"
+            />
+
+            <label className="block text-sm font-medium mb-1">Notes (optional)</label>
+            <textarea
+              rows={3}
+              className="w-full border border-gray-300 rounded p-2 mb-4"
+              placeholder="Any specific topics or questions?"
+              value={notes}
+              onChange={(e) => setNotes(e.target.value)}
+            />
+
+            <div className="flex justify-end space-x-2">
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+                onClick={() => setIsBookingModalOpen(false)}
+              >
+                Cancel
+              </button>
+              <button
+                className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+                onClick={handleBookConsultationSubmit}
+              >
+                Book
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 };
