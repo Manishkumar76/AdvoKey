@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import dynamic from 'next/dynamic';
 import {
   PieChart,
   Pie,
@@ -16,7 +15,7 @@ import {
   Legend,
 } from 'recharts';
 
-type Status = 'completed' | 'pending' | 'confirmed' | 'cancelled';
+type Status = 'completed' | 'scheduled' | 'cancelled';
 
 interface StatusCountItem {
   _id: Status;
@@ -27,7 +26,7 @@ interface TimelineRawItem {
   _id: {
     month: number;
     year: number;
-    status: Status;
+    status: string; // will normalize to lowercase
   };
   count: number;
 }
@@ -35,12 +34,11 @@ interface TimelineRawItem {
 interface TimelineFormattedItem {
   date: string;
   completed?: number;
-  pending?: number;
-  confirmed?: number;
+  scheduled?: number;
   cancelled?: number;
 }
 
-const COLORS = ['#8884d8', '#82ca9d', '#ffc658', '#ff8042'];
+const COLORS = ['#8884d8', '#82ca9d', '#ffc658'];
 
 export default function ConsultationCharts() {
   const [statusCounts, setStatusCounts] = useState<StatusCountItem[]>([]);
@@ -48,14 +46,21 @@ export default function ConsultationCharts() {
   const [hasMounted, setHasMounted] = useState(false);
 
   useEffect(() => {
-    setHasMounted(true); // avoid hydration errors
+    setHasMounted(true);
   }, []);
 
   useEffect(() => {
     const fetchStats = async () => {
       try {
         const res = await axios.get('/api/my-consultation/stats');
-        setStatusCounts(res.data.statusCounts);
+
+        // Normalize status to lowercase
+        const statusCountsNormalized = res.data.statusCounts.map((item: any) => ({
+          _id: item._id.toLowerCase(),
+          count: item.count,
+        }));
+
+        setStatusCounts(statusCountsNormalized);
 
         const formatted = formatTimelineData(res.data.timelineStats);
         setTimelineStats(formatted);
@@ -68,7 +73,7 @@ export default function ConsultationCharts() {
   }, []);
 
   const isValidStatus = (status: string): status is Status => {
-    return ['completed', 'pending', 'confirmed', 'cancelled'].includes(status);
+    return ['completed', 'scheduled', 'cancelled'].includes(status.toLowerCase());
   };
 
   const formatTimelineData = (data: TimelineRawItem[]): TimelineFormattedItem[] => {
@@ -76,23 +81,24 @@ export default function ConsultationCharts() {
 
     data.forEach(({ _id, count }) => {
       const key = `${_id.month}/${_id.year}`;
-      if (!grouped[key]) grouped[key] = { date: key };
+      const status = _id.status.toLowerCase();
 
-      if (isValidStatus(_id.status)) {
-        grouped[key][_id.status] = count;
+      if (!grouped[key]) grouped[key] = { date: key };
+      if (isValidStatus(status)) {
+        grouped[key][status] = count;
       }
     });
 
     return Object.values(grouped);
   };
 
-  if (!hasMounted) return null; // avoid mismatch
+  if (!hasMounted) return null;
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12 text-gray-900">
       {/* Pie Chart */}
       <div className="bg-white p-4 rounded shadow">
-        <h2 className="text-xl font-semibold mb-4 ">Consultations by Status</h2>
+        <h2 className="text-xl font-semibold mb-4">Consultations by Status</h2>
         <PieChart width={400} height={300}>
           <Pie
             data={statusCounts}
@@ -121,9 +127,8 @@ export default function ConsultationCharts() {
           <Tooltip />
           <Legend />
           <Bar dataKey="completed" stackId="a" fill="#82ca9d" />
-          <Bar dataKey="pending" stackId="a" fill="#ffc658" />
-          <Bar dataKey="confirmed" stackId="a" fill="#8884d8" />
-          <Bar dataKey="cancelled" stackId="a" fill="#ff8042" />
+          <Bar dataKey="scheduled" stackId="a" fill="#8884d8" />
+          <Bar dataKey="cancelled" stackId="a" fill="#ffc658" />
         </BarChart>
       </div>
     </div>

@@ -5,26 +5,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
-
-interface User {
-  username: string;
-  profile_image_url?: string;
-}
-
-interface Consultation {
-  _id: string;
-  lawyer_id: {
-    _id: string;
-    user: User;
-  };
-  client_id: string;
-  scheduledAt: string;
-  time: string;
-  durationMinutes: number;
-  notes?: string;
-  status: string;
-  createdAt: string;
-}
+import {Consultation} from '@/helpers/interfaces/consultation';
 
 const statusColorMap: Record<string, string> = {
   pending: "bg-yellow-500 animate-pulse",
@@ -57,7 +38,7 @@ const ConsultationsWithLawyer = () => {
     const fetchConsultations = async () => {
       try {
         const uid = await getDataFromToken();
-        setUserId(uid);
+        setUserId(uid?.id);
 
         const res = await axios.get(`/api/consultation`);
         const all: Consultation[] = res.data?.userConsultations || [];

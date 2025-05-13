@@ -18,11 +18,11 @@ export async function getDataFromToken(){
 
     const decoded = jwt.verify(token, process.env.TOKEN_SECRET!) as AuthTokenPayload;
 
-    if (!decoded.id) {
+    if (!decoded) {
       throw new Error("Invalid token payload");
     }
 
-    return decoded.id;
+    return decoded;
   } catch (error) {
     console.error("Token verification error:", error);
     throw new Error("Unauthorized");

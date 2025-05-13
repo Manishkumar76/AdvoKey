@@ -27,7 +27,9 @@ try{
     const tokenData={
         id:user._id,
         email:user.email,
-        userType:user.role
+        role:user.role,
+        isAdmin:user.isAdmin,
+        user_profile_image_url: user.user_profile_image_url,
     };
     
       const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {

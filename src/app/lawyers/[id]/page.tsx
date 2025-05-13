@@ -93,7 +93,7 @@ const LawyerDetail = () => {
 
   const fetchUserId = async () => {
     try {
-      const id = await getDataFromToken();
+      const id = (await getDataFromToken()).id;
       setUserId(id);
     } catch (err: any) {
       setError("Failed to fetch user ID");
@@ -219,11 +219,11 @@ const LawyerDetail = () => {
     <div className="min-h-screen bg-gray-900 text-white px-4 pt-20 pb-10">
       <Toaster position="top-right" />
       <div
-        className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-gray-700 p-6 rounded-2xl shadow-lg"
+        className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 p-6 rounded-2xl shadow-lg "
         ref={gsapRef}
       >
         {/* Left Panel: Lawyer Info */}
-        <div className="flex flex-col items-center bg-gray-900 rounded-xl p-6 w-full md:w-1/2">
+        <div className="flex flex-col items-center bg-gradient-to-br from-gray-800 via-black to-gray-800  rounded-xl p-6 w-full md:w-1/2">
           <img
             src={lawyer.user?.profile_image_url || "/lawyer_vector.jpeg"}
             alt={lawyer.user?.username}
@@ -265,7 +265,7 @@ const LawyerDetail = () => {
 
         {/* Right Panel: Bio & Reviews */}
         <div className="w-full md:w-1/2 flex flex-col gap-6">
-          <div className="bg-gray-900 p-4 rounded-xl">
+          <div className="bg-gray-900 p-4 rounded-xl bg-gradient-to-br from-gray-800 via-black to-gray-800">
             <h2 className="text-xl font-semibold mb-2">About</h2>
             <p className="text-gray-300">{lawyer.bio}</p>
           </div>
@@ -277,7 +277,7 @@ const LawyerDetail = () => {
                 owner ? (
                   <button
                     onClick={() => router.push(`/dashboard/${userId}`)}
-                    className="bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-700"
+                    className="bg-gray-600 text-white px-4 py-1 rounded hover:bg-gray-800"
                   >
                     View All Reviews
                   </button>
@@ -285,7 +285,7 @@ const LawyerDetail = () => {
 
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-700"
+                    className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-800"
                   >
                     + Add Review
                   </button>)

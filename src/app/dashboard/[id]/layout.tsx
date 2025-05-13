@@ -31,7 +31,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       {/* Sidebar with top space */}
 
       <div className=' min-h-screen'>
-        <aside className=" w-60 bg-gray text-gray-300 p-4 pt-20 h-full rounded-tr-xl ">
+        <aside className=" w-70 bg-gray text-gray-300 p-4 pt-20 h-full rounded-tr-xl ">
 
           <div className="flex items-center space-x-4 mb-6">
             <img
@@ -41,9 +41,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             />
             <div>
               <h2 className="text-lg font-semibold">{userData?.username || 'User Name'}</h2>
-              <Link href="/profile" className="text-xs hover:underline text-gray-600">
-                View profile
-              </Link>
+              <p className='text-sm '>{userData?.email || 'User Email'}</p>
             </div>
           </div>
 

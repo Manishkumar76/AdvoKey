@@ -61,8 +61,8 @@ const LawyersPage: React.FC = () => {
         (!filters.experience || lawyer.years_of_experience >= filters.experience) &&
         (!filters.location ||
           (location?.city?.toLowerCase().includes(filters.location.toLowerCase()) ||
-           location?.state?.toLowerCase().includes(filters.location.toLowerCase()) ||
-           location?.country?.toLowerCase().includes(filters.location.toLowerCase()))) &&
+            location?.state?.toLowerCase().includes(filters.location.toLowerCase()) ||
+            location?.country?.toLowerCase().includes(filters.location.toLowerCase()))) &&
         (!searchTerm || user?.username?.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     });
@@ -142,11 +142,11 @@ const LawyersPage: React.FC = () => {
               <div
                 onClick={() => router.push(`/lawyers/${lawyer._id}`)}
                 key={index}
-                className="flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gray-800/70 border border-gray-700 p-6 rounded-xl shadow-xl transition-all duration-300 delay-200 ease-in-out transform hover:scale-[1.03] hover:border-gray-500"
+                className="flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 border border-gray-700 p-6 rounded-2xl shadow-2xl transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-blue-400/30 hover:border-blue-400"
                 data-aos="fade-up"
               >
                 {/* Lawyer Image */}
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-2 border-gray-700 flex-shrink-0">
+                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden border-4 border-blue-500 shadow-lg flex-shrink-0">
                   <img
                     src={lawyer?.user?.profile_image_url || '/lawyer_vector.jpeg'}
                     alt={lawyer?.user?.fullname || 'Lawyer'}
@@ -155,17 +155,19 @@ const LawyersPage: React.FC = () => {
                 </div>
 
                 {/* Lawyer Info */}
-                <div className="flex-1 text-center md:text-left">
-                  <h3 className="text-2xl font-bold text-blue-500">{lawyer?.user?.fullname}</h3>
-                  <p className="text-sm mt-2">📘 Specialization: {lawyer.specialization}</p>
-                  <p className="text-sm">⭐ Rating: {lawyer.rating}</p>
-                  <p className="text-sm">📅 Availability: {lawyer.availability}</p>
-                  <p className="text-sm">⏳ Experience: {lawyer.years_of_experience} years</p>
-                  <p className="text-sm">
-                    📍 Location: {lawyer.user?.location?.city || 'N/A'}, {lawyer.user?.location?.state || 'N/A'}, {lawyer.user?.location?.country || 'N/A'}
+                <div className="flex-1 text-center md:text-left space-y-1">
+                  <h3 className="text-2xl font-extrabold text-blue-400">{lawyer?.user?.username}</h3>
+                  <p className="text-sm text-gray-300">📘 Specialization: <span className="text-white">{lawyer.specialization}</span></p>
+                  <p className="text-sm text-gray-300">⭐ Rating: <span className="text-white">{lawyer.rating}</span></p>
+                  <p className="text-sm text-gray-300">📅 Availability: <span className="text-white">{lawyer.availability}</span></p>
+                  <p className="text-sm text-gray-300">⏳ Experience: <span className="text-white">{lawyer.years_of_experience} years</span></p>
+                  <p className="text-sm text-gray-300">
+                    📍 Location: <span className="text-white">
+                      {lawyer.user?.location?.city || 'N/A'}, {lawyer.user?.location?.state || 'N/A'}, {lawyer.user?.location?.country || 'N/A'}
+                    </span>
                   </p>
-                  <p className="text-sm">📧 Email: {lawyer.user?.email}</p>
-                  <p className="text-sm">📱 Phone: {lawyer.user?.phone}</p>
+                  <p className="text-sm text-gray-300">📧 Email: <span className="text-white">{lawyer.user?.email}</span></p>
+                  <p className="text-sm text-gray-300">📱 Phone: <span className="text-white">{lawyer.user?.phone}</span></p>
                 </div>
               </div>
             ))
@@ -173,6 +175,8 @@ const LawyersPage: React.FC = () => {
             <div className="text-center text-gray-400">No lawyers found matching the criteria.</div>
           )}
         </div>
+
+
       </div>
     </div>
   );
