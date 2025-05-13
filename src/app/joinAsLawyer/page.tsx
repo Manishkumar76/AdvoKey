@@ -57,7 +57,8 @@ const JoinAsLawyer = () => {
   useEffect(() => {
     const fetchUserId = async () => {
       try {
-        const id = await getDataFromToken();
+        const id = (await getDataFromToken()).id
+  ;
         setUserId(id);
       } catch (err: any) {
         console.error("Failed to fetch user ID", err);
