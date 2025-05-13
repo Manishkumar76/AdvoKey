@@ -15,6 +15,7 @@ import { User } from '@/helpers/interfaces/user';
 export default function Navbar() {
   const [user, setUser] = useState<User | null>(null);
   const [isOpen, setIsOpen] = useState(false);
+  const [scrollDirection, setScrollDirection] = useState('up'); // Track scroll direction
   const router = useRouter();
 
   useEffect(() => {
@@ -27,6 +28,25 @@ export default function Navbar() {
       }
     };
     fetchUser();
+
+    // Scroll event listener to track direction
+    let lastScrollY = window.pageYOffset;
+
+    const handleScroll = () => {
+      const currentScrollY = window.pageYOffset;
+      if (currentScrollY > lastScrollY) {
+        setScrollDirection('down');
+      } else {
+        setScrollDirection('up');
+      }
+      lastScrollY = currentScrollY;
+    };
+
+    window.addEventListener('scroll', handleScroll);
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const handleLogout = async () => {
@@ -43,7 +63,11 @@ export default function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-white/10 rounded-bl-xl rounded-br-xl">
+    <header
+      className={`fixed top-0 w-full z-50 backdrop-blur-md bg-black/30 border-b border-white/10 rounded-bl-xl rounded-br-xl transition-all duration-300 ease-in-out ${
+        scrollDirection === 'down' ? 'transform -translate-y-full' : 'transform translate-y-0'
+      }`}
+    >
       <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex justify-between items-center text-white">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">

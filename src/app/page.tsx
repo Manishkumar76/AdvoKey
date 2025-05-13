@@ -14,7 +14,7 @@ export default function HomePage() {
       <div className="relative w-full flex items-center justify-center py-20 px-6 bg-black">
         {/* Background Image */}
         <img
-          src="https://images.unsplash.com/photo-1508394522741-82ac9c15ba69?ixlib=rb-1.2.1&auto=format&fit=crop&w=748&q=80"
+          src="/home_bg.png"
           alt="Law Background"
           className="absolute inset-0 h-full w-full object-cover z-0"
         />

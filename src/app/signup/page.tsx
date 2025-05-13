@@ -6,6 +6,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import Skeleton from "react-loading-skeleton"; 
+import { useGSAP } from "@gsap/react";
 
 export default function Signup() {
   const router = useRouter();
@@ -75,6 +76,16 @@ export default function Signup() {
     return Object.values(newErrors).every(error => error === '');
   };
 
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  useGSAP(() => {
+    gsap.to('.cursor', {
+        x: mousePosition.x,
+        y: mousePosition.y,
+        ease: "power2.out",
+        duration: 0.3
+    });
+}, [mousePosition]);
+
   useEffect(() => {
     const isValid = validate();
     setButtonDisabled(!isValid);
@@ -107,7 +118,7 @@ export default function Signup() {
       {/* Skeleton loader background */}
       <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none"></div>
       <div className="h-screen bg-gray-900 flex items-center justify-center relative">
-        <img src="../assets/images/Bg_image.jpeg" alt="" className="h-screen absolute w-full" />
+      <img src="/auth_bg.png" alt="" className="h-screen absolute w-full " />
         {loading && (
           <div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 flex items-center justify-center">
             {/* Skeleton Animation */}

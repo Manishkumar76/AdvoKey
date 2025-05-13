@@ -6,7 +6,8 @@ import axios from "axios";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import toast, { Toaster } from "react-hot-toast"; // Import Toaster
-
+import bg from "../assets/images/Bg_image.jpeg";
+import Image from "next/image";
 
 export default function Login() {
     const router = useRouter();
@@ -112,14 +113,14 @@ export default function Login() {
     }, [mousePosition]);
 
     return (
-        <div className="h-screen">
+        <div className="h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800">
             {/* Add the Toaster component */}
             <Toaster position="top-right" />
 
             {/* Animated Cursor */}
             <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 "></div>
             <div className={`h-screen flex items-center justify-center relative `}>
-                <img src="../assets/images/Bg_image.jpeg" alt="" className="h-screen absolute w-full " />
+                <img src="/auth_bg.png" alt="" className="h-screen absolute w-full " />
                 {
     loading && (
         <div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 flex items-center justify-center">
@@ -128,8 +129,8 @@ export default function Login() {
     )
 }
 
-                <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-600 text-white shadow-blue-600 bg-opacity-30 backdrop-blur">
-                    <h1 className="text-xl font-bold mb-4">Login Page</h1>
+                <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-600 text-white shadow-blue-600 bg-opacity-10 backdrop-blur">
+                    <h1 className="text-xl font-bold mb-4">Login</h1>
 
                     <input
                         className="w-full p-2 border border-gray-600 rounded-lg mb-4 bg-gray-700 focus:outline-none focus:border-blue-400"

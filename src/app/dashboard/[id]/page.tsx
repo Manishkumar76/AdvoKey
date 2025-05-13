@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
 import { useRouter } from 'next/navigation';
+import toast from 'react-hot-toast';
 
 import { User } from '@/helpers/interfaces/user';
 import { Consultation } from '@/helpers/interfaces/consultation';
 import ConsultationCharts from './insights';
-import toast from 'react-hot-toast';
 
 export default function DashboardPage() {
   const route = useRouter();
@@ -22,117 +22,131 @@ export default function DashboardPage() {
   useEffect(() => {
     const fetchConsultations = async () => {
       try {
-         const user= await axios.get('/api/users/me');
-         setUserData(user?.data?.data);
-        const res = await axios.get(`/api/consultation`);
-        console.log("Consultation API response:", res.data);
+        const user = await axios.get('/api/users/me');
+        setUserData(user?.data?.data);
 
+        const res = await axios.get('/api/consultation');
         const all: Consultation[] = res.data?.userConsultations || [];
-         
-        if(user?.data?.data?.role !== 'Lawyer') {
-          const filtered = all.filter((c) => c.client_id === user?.data?.data?._id);
+
+        if (user?.data?.data?.role !== 'Lawyer') {
+          const filtered = all.filter(c => c.client_id === user?.data?.data?._id);
           setConsultations(filtered);
+        } else {
+          setConsultations(all);
         }
-        if (!Array.isArray(all)) throw new Error("Invalid data format");
- 
-        setConsultations(all);
       } catch (err) {
         console.error(err);
-        toast.error("Failed to load consultations");
+        toast.error('Failed to load consultations');
       } finally {
         setLoading(false);
         setInsightsLoading(false);
       }
-    }
-  fetchConsultations();
-  },[]);
+    };
+    fetchConsultations();
+  }, []);
 
   return (
-    <div className="flex-col p-6 min-w-screen min-h-screen text-white mx-auto pt-20 bg-gray-900 gap-y-4">
+    <div className="flex flex-col p-4 sm:p-6 min-h-screen text-white bg-gray-900">
+      {/* User Info */}
       {userData && (
-        <div className="bg-gray-800 p-6 rounded-lg shadow-lg mb-6">
-          <div className="flex items-center gap-x-4">
+        <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg mb-6 w-full">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
             <img
               src={userData.profile_image_url || '/user.jpg'}
               alt="Profile"
-              className="w-20 h-20 rounded-full object-cover"
+              className="w-24 h-24 rounded-full object-cover mx-auto sm:mx-0"
             />
-            <div>
-              <h2 className="text-2xl font-bold">{userData.username}</h2>
-              <p className="text-sm text-gray-400 flex gap-2">Email: <span className="text-sm text-gray-200"> {userData.email}</span></p>
-              <p className="text-sm text-gray-400 flex gap-2">Contact Number :<span className="text-sm text-gray-200"> {userData.phone}</span></p>
-              <p className="text-sm text-gray-400 flex gap-2">Age:<span className="text-sm text-gray-200">{userData.age}</span></p>
+            <div className="flex-1">
+              <h2 className="text-xl sm:text-2xl font-bold text-center sm:text-left">{userData.username}</h2>
+              <p className="text-sm text-gray-400">
+                Email: <span className="text-gray-200">{userData.email}</span>
+              </p>
+              <p className="text-sm text-gray-400">
+                Contact: <span className="text-gray-200">{userData.phone}</span>
+              </p>
+              <p className="text-sm text-gray-400">
+                Age: <span className="text-gray-200">{userData.age}</span>
+              </p>
             </div>
-            <button
-              onClick={() => route.push(`/dashboard/${userData._id}/settings`)}
-              className="ml-auto bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700"
-            >
-              Edit Profile
-            </button>
+            <div className="sm:ml-auto">
+              <button
+                onClick={() => route.push(`/dashboard/${userData._id}/settings`)}
+                className="bg-violet-600 text-white py-2 px-4 rounded-md hover:bg-violet-700 w-full sm:w-auto"
+              >
+                Edit Profile
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <h1 className="text-3xl font-bold mb-6">📊 Consultation Insights</h1>
-
+      {/* Charts */}
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4">📊 Consultation Insights</h1>
       {insightsLoading ? (
         <Skeleton height={300} width="100%" />
       ) : (
-        <ConsultationCharts  />
+        <ConsultationCharts userId={userData!._id} />
       )}
 
-      <h1 className="text-3xl font-bold mb-6 mt-10">🗓️ My Consultations</h1>
-
+      {/* Consultation Table */}
+      <h1 className="text-2xl sm:text-3xl font-bold mt-10 mb-4">🗓️ My Consultations</h1>
       {loading ? (
-        <div className="flex items-center justify-center h-screen bg-gray-900 pt-20">
+        <div className="flex items-center justify-center h-64">
           <Skeleton count={5} height={50} width="100%" />
         </div>
-      ) : consultations.length == 0 ? (
+      ) : consultations.length === 0 ? (
         <p className="text-center text-white">No consultations available.</p>
       ) : (
-        <div className="container p-2 mx-auto sm:p-4 dark:text-gray-800">
-          <div className="overflow-x-auto">
-            <table className="min-w-full text-xs">
-              <thead className="dark:bg-gray-300">
-                <tr className="text-left">
-                  <th className="p-3">#</th>
-                  <th className="p-3">Lawyer</th>
-                  <th className="p-3">Scheduled At</th>
-                  <th className="p-3">Duration</th>
-                  <th className="p-3">Notes</th>
-                  <th className="p-3 text-right">Status</th>
+        <div className="overflow-x-auto bg-gray-50 text-gray-800 rounded-lg shadow">
+          <table className="min-w-full text-sm">
+            <thead className="bg-gray-300">
+              <tr className="text-left">
+                <th className="p-3">#</th>
+                <th className="p-3">Lawyer</th>
+                <th className="p-3">Scheduled At</th>
+                <th className="p-3">Duration</th>
+                <th className="p-3">Notes</th>
+                <th className="p-3 text-right">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              {consultations.map((c, idx) => (
+                <tr
+                  key={c._id}
+                  className="border-b border-gray-200 bg-white hover:bg-gray-100 transition-all"
+                >
+                  <td className="p-3">{idx + 1}</td>
+                  <td className="p-3">{c.lawyer_id?.user?.username || 'Unknown'}</td>
+                  <td className="p-3">
+                    <p>{new Date(c.scheduledAt).toLocaleDateString()}</p>
+                    <p className="text-xs text-gray-500">{new Date(c.scheduledAt).toLocaleTimeString()}</p>
+                  </td>
+                  <td className="p-3">{c.durationMinutes} min</td>
+                  <td className="p-3 text-xs">
+                    {c.notes
+                      ? c.notes.split(' ').slice(0, 5).join(' ') +
+                        (c.notes.split(' ').length > 5 ? '...' : '')
+                      : 'None'}
+                  </td>
+                  <td className="p-3 text-right">
+                    <span
+                      className={`px-3 py-1 font-semibold rounded-md text-white ${
+                        c.status === 'completed'
+                          ? 'bg-green-600'
+                          : c.status === 'pending'
+                          ? 'bg-yellow-500'
+                          : c.status === 'confirmed'
+                          ? 'bg-blue-500'
+                          : 'bg-red-500'
+                      }`}
+                    >
+                      {c.status}
+                    </span>
+                  </td>
                 </tr>
-              </thead>
-              <tbody>
-                {consultations.map((c, idx) => (
-                  <tr key={c._id} className="border-b border-opacity-20 dark:border-gray-300 dark:bg-gray-50">
-                    <td className="p-3">{idx + 1}</td>
-                    <td className="p-3">{c.lawyer_id?.user?.username || 'Unknown'}</td>
-                    <td className="p-3">
-                      <p>{new Date(c.scheduledAt).toLocaleDateString()}</p>
-                      <p className="dark:text-gray-600">{new Date(c.scheduledAt).toLocaleTimeString()}</p>
-                    </td>
-                    <td className="p-3">{c.durationMinutes} min</td>
-                    <td className="p-3">
-                      {c.notes
-                        ? c.notes.split(' ').slice(0, 5).join(' ') + (c.notes.split(' ').length > 5 ? '...' : '')
-                        : 'None'}
-                    </td>
-                    <td className="p-3 text-right">
-                      <span className={`px-3 py-1 font-semibold rounded-md text-white ${
-                        c.status === 'completed' ? 'bg-green-600' :
-                        c.status === 'pending' ? 'bg-yellow-500' :
-                        c.status === 'confirmed' ? 'bg-blue-500' :
-                        'bg-red-500'
-                      }`}>
-                        {c.status}
-                      </span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+              ))}
+            </tbody>
+          </table>
         </div>
       )}
     </div>
