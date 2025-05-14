@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const chatSessionSchema = new mongoose.Schema({
+  consultation_id:{type:mongoose.Schema.Types.ObjectId,ref:'Consultation',required:true},
   client_id: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
   lawyer_id: { type: mongoose.Schema.Types.ObjectId, ref: 'LawyerProfile', required: true },
   is_active: { type: Boolean, default: true },

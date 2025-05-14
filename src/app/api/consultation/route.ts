@@ -3,12 +3,14 @@ import { connect } from '@/dbConfig/dbConfig';
 import Consultation from '@/models/Consultation';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { FaArrowAltCircleLeft } from 'react-icons/fa';
+import ChatSession from '@/models/ChatSession';
+import mongoose from 'mongoose';
 
 export async function GET(req: NextRequest) {
   await connect();
 
   try {
-    const userId = await getDataFromToken(); // <--- Make sure token comes from the request
+    const userId = (await getDataFromToken()).id; 
 
     const consultations = await Consultation.find()
       .populate('client_id')
@@ -52,7 +54,17 @@ export async function POST(req: NextRequest) {
     });
 
     await consultation.save();
+    
 
+    const session= new ChatSession({
+      consultation_id:consultation._id,
+      client_id: user_id,
+      lawyer_id,
+      is_active:false
+    })
+
+     await session.save();
+     
     return NextResponse.json(consultation, { status: 200 });
   } catch (error: any) {
     console.error('Error in POST /consultation:', error);

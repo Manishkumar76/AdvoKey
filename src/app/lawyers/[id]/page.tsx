@@ -244,23 +244,24 @@ const LawyerDetail = () => {
               Go to Dashboard
             </button>
           ) : (
+            <div className="mt-4 flex gap-2 flex-col">
             <button
               className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded"
               onClick={() => setIsBookingModalOpen(true)}
-
             >
               Book Consultation
             </button>
+            
+             <button
+               className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded"
+               onClick={() => router.push(`/consultation/${lawyer?._id}`)}
+             >
+               View All Consultations
+             </button>
+           </div>
           )}
           {/* show all consulation booked by user with this lawyer */}
-          <div className="mt-4 flex gap-2">
-            <button
-              className="px-4 py-2 bg-gray-600 hover:bg-gray-700 rounded"
-              onClick={() => router.push(`/consultation/${lawyer?._id}`)}
-            >
-              View All Consultations
-            </button>
-            </div>
+         
         </div>
 
         {/* Right Panel: Bio & Reviews */}

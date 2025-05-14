@@ -8,6 +8,7 @@ import FooterWrap from "./components/core/Footer/footer_wrap";
 export const metadata: Metadata = {
   title: "AdvoKey",
   description: "Connect with trusted legal professionals instantly",
+  icons:"/Advokey.png",
 };
 
 export default function RootLayout({

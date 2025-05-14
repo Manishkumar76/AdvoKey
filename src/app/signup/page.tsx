@@ -6,7 +6,6 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import { Toaster } from "react-hot-toast";
 import Skeleton from "react-loading-skeleton"; 
-import { useGSAP } from "@gsap/react";
 
 export default function Signup() {
   const router = useRouter();
@@ -76,15 +75,7 @@ export default function Signup() {
     return Object.values(newErrors).every(error => error === '');
   };
 
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  useGSAP(() => {
-    gsap.to('.cursor', {
-        x: mousePosition.x,
-        y: mousePosition.y,
-        ease: "power2.out",
-        duration: 0.3
-    });
-}, [mousePosition]);
+  
 
   useEffect(() => {
     const isValid = validate();
