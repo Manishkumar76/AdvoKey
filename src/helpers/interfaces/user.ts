@@ -10,5 +10,5 @@ export interface User{
     profile_image_url: string;
       isEmailverify: boolean;
     location:Location;
-
+    isverify: boolean;
 }
