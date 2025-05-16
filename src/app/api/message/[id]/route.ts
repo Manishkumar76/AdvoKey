@@ -4,7 +4,7 @@ import Message from '@/models/Message';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET messages for chatId
-export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(req: NextRequest, { params }: any) {
   await connect();
 
   const { id } = params;
@@ -23,7 +23,7 @@ export async function GET(req: NextRequest, { params }: { params: { id: string }
 }
 
 // POST a new message
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(req: NextRequest, { params }:any) {
   await connect();
 
   const { id } = params;
