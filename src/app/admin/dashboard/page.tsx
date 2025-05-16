@@ -129,7 +129,7 @@ export default function DashboardPage() {
         <div className="flex items-center space-x-2">
           <DatePicker
             selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
+            onChange={(date: Date | null) => setStartDate(date)}
             selectsStart
             startDate={startDate}
             endDate={endDate}
@@ -137,50 +137,51 @@ export default function DashboardPage() {
             className="border border-gray-300 rounded px-3 py-2 bg-white"
             isClearable
           />
-          <span>to</span>
+
           <DatePicker
             selected={endDate}
-            onChange={(date: Date) => setEndDate(date)}
+            onChange={(date: Date | null) => setEndDate(date)}
             selectsEnd
             startDate={startDate}
             endDate={endDate}
-            minDate={startDate}
+            minDate={startDate!}
             placeholderText="End Date"
             className="border border-gray-300 rounded px-3 py-2 bg-white"
             isClearable
           />
+
         </div>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
         {loading
           ? Array(4)
-              .fill(null)
-              .map((_, i) => (
-                <Card key={i} className="shadow-md rounded-2xl border border-gray-100 p-6">
-                  <Skeleton height={30} width={30} circle />
-                  <Skeleton height={20} width={80} className="mt-2" />
-                  <Skeleton height={28} width={50} className="mt-1" />
-                </Card>
-              ))
+            .fill(null)
+            .map((_, i) => (
+              <Card key={i} className="shadow-md rounded-2xl border border-gray-100 p-6">
+                <Skeleton height={30} width={30} circle />
+                <Skeleton height={20} width={80} className="mt-2" />
+                <Skeleton height={28} width={50} className="mt-1" />
+              </Card>
+            ))
           : dashboardData.map((item, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: index * 0.1 }}
-              >
-                <Card className="shadow-md rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300">
-                  <CardContent className="flex items-center gap-4 p-6">
-                    <div className="bg-gray-100 p-3 rounded-full">{item.icon}</div>
-                    <div>
-                      <div className="text-sm text-gray-500">{item.title}</div>
-                      <div className="text-xl font-bold">{item.value}</div>
-                    </div>
-                  </CardContent>
-                </Card>
-              </motion.div>
-            ))}
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: index * 0.1 }}
+            >
+              <Card className="shadow-md rounded-2xl border border-gray-100 hover:shadow-lg transition-all duration-300">
+                <CardContent className="flex items-center gap-4 p-6">
+                  <div className="bg-gray-100 p-3 rounded-full">{item.icon}</div>
+                  <div>
+                    <div className="text-sm text-gray-500">{item.title}</div>
+                    <div className="text-xl font-bold">{item.value}</div>
+                  </div>
+                </CardContent>
+              </Card>
+            </motion.div>
+          ))}
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
