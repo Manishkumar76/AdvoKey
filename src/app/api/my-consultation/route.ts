@@ -6,7 +6,7 @@ import { getDataFromToken } from '@/helpers/getDataFromToken';
 export async function GET() {
     await connect();
 
-    const userId = await getDataFromToken(); // Securely extract user id from token
+    const userId = (await getDataFromToken()).id; // Securely extract user id from token
     console.log(userId);
     if (!userId) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });

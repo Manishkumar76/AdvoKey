@@ -8,7 +8,7 @@ export interface Lawyer {
     availability: string;
     years_of_experience: number;
     location:Location;
-    isverify: boolean;
+    isVerified : boolean;
     user: User;
     
   }

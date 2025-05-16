@@ -86,10 +86,10 @@ export default function LawyersPage() {
                     <td className="px-6 py-4">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          lawyer.isverify ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                          lawyer. isVerified ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
                         }`}
                       >
-                        {lawyer.isverify ? 'Verified' : 'Pending'}
+                        {lawyer. isVerified ? 'Verified' : 'Pending'}
                       </span>
                     </td>   
                     <td className="px-6 py-4 flex gap-4">
