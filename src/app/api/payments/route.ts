@@ -1,3 +1,4 @@
+// src/app/api/payments/route.ts
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
 import Payment from '@/models/Payment';
@@ -6,11 +7,17 @@ export async function GET() {
   await connect();
   try {
     const payments = await Payment.find()
-      .populate('client_id')
-      .populate('lawyer_id')
+      .populate('client_id', 'username email')
+      .populate({
+        path: 'lawyer_id',
+        populate: {
+          path: 'user',
+          select: 'username email',
+        },
+      })
       .populate('consultation_id')
       .populate('chat_session_id');
-    return NextResponse.json( payments, { status: 200 });
+    return NextResponse.json(payments, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

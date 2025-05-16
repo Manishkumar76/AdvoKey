@@ -16,6 +16,8 @@ import {
   CartesianGrid,
 } from 'recharts';
 import dayjs from 'dayjs';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -24,8 +26,8 @@ export default function UsersPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
   const [roleFilter, setRoleFilter] = useState<string>('All');
-  const [startDate, setStartDate] = useState<string>('');
-  const [endDate, setEndDate] = useState<string>('');
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
 
   useEffect(() => {
     const fetchusers = async () => {
@@ -49,10 +51,10 @@ export default function UsersPage() {
     }
 
     if (startDate) {
-      filtered = filtered.filter((u) => dayjs(u.createdAt).isAfter(startDate));
+      filtered = filtered.filter((u) => dayjs(u.createdAt).isAfter(dayjs(startDate)));
     }
     if (endDate) {
-      filtered = filtered.filter((u) => dayjs(u.createdAt).isBefore(endDate));
+      filtered = filtered.filter((u) => dayjs(u.createdAt).isBefore(dayjs(endDate).endOf('day')));
     }
 
     setFilteredUsers(filtered);
@@ -96,7 +98,7 @@ export default function UsersPage() {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap gap-4 mb-6">
+      <div className="flex flex-wrap gap-4 mb-6 items-center">
         <select
           value={roleFilter}
           onChange={(e) => setRoleFilter(e.target.value)}
@@ -107,17 +109,23 @@ export default function UsersPage() {
           <option value="Lawyer">Lawyer</option>
           <option value="Admin">Admin</option>
         </select>
-        <input
-          type="date"
+
+        <DatePicker
+          selected={startDate}
+          onChange={(date: Date | null) => setStartDate(date)}
+          placeholderText="Start Date"
           className="border rounded px-4 py-2"
-          value={startDate}
-          onChange={(e) => setStartDate(e.target.value)}
+          dateFormat="yyyy-MM-dd"
+          maxDate={new Date()}
         />
-        <input
-          type="date"
+
+        <DatePicker
+          selected={endDate}
+          onChange={(date: Date | null) => setEndDate(date)}
+          placeholderText="End Date"
           className="border rounded px-4 py-2"
-          value={endDate}
-          onChange={(e) => setEndDate(e.target.value)}
+          dateFormat="yyyy-MM-dd"
+          maxDate={new Date()}
         />
       </div>
 
@@ -173,7 +181,9 @@ export default function UsersPage() {
                     <td className="px-6 py-4">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          user.isverify ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                          user.isverify
+                            ? 'bg-green-100 text-green-700'
+                            : 'bg-yellow-100 text-yellow-700'
                         }`}
                       >
                         {user.isverify ? 'Verified' : 'Pending'}
