@@ -15,6 +15,7 @@ import {
     Tooltip,
     ResponsiveContainer,
     CartesianGrid,
+    Cell
 } from 'recharts';
 
 export default function ReviewsPage() {
@@ -22,7 +23,7 @@ export default function ReviewsPage() {
     const [loading, setLoading] = useState(true);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedReviewId, setSelectedReviewId] = useState<string | null>(null);
-
+    const barColors = ['#EF4444', '#F59E0B', '#10B981', '#3B82F6', '#8B5CF6']; 
     useEffect(() => {
         const fetchReviews = async () => {
             try {
@@ -96,10 +97,15 @@ export default function ReviewsPage() {
                         <XAxis dataKey="rating" />
                         <YAxis allowDecimals={false} />
                         <Tooltip />
-                        <Bar dataKey="count" fill="#4f46e5" />
+                        <Bar dataKey="count">
+                            {ratingStats.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={barColors[index % barColors.length]} />
+                            ))}
+                        </Bar>
                     </BarChart>
                 </ResponsiveContainer>
             </div>
+
 
             {loading ? (
                 <div className="flex items-center justify-center h-screen bg-gray-100">

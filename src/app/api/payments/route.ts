@@ -10,7 +10,7 @@ export async function GET() {
       .populate('lawyer_id')
       .populate('consultation_id')
       .populate('chat_session_id');
-    return NextResponse.json({ data: payments });
+    return NextResponse.json( payments, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

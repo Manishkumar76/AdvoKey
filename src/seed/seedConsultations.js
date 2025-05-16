@@ -1,47 +1,63 @@
 import mongoose from 'mongoose';
-import Consultation from '../models/Consultation';
 import dotenv from 'dotenv';
-dotenv.config();
+import Consultation from '../models/Consultation.js';
+import User from '../models/userModel.js';
+import LawyerProfile from '../models/LawyerProfile.js';
 
-const consultations = [
-  {
-    client_id: '9aad1626-d061-444a-aae6-e84775e967a3',
-    lawyer_id: '56198c12-90b5-4d40-b980-ee8cf5da9c7f',
-    scheduledAt: new Date('2025-06-15T11:59:28Z'),
-    time: '22:41:12',
-    durationMinutes: 90,
-    notes: 'Leave impact move job lot.',
-    status: 'Completed',
-  },
-  {
-    client_id: '0bc9e19d-75b5-4ac7-a855-fe546cafe919',
-    lawyer_id: '086cc025-fbb4-4c18-b8e9-9a3868ca5d68',
-    scheduledAt: new Date('2025-06-14T05:15:33Z'),
-    time: '05:27:16',
-    durationMinutes: 60,
-    notes: 'Appear indeed themselves.',
-    status: 'Cancelled',
-  },
-  // ... add 48 more consultations
-];
+dotenv.config();
+const MONGO_URI = process.env.MONGO_URI;
 
 async function seedConsultations() {
   try {
-    await mongoose.connect(process.env.MONGODB_URI);
-    console.log('Connected to MongoDB for seeding consultations');
+    await mongoose.connect(MONGO_URI);
+    console.log('✅ Connected to MongoDB');
 
+    // Fetch existing clients and lawyers
+    const clients = await User.find({ role: 'Client' }).select('_id');
+    const lawyers = await LawyerProfile.find().select('user');
+
+    if (clients.length === 0 || lawyers.length === 0) {
+      console.error('❌ Not enough clients or lawyers to create consultations');
+      return process.exit(1);
+    }
+
+    // Optional: Clear existing consultations
     await Consultation.deleteMany({});
-    console.log('Deleted existing consultations');
+    console.log('🗑️ Cleared existing Consultation records');
+
+    // Create 50 consultation documents
+    const consultations = [];
+    const statuses = ['Scheduled', 'Completed', 'Cancelled']; // match enum
+
+    for (let i = 1; i <= 50; i++) {
+      const randomClient = clients[Math.floor(Math.random() * clients.length)];
+      const randomLawyer = lawyers[Math.floor(Math.random() * lawyers.length)];
+
+      const scheduledAt = new Date(Date.now() + i * 3600 * 1000); // future time
+      const createdAt = new Date(Date.now() - Math.floor(Math.random() * 1e10));
+
+      consultations.push({
+        client_id: randomClient._id,
+        lawyer_id: randomLawyer._id, // `user` from LawyerProfile
+        scheduledAt,
+        time: `${9 + (i % 8)}:00 AM`,
+        durationMinutes: 60,
+        status: statuses[i % statuses.length],
+        notes: `Consultation notes ${i}`,
+        createdAt,
+      });
+    }
 
     await Consultation.insertMany(consultations);
-    console.log('Inserted consultations data');
+    console.log(`✅ Inserted ${consultations.length} consultations`);
 
     await mongoose.disconnect();
-    console.log('Disconnected from MongoDB');
+    console.log('🔌 Disconnected from MongoDB');
+    
   } catch (err) {
-    console.error('Seeding consultations failed:', err);
+    console.error('❌ Seeding consultations failed:', err);
     process.exit(1);
   }
 }
 
-seedConsultations();
+export default seedConsultations;

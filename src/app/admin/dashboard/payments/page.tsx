@@ -13,7 +13,8 @@ export default function PaymentsPage() {
     const fetchPayments = async () => {
       try {
         const res = await axios.get('/api/payments');
-        setPayments(res.data.data || []);
+        console.log('Payments:', res.data[0]);
+        setPayments(res.data || []);
       } catch (err) {
         console.error('Error fetching payments:', err);
       } finally {

@@ -118,7 +118,7 @@ export default function LawyersPage() {
         </div>
       ) : (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
-          <div className="overflow-x-auto bg-white shadow-md rounded-lg">
+          <div className="overflow-x-auto bg-gray-200 shadow-md rounded-lg">
             <table className="min-w-full divide-y divide-gray-200">
               <thead className="bg-gray-100 text-gray-700 text-left text-sm font-semibold">
                 <tr>
@@ -133,15 +133,14 @@ export default function LawyersPage() {
               <tbody className="divide-y divide-gray-200 text-sm">
                 {lawyers.map((lawyer) => (
                   <tr key={lawyer._id} className="hover:bg-gray-50">
-                    <td className="px-6 py-4 whitespace-nowrap">{lawyer.user.username}</td>
-                    <td className="px-6 py-4">{lawyer.user.email}</td>
-                    <td className="px-6 py-4">{lawyer.user.phone}</td>
-                    <td className="px-6 py-4">{lawyer.specialization || 'N/A'}</td>
+                    <td className="px-6 py-4 whitespace-nowrap">{lawyer.user?.username}</td>
+                    <td className="px-6 py-4">{lawyer.user?.email}</td>
+                    <td className="px-6 py-4">{lawyer.user?.phone}</td>
+                    <td className="px-6 py-4">{lawyer?.specialization || 'N/A'}</td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          lawyer.isVerified ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
-                        }`}
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${lawyer.isVerified ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                          }`}
                       >
                         {lawyer.isVerified ? 'Verified' : 'Pending'}
                       </span>
@@ -200,4 +199,3 @@ export default function LawyersPage() {
     </div>
   );
 }
-  
