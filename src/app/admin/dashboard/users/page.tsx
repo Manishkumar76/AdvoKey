@@ -15,12 +15,17 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
+import dayjs from 'dayjs';
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
+  const [roleFilter, setRoleFilter] = useState<string>('All');
+  const [startDate, setStartDate] = useState<string>('');
+  const [endDate, setEndDate] = useState<string>('');
 
   useEffect(() => {
     const fetchusers = async () => {
@@ -35,6 +40,23 @@ export default function UsersPage() {
     };
     fetchusers();
   }, []);
+
+  useEffect(() => {
+    let filtered = [...users];
+
+    if (roleFilter !== 'All') {
+      filtered = filtered.filter((u) => u.role === roleFilter);
+    }
+
+    if (startDate) {
+      filtered = filtered.filter((u) => dayjs(u.createdAt).isAfter(startDate));
+    }
+    if (endDate) {
+      filtered = filtered.filter((u) => dayjs(u.createdAt).isBefore(endDate));
+    }
+
+    setFilteredUsers(filtered);
+  }, [roleFilter, startDate, endDate, users]);
 
   const handleDelete = async () => {
     if (!selectedUserId) return;
@@ -58,32 +80,45 @@ export default function UsersPage() {
     count: users.filter((u) => u.role === role).length,
   }));
 
+  const latestUsers = [...users]
+    .sort((a, b) => +new Date(b.createdAt) - +new Date(a.createdAt))
+    .slice(0, 5);
+
   return (
     <div className="p-6">
       <h1 className="text-2xl font-semibold mb-6 text-gray-800">Users Management</h1>
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <h2 className="text-xl font-semibold text-gray-800">Total Users</h2>
-          <h3 className="text-lg font-medium text-gray-700">
-            <CountUp end={totalUsers} duration={1.5} />
-          </h3>
-        </div>
+        <SummaryCard title="Total Users" count={totalUsers} />
+        <SummaryCard title="Verified Users" count={verifiedUsers} />
+        <SummaryCard title="Total Lawyers" count={totalLawyers} />
+      </div>
 
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <h2 className="text-xl font-semibold text-gray-800">Verified Users</h2>
-          <h3 className="text-lg font-medium text-gray-700">
-            <CountUp end={verifiedUsers} duration={1.5} />
-          </h3>
-        </div>
-
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <h2 className="text-xl font-semibold text-gray-800">Total Lawyers</h2>
-          <h3 className="text-lg font-medium text-gray-700">
-            <CountUp end={totalLawyers} duration={1.5} />
-          </h3>
-        </div>
+      {/* Filters */}
+      <div className="flex flex-wrap gap-4 mb-6">
+        <select
+          value={roleFilter}
+          onChange={(e) => setRoleFilter(e.target.value)}
+          className="border rounded px-4 py-2"
+        >
+          <option value="All">All Roles</option>
+          <option value="Client">Client</option>
+          <option value="Lawyer">Lawyer</option>
+          <option value="Admin">Admin</option>
+        </select>
+        <input
+          type="date"
+          className="border rounded px-4 py-2"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+        />
+        <input
+          type="date"
+          className="border rounded px-4 py-2"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+        />
       </div>
 
       {/* Role Chart */}
@@ -100,18 +135,21 @@ export default function UsersPage() {
         </ResponsiveContainer>
       </div>
 
+      {/* Latest Users */}
+      <div className="bg-white shadow rounded-lg p-4 mb-8">
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">Recent Signups</h2>
+        <ul className="space-y-2 text-sm text-gray-700">
+          {latestUsers.map((u) => (
+            <li key={u._id} className="border-b pb-1">
+              {u.username} – {u.email} – {dayjs(u.createdAt).format('MMM D, YYYY')}
+            </li>
+          ))}
+        </ul>
+      </div>
+
       {/* Table */}
       {loading ? (
-        <div className="flex items-center justify-center h-screen bg-gray-100">
-          <svg className="animate-spin h-10 w-10 text-gray-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <circle className="opacity-25" cx="12" cy="10" r="10" fill="none" strokeWidth="4" strokeLinecap="round" />
-            <path
-              className="opacity-75"
-              fill="currentColor"
-              d="M4.93 4.93a10 10 0 0114.14 14.14l-1.41-1.41a8 8 0 00-11.31-11.31L4.93 4.93z"
-            />
-          </svg>
-        </div>
+        <SkeletonTable />
       ) : (
         <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.1 }}>
           <div className="overflow-x-auto bg-white shadow-md rounded-lg">
@@ -127,7 +165,7 @@ export default function UsersPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 text-sm">
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <tr key={user._id} className="hover:bg-gray-50">
                     <td className="px-6 py-4 whitespace-nowrap">{user.username}</td>
                     <td className="px-6 py-4">{user.email}</td>
@@ -193,6 +231,27 @@ export default function UsersPage() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function SummaryCard({ title, count }: { title: string; count: number }) {
+  return (
+    <div className="bg-white rounded-lg shadow p-6 text-center">
+      <h2 className="text-xl font-semibold text-gray-800">{title}</h2>
+      <h3 className="text-lg font-medium text-gray-700">
+        <CountUp end={count} duration={1.5} />
+      </h3>
+    </div>
+  );
+}
+
+function SkeletonTable() {
+  return (
+    <div className="bg-white p-6 rounded-lg shadow space-y-4 animate-pulse">
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className="h-6 bg-gray-200 rounded w-full"></div>
+      ))}
     </div>
   );
 }

@@ -34,9 +34,8 @@ isverify:{
 forgotPasswordToken:String,
 forgotPasswordExpiry:Date,
 verifyToken: String,
-verifyTokenExpiry:Date
-
-
+verifyTokenExpiry:Date,
+createdAt:{type:Date,default:Date.now()}
 });
 
 const User= mongoose.models.User || mongoose.model('User',userSchema); 

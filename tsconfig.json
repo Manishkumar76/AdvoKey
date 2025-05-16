@@ -1,5 +1,7 @@
 {
+
   "compilerOptions": {
+    "baseUrl": ".",
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
@@ -24,4 +26,5 @@
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "src/app/api/users/me/route.ts", "src/app/api/socket/route.js"],
   "exclude": ["node_modules"]
+  
 }

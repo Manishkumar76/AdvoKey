@@ -11,4 +11,5 @@ export interface User{
       isEmailverify: boolean;
     location:Location;
     isverify: boolean;
+    createdAt: Date;
 }

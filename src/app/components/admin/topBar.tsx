@@ -2,9 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { User } from '@/helpers/interfaces/user';
 
 const Topbar = () => {
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<User |null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 
@@ -44,11 +45,11 @@ const Topbar = () => {
 
   return (
     <header className="bg-white border-b shadow-sm p-4 flex items-center justify-between">
-      <h1 className="text-lg font-semibold text-gray-800">AdvoKey Admin Dashboard</h1>
+      <h1 className="text-lg font-semibold text-gray-800">{user?.username|| 'Welcome Admin'}</h1>
       <div className="flex items-center gap-4">
         {!loading && user ? (
           <>
-            <span className="text-sm text-gray-700">Welcome, {user.username}</span>
+            <span className="text-sm text-gray-700">Welcome, {user?.email}</span>
             <button
               onClick={handleLogout}
               className="bg-red-500 hover:bg-red-600 text-white px-3 py-1.5 rounded-md text-sm"
