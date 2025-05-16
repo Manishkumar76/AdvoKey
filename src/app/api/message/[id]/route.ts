@@ -1,48 +1,52 @@
-// /pages/api/messages/[chatId].ts
-import { NextApiRequest, NextApiResponse } from 'next';
+// src/app/api/message/[id]/route.ts
 import { connect } from '@/dbConfig/dbConfig';
 import Message from '@/models/Message';
+import { NextRequest, NextResponse } from 'next/server';
 
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+// GET messages for chatId
+export async function GET(req: NextRequest, { params }: { params: { id: string } }) {
   await connect();
 
-  const { id } = req.query;
+  const { id } = params;
 
-  if (!id || typeof id !== 'string') {
-    return res.status(400).json({ error: 'Invalid chatId' });
+  if (!id) {
+    return NextResponse.json({ error: 'Invalid chatId' }, { status: 400 });
   }
 
   try {
-    switch (req.method) {
-      case 'GET':
-        // Fetch all messages in this chat
-        const messages = await Message.find({ id }).sort({ timestamp: 1 });
-        return res.status(200).json(messages);
-
-      case 'POST':
-        // Create a new message
-        const { senderId, receiverId, text, content } = req.body;
-
-        if (!senderId || !receiverId || !text) {
-          return res.status(400).json({ error: 'senderId, receiverId, and text are required' });
-        }
-
-        const newMessage = await Message.create({
-          id,
-          senderId,
-          receiverId,
-          text,
-          content,
-        });
-
-        return res.status(201).json(newMessage);
-
-      default:
-        return res.status(405).json({ error: 'Method not allowed' });
-    }
+    const messages = await Message.find({ id }).sort({ timestamp: 1 });
+    return NextResponse.json(messages, { status: 200 });
   } catch (error) {
-    console.error('Message API Error:', error);
-    return res.status(500).json({ error: 'Internal server error' });
+    console.error('GET messages error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+  }
+}
+
+// POST a new message
+export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
+  await connect();
+
+  const { id } = params;
+  const body = await req.json();
+
+  const { senderId, receiverId, text, content } = body;
+
+  if (!senderId || !receiverId || !text) {
+    return NextResponse.json({ error: 'senderId, receiverId, and text are required' }, { status: 400 });
+  }
+
+  try {
+    const newMessage = await Message.create({
+      id,
+      senderId,
+      receiverId,
+      text,
+      content,
+    });
+
+    return NextResponse.json(newMessage, { status: 201 });
+  } catch (error) {
+    console.error('POST message error:', error);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }
