@@ -1,36 +1,53 @@
-// src/app/api/payments/route.ts
-import { NextRequest, NextResponse } from 'next/server';
-import { connect } from '@/dbConfig/dbConfig';
+import { NextResponse } from 'next/server';
+import {connect} from '@/dbConfig/dbConfig';
 import Payment from '@/models/Payment';
+import User from '@/models/userModel';
+import LawyerProfile from '@/models/LawyerProfile';
 
 export async function GET() {
-  await connect();
   try {
+    await connect();
+
     const payments = await Payment.find()
-      .populate('client_id', 'username email')
+      .sort({ timestamp: -1 }) // most recent first
+      .populate('client_id')
       .populate({
         path: 'lawyer_id',
         populate: {
           path: 'user',
-          select: 'username email',
+          model: 'User',
         },
-      })
-      .populate('consultation_id')
-      .populate('chat_session_id');
-    return NextResponse.json(payments, { status: 200 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+      });
+
+    return NextResponse.json(payments);
+  } catch (err) {
+    console.error('Error fetching payments:', err);
+    return NextResponse.json({ message: 'Failed to fetch payments' }, { status: 500 });
   }
 }
 
-export async function POST(req: NextRequest) {
-  await connect();
+// POST request to create a new payment
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-    const payment = new Payment(body);
-    await payment.save();
-    return NextResponse.json({ data: payment }, { status: 201 });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 400 });
+    await connect();
+
+    const paymentData = await request.json();
+    const { lawyer_id, client_id } = paymentData;
+
+    // Check if the lawyer and client exist
+    const lawyer = await LawyerProfile.findById(lawyer_id);
+    const client = await User.findById(client_id);
+
+    if (!lawyer || !client) {
+      return NextResponse.json({ message: 'Lawyer or Client not found' }, { status: 404 });
+    }
+
+    const newPayment = new Payment(paymentData);
+    await newPayment.save();
+
+    return NextResponse.json(newPayment, { status: 201 });
+  } catch (err) {
+    console.error('Error creating payment:', err);
+    return NextResponse.json({ message: 'Failed to create payment' }, { status: 500 });
   }
 }

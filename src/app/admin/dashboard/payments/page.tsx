@@ -13,7 +13,6 @@ export default function PaymentsPage() {
     const fetchPayments = async () => {
       try {
         const res = await axios.get('/api/payments');
-        console.log('Payments:', res.data[0]);
         setPayments(res.data || []);
       } catch (err) {
         console.error('Error fetching payments:', err);
@@ -104,17 +103,26 @@ export default function PaymentsPage() {
                 ) : (
                   filteredPayments.map((p) => (
                     <tr key={p._id}>
-                      <td className="px-6 py-4">{p.client_id?.username || 'Client'}</td>
-                      <td className="px-6 py-4">{p.lawyer_id?.user?.username || 'Lawyer'}</td>
+                      <td className="px-6 py-4">
+                        {p.client_id?.username || 'Client'}
+                      </td>
+                      <td className="px-6 py-4">
+                        {p.lawyer_id?.user?.username || 'Lawyer'}
+                      </td>
                       <td className="px-6 py-4">${p.amount.toFixed(2)}</td>
                       <td className="px-6 py-4">{p.transaction_id}</td>
                       <td className="px-6 py-4">
-                        {new Date(p.timestamp).toLocaleString()}
+                        {new Intl.DateTimeFormat('en-US', {
+                          dateStyle: 'medium',
+                          timeStyle: 'short',
+                        }).format(new Date(p.timestamp))}
                       </td>
                       <td className="px-6 py-4">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                            statusColors[p.status.toLowerCase() as keyof typeof statusColors] || ''
+                            statusColors[
+                              p.status.toLowerCase() as keyof typeof statusColors
+                            ] || ''
                           }`}
                         >
                           {p.status}
