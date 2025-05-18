@@ -33,6 +33,8 @@ export const config = {
         '/verify-email',
         '/dashboard/:path*',
         '/lawyers/:path*',
-        '/consultation/:path*' 
-    ],
+        '/consultation/:path*',
+        '/AiChat/:path*',
+        '/AiChat'
+        ],
 };

@@ -34,7 +34,7 @@ export default function HomePage() {
             </p>
             <div className="flex flex-col sm:flex-row justify-center lg:justify-start gap-4">
               <Link
-                href="/get-legal-advice"
+                href="/AiChat"
                 className="px-6 py-3 bg-blue-600 hover:bg-blue-700 transition text-white font-semibold text-base rounded-lg"
               >
                 Get Legal Advice
