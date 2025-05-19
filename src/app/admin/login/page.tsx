@@ -128,7 +128,7 @@ export default function Login() {
                 }
 
                 <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-600 text-white shadow-blue-600 bg-opacity-30 backdrop-blur">
-                    <h1 className="text-xl font-bold mb-4">Login Page</h1>
+                    <h1 className="text-xl font-bold mb-4">Admin Login</h1>
 
                     <input
                         className="w-full p-2 border border-gray-600 rounded-lg mb-4 bg-gray-700 focus:outline-none focus:border-blue-400"
@@ -163,10 +163,6 @@ export default function Login() {
                     >
                         Login
                     </button>
-                    <div className="my-2 py-2">
-                        <span>Don't have an account? </span>
-                        <Link className="text-blue-400 mt-4 hover:underline" href="/signup">Sign Up</Link>
-                    </div>
                 </div>
             </div>
         </div>
