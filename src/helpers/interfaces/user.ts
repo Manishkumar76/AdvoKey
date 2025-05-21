@@ -1,4 +1,4 @@
-import {Locations} from "./location"
+import {Location} from "./location"
 export interface Users{
       _id: string;
       fullname: string;
@@ -9,7 +9,7 @@ export interface Users{
       role: string;
     profile_image_url: string;
       isEmailverify: boolean;
-    location:Locations;
+    location:Location;
     isverify: boolean;
     createdAt: Date;
 }
