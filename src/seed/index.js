@@ -11,6 +11,7 @@ import seedPayments from './seedPayments.js';
 import seedReviews from './seedReviews.js';
 
 import seedSpecializations from './seedLawyerSpecializations.js';
+import seedLocations from './seedLocations.js';
 
 async function main() {
   try {
@@ -22,6 +23,7 @@ async function main() {
 
     // Run each seeder
     await seedUsers();
+    await seedLocations();
     await seedLawyerProfiles();
     await seedConsultations();
     await seedSpecializations();
@@ -29,6 +31,7 @@ async function main() {
     await seedMessages();
     await seedPayments();
     await seedReviews();
+    
     
 
     // Disconnect after all seeders finish
