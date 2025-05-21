@@ -186,7 +186,7 @@ export default function DashboardPage() {
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {[{
-          title: 'User Growth Over Time',
+          title: 'Users Growth Over Time',
           data: chartDataUsers,
           color: '#2563eb'
         }, {
@@ -194,7 +194,7 @@ export default function DashboardPage() {
           data: chartDataLawyers,
           color: '#16a34a'
         }, {
-          title: 'Review Counts Over Time',
+          title: 'Reviews Counts Over Time',
           data: chartDataReviews,
           color: '#fbbf24'
         }].map((chart, i) => (

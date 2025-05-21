@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Consultation from '@/models/Consultation';
+import Consultations from '@/models/Consultations';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 
 export async function GET() {
@@ -13,7 +13,7 @@ export async function GET() {
     }
 
     try {
-        const consultations = await Consultation.find({ client: userId })
+        const consultations = await Consultations.find({ client: userId })
             .populate({
                 path: 'lawyer',
                 select:'isVerified',

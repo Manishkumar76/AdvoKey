@@ -1,13 +1,13 @@
 import React, { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-interface User {
+interface Users {
   id:string,
   username: string;
   avatar?: string;
 }
 
 interface UserDropdownProps {
-  user: User;
+  user: Users;
   handleLogout: () => void;
 }
 
@@ -36,7 +36,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ user, handleLogout }) => {
       >
         <img
           src={user.avatar || '/user.jpg'}
-          alt="User Avatar"
+          alt="Users Avatar"
           className="w-10 h-10 rounded-full border-2 border-white shadow-md object-cover"
         />
         <div className=''>{user.username}</div>
@@ -60,7 +60,7 @@ const UserDropdown: React.FC<UserDropdownProps> = ({ user, handleLogout }) => {
               href={`/dashboard/${user.id}`}
               className="block px-4 py-2 hover:bg-gray-100 focus:bg-gray-100 focus:outline-none transition"
             >
-              User Profile
+              Users Profile
             </Link>
             <button
               onClick={handleLogout}

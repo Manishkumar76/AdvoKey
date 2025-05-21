@@ -6,7 +6,7 @@ import path from 'path';
 import { tmpdir } from 'os';
 import { randomUUID } from 'crypto';
 import fs from 'fs';
-import User from '@/models/userModel';
+import Users from '@/models/userModel';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME!,
@@ -50,8 +50,8 @@ export async function POST(req: NextRequest,  params : any) {
 
     //update user profile picture in database
     
-    // Assuming you have a User model and a function to update the user
-    const Response = await User.findByIdAndUpdate(userId, { profile_image_url: result.secure_url.toString() });
+    // Assuming you have a Users model and a function to update the user
+    const Response = await Users.findByIdAndUpdate(userId, { profile_image_url: result.secure_url.toString() });
 
     return NextResponse.json({ url: Response.profile_image_url }, { status: 200 });
 

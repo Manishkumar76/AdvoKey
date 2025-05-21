@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Specialization from '../models/Specialization.js';
+import Specializations from '../models/Specializations.js';
 
 dotenv.config();
 
@@ -33,10 +33,10 @@ async function seedSpecializations() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ Connected to MongoDB for seeding specializations');
 
-    await Specialization.deleteMany({});
+    await Specializations.deleteMany({});
     console.log('🗑️ Deleted existing specializations');
 
-    await Specialization.insertMany(specializations);
+    await Specializations.insertMany(specializations);
     console.log(`✅ Inserted ${specializations.length} specializations`);
 
    

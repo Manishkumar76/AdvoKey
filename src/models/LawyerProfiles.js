@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 
 const lawyerProfileSchema = new mongoose.Schema({
-  user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', unique: true },
+  user: { type: mongoose.Schema.Types.ObjectId, ref: 'Users', unique: true },
   bio: String,
   years_of_experience: Number,
   hourly_rate: Number,
@@ -11,4 +11,4 @@ const lawyerProfileSchema = new mongoose.Schema({
   isVerified:Boolean
 }, { timestamps: { createdAt: 'created_at' } });
 
-export default mongoose.models.LawyerProfile || mongoose.model('LawyerProfile', lawyerProfileSchema);
+export default mongoose.models.LawyerProfiles || mongoose.model('LawyerProfiles', lawyerProfileSchema);

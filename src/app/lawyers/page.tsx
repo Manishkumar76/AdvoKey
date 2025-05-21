@@ -157,12 +157,12 @@ const LawyersPage: React.FC = () => {
                 {/* Lawyer Info */}
                 <div className="flex-1 text-center md:text-left space-y-1">
                   <h3 className="text-2xl font-extrabold text-blue-400">{lawyer?.user?.username}</h3>
-                  <p className="text-sm text-gray-300">📘 Specialization: <span className="text-white">{lawyer.specialization}</span></p>
+                  <p className="text-sm text-gray-300">📘 Specializations: <span className="text-white">{lawyer.specialization}</span></p>
                   <p className="text-sm text-gray-300">⭐ Rating: <span className="text-white">{lawyer.rating}</span></p>
                   <p className="text-sm text-gray-300">📅 Availability: <span className="text-white">{lawyer.availability}</span></p>
                   <p className="text-sm text-gray-300">⏳ Experience: <span className="text-white">{lawyer.years_of_experience} years</span></p>
                   <p className="text-sm text-gray-300">
-                    📍 Location: <span className="text-white">
+                    📍 Locations: <span className="text-white">
                       {lawyer.user?.location?.city || 'N/A'}, {lawyer.user?.location?.state || 'N/A'}, {lawyer.user?.location?.country || 'N/A'}
                     </span>
                   </p>

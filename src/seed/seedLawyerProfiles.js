@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import LawyerProfile from '../models/LawyerProfile.js';
-import User from '../models/userModel.js';
+import LawyerProfiles from '../models/LawyerProfiles.js';
+import Users from '../models/userModel.js';
 
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
@@ -12,7 +12,7 @@ async function seedLawyerProfiles() {
     console.log('✅ Connected to MongoDB');
 
     // Get all users with role: "Lawyer"
-    const lawyerUsers = await User.find({ role: 'Lawyer' }).select('_id');
+    const lawyerUsers = await Users.find({ role: 'Lawyer' }).select('_id');
     if (lawyerUsers.length === 0) {
       console.error('❌ No lawyers found in the database');
       return process.exit(1);
@@ -21,8 +21,8 @@ async function seedLawyerProfiles() {
     console.log(`👨‍⚖️ Found ${lawyerUsers.length} lawyer users`);
 
     // Clear existing profiles
-    await LawyerProfile.deleteMany({});
-    console.log('🗑️ Cleared existing LawyerProfile records');
+    await LawyerProfiles.deleteMany({});
+    console.log('🗑️ Cleared existing LawyerProfiles records');
 
     // Create a unique profile for each lawyer
     const lawyerProfiles = lawyerUsers.map((lawyer, index) => ({
@@ -37,7 +37,7 @@ async function seedLawyerProfiles() {
       createdAt: new Date(Date.now() - Math.floor(Math.random() * 1e10)),
     }));
 
-    await LawyerProfile.insertMany(lawyerProfiles);
+    await LawyerProfiles.insertMany(lawyerProfiles);
     console.log(`✅ Inserted ${lawyerProfiles.length} unique lawyer profiles`);
 
     await mongoose.disconnect();

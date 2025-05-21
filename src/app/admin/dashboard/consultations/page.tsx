@@ -107,7 +107,7 @@ export default function ConsultationsPage() {
             <table className="min-w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gray-100 text-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left">User</th>
+                  <th className="px-6 py-3 text-left">Users</th>
                   <th className="px-6 py-3 text-left">Lawyer</th>
                   <th className="px-6 py-3 text-left">Date</th>
                   <th className="px-6 py-3 text-left">Time</th>
@@ -127,7 +127,7 @@ export default function ConsultationsPage() {
                     const statusKey = c.status.toLowerCase();
                     return (
                       <tr key={c._id} className="hover:bg-gray-50">
-                        <td className="px-6 py-4 whitespace-nowrap">{c.client_id?.username || 'User'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">{c.client_id?.username || 'Users'}</td>
                         <td className="px-6 py-4 whitespace-nowrap">{c.lawyer_id?.user?.username || 'Lawyer'}</td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {new Date(c.scheduledAt).toLocaleDateString()}

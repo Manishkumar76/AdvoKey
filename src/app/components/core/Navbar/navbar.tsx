@@ -10,10 +10,10 @@ import { Menu, X } from 'lucide-react';
 import AdvoKey_Logo from '@/app/assets/images/Logo.png';
 import UserDropdown from './drop_down';
 
-import { User } from '@/helpers/interfaces/user';
+import { Users } from '@/helpers/interfaces/user';
 
 export default function Navbar() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<Users | null>(null);
   const [isOpen, setIsOpen] = useState(false);
   const [scrollDirection, setScrollDirection] = useState('up'); // Track scroll direction
   const router = useRouter();

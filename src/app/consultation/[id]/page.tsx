@@ -5,7 +5,7 @@ import { useParams } from "next/navigation";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
-import {Consultation} from '@/helpers/interfaces/consultation';
+import {Consultations} from '@/helpers/interfaces/consultation';
 
 const statusColorMap: Record<string, string> = {
   pending: "bg-yellow-500 animate-pulse",
@@ -29,7 +29,7 @@ const SkeletonCard = () => (
 
 const ConsultationsWithLawyer = () => {
   const { id: lawyerId } = useParams<{ id: string }>();
-  const [consultations, setConsultations] = useState<Consultation[]>([]);
+  const [consultations, setConsultations] = useState<Consultations[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
@@ -41,7 +41,7 @@ const ConsultationsWithLawyer = () => {
         setUserId(uid?.id);
 
         const res = await axios.get(`/api/consultation`);
-        const all: Consultation[] = res.data?.userConsultations || [];
+        const all: Consultations[] = res.data?.userConsultations || [];
 
         if (!Array.isArray(all)) throw new Error("Invalid data format");
 

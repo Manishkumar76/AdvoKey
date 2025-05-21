@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import ChatBubble from "@/app/components/ui/chatBubble";
 import { SunIcon, MoonIcon } from "lucide-react";
 
-type Message = {
+type Messages = {
   role: "user" | "assistant";
   content: string;
 };
@@ -15,7 +15,7 @@ const ADVOKEYAGENT = {
 };
 
 export default function AdvokeyChatPage() {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Messages[]>([]);
   const [input, setInput] = useState("");
   const [loading, setLoading] = useState(false);
   const [darkMode, setDarkMode] = useState(false);
@@ -38,8 +38,8 @@ export default function AdvokeyChatPage() {
   const handleSend = async () => {
     if (!input.trim() || !isAvailable) return;
 
-    const userMessage: Message = { role: "user", content: input };
-    const newMessages: Message[] = [...messages, userMessage];
+    const userMessage: Messages = { role: "user", content: input };
+    const newMessages: Messages[] = [...messages, userMessage];
 
     setMessages(newMessages);
     setInput("");
@@ -53,7 +53,7 @@ export default function AdvokeyChatPage() {
       });
 
       const data = await res.json();
-      const assistantMessage: Message = {
+      const assistantMessage: Messages = {
         role: "assistant",
         content: typeof data.message === "string" ? data.message : "Sorry, I couldn't understand.",
       };

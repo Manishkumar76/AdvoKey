@@ -3,12 +3,12 @@ import mongoose from 'mongoose';
 const ConsultationSchema = new mongoose.Schema({
   client_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
+    ref: 'Users',
     required: true,
   },
   lawyer_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'LawyerProfile',
+    ref: 'LawyerProfiles',
     required: true,
   },
   scheduledAt: {
@@ -33,4 +33,4 @@ const ConsultationSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.models.Consultation || mongoose.model('Consultation', ConsultationSchema);
+export default mongoose.models.Consultations || mongoose.model('Consultations', ConsultationSchema);

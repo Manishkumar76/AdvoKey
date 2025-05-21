@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Consultation from '../models/Consultation.js';
-import User from '../models/userModel.js';
-import LawyerProfile from '../models/LawyerProfile.js';
+import Consultations from '../models/Consultations.js';
+import Users from '../models/userModel.js';
+import LawyerProfiles from '../models/LawyerProfiles.js';
 
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
@@ -13,8 +13,8 @@ async function seedConsultations() {
     console.log('✅ Connected to MongoDB');
 
     // Fetch existing clients and lawyers
-    const clients = await User.find({ role: 'Client' }).select('_id');
-    const lawyers = await LawyerProfile.find().select('user');
+    const clients = await Users.find({ role: 'Client' }).select('_id');
+    const lawyers = await LawyerProfiles.find().select('user');
 
     if (clients.length === 0 || lawyers.length === 0) {
       console.error('❌ Not enough clients or lawyers to create consultations');
@@ -22,8 +22,8 @@ async function seedConsultations() {
     }
 
     // Optional: Clear existing consultations
-    await Consultation.deleteMany({});
-    console.log('🗑️ Cleared existing Consultation records');
+    await Consultations.deleteMany({});
+    console.log('🗑️ Cleared existing Consultations records');
 
     // Create 50 consultation documents
     const consultations = [];
@@ -38,17 +38,17 @@ async function seedConsultations() {
 
       consultations.push({
         client_id: randomClient._id,
-        lawyer_id: randomLawyer._id, // `user` from LawyerProfile
+        lawyer_id: randomLawyer._id, // `user` from LawyerProfiles
         scheduledAt,
         time: `${9 + (i % 8)}:00 AM`,
         durationMinutes: 60,
         status: statuses[i % statuses.length],
-        notes: `Consultation notes ${i}`,
+        notes: `Consultations notes ${i}`,
         createdAt,
       });
     }
 
-    await Consultation.insertMany(consultations);
+    await Consultations.insertMany(consultations);
     console.log(`✅ Inserted ${consultations.length} consultations`);
 
     await mongoose.disconnect();

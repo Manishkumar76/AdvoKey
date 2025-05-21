@@ -5,11 +5,11 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Menu } from 'lucide-react';
-import { User } from '@/helpers/interfaces/user';
+import { Users } from '@/helpers/interfaces/user';
 
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const [userData, setUserData] = useState<User | null>(null);
+  const [userData, setUserData] = useState<Users | null>(null);
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -64,8 +64,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
               className="w-12 h-12 rounded-full bg-gray-500 object-cover"
             />
             <div>
-              <h2 className="text-base font-semibold">{userData?.username || 'User Name'}</h2>
-              <p className="text-sm truncate">{userData?.email || 'User Email'}</p>
+              <h2 className="text-base font-semibold">{userData?.username || 'Users Name'}</h2>
+              <p className="text-sm truncate">{userData?.email || 'Users Email'}</p>
             </div>
           </div>
 

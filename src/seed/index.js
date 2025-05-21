@@ -16,7 +16,6 @@ async function main() {
   try {
     console.log('Starting database seeding...');
 
-    console.log(process.env.MONGO_URI);
     // Connect once for all seeders
     await mongoose.connect(process.env.MONGO_URI.toString());
     console.log('Connected to MongoDB');

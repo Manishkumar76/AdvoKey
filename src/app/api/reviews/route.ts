@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
 import {connect} from '@/dbConfig/dbConfig';
-import Review from '@/models/Review';
+import Reviews from '@/models/Reviews';
 
 export async function GET() {
   await connect();
   try {
-    const reviews = await Review.find()
+    const reviews = await Reviews.find()
       .populate('client_id', 'username email') // Populate only needed fields
       .populate({
         path: 'lawyer_id',
         populate: {
           path: 'user',
-          model: 'User',
+          model: 'Users',
           select: 'username email', // optional
         },
       });
@@ -27,7 +27,7 @@ export async function POST(req:NextRequest) {
   await connect();
   const body = await req.json();
   try {
-    const review = new Review(body);
+    const review = new Reviews(body);
     await review.save();
     return NextResponse.json(review, { status: 201 });
   } catch (error:any) {

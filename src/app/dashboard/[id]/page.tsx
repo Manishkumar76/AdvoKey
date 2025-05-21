@@ -7,15 +7,15 @@ import 'react-loading-skeleton/dist/skeleton.css';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
 
-import { User } from '@/helpers/interfaces/user';
-import { Consultation } from '@/helpers/interfaces/consultation';
+import { Users } from '@/helpers/interfaces/user';
+import { Consultations } from '@/helpers/interfaces/consultation';
 import ConsultationCharts from './insights';
 
 export default function DashboardPage() {
   const route = useRouter();
 
-  const [consultations, setConsultations] = useState<Consultation[]>([]);
-  const [userData, setUserData] = useState<User | null>(null);
+  const [consultations, setConsultations] = useState<Consultations[]>([]);
+  const [userData, setUserData] = useState<Users | null>(null);
   const [loading, setLoading] = useState(true);
   const [insightsLoading, setInsightsLoading] = useState(true);
 
@@ -26,7 +26,7 @@ export default function DashboardPage() {
         setUserData(user?.data?.data);
 
         const res = await axios.get('/api/consultation');
-        const all: Consultation[] = res.data?.userConsultations || [];
+        const all: Consultations[] = res.data?.userConsultations || [];
 
         if (user?.data?.data?.role !== 'Lawyer') {
           const filtered = all.filter(c => c.client_id === user?.data?.data?._id);
@@ -47,7 +47,7 @@ export default function DashboardPage() {
 
   return (
     <div className="flex flex-col p-4 sm:p-6 min-h-screen text-white bg-gray-900">
-      {/* User Info */}
+      {/* Users Info */}
       {userData && (
         <div className="bg-gray-800 p-4 sm:p-6 rounded-lg shadow-lg mb-6 w-full">
           <div className="flex flex-col sm:flex-row sm:items-center gap-4">
@@ -81,14 +81,14 @@ export default function DashboardPage() {
       )}
 
       {/* Charts */}
-      <h1 className="text-2xl sm:text-3xl font-bold mb-4">📊 Consultation Insights</h1>
+      <h1 className="text-2xl sm:text-3xl font-bold mb-4">📊 Consultations Insights</h1>
       {insightsLoading ? (
         <Skeleton height={300} width="100%" />
       ) : (
         <ConsultationCharts userId={userData!._id} />
       )}
 
-      {/* Consultation Table */}
+      {/* Consultations Table */}
       <h1 className="text-2xl sm:text-3xl font-bold mt-10 mb-4">🗓️ My Consultations</h1>
       {loading ? (
         <div className="flex items-center justify-center h-64">

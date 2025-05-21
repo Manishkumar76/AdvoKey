@@ -1,10 +1,10 @@
-import { User } from "./user";
+import { Users } from "./user";
 
-export interface Consultation {
+export interface Consultations {
     _id: string;
     lawyer_id: {
       _id: string;
-      user: User;
+      user: Users;
     };
     client_id: string;
     scheduledAt: string;

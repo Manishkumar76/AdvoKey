@@ -1,5 +1,5 @@
 // src/types/message.ts
-export interface Message {
+export interface Messages {
     senderId: string
     receiverId: string
     chatId: string

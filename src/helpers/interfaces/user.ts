@@ -1,5 +1,5 @@
-import {Location} from "./location"
-export interface User{
+import {Locations} from "./location"
+export interface Users{
       _id: string;
       fullname: string;
       age: number;
@@ -9,7 +9,7 @@ export interface User{
       role: string;
     profile_image_url: string;
       isEmailverify: boolean;
-    location:Location;
+    location:Locations;
     isverify: boolean;
     createdAt: Date;
 }

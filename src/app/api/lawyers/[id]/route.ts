@@ -1,5 +1,5 @@
 import { connect } from '@/dbConfig/dbConfig';
-import LawyerProfile from '@/models/LawyerProfile';
+import LawyerProfiles from '@/models/LawyerProfiles';
 import { NextRequest, NextResponse } from 'next/server';
 
 
@@ -11,7 +11,7 @@ export async function GET(
   await connect();
   try {
     const { id } = context.params;
-    const lawyer = await LawyerProfile.findById(id).populate('user');
+    const lawyer = await LawyerProfiles.findById(id).populate('user');
 
     if (!lawyer) {
       return NextResponse.json({ error: 'Lawyer not found' }, { status: 404 });
@@ -32,7 +32,7 @@ export async function PUT(
   try {
     const { id } = context.params;
     const data = await req.json();
-    const updated = await LawyerProfile.findByIdAndUpdate(id, data, { new: true });
+    const updated = await LawyerProfiles.findByIdAndUpdate(id, data, { new: true });
 
     if (!updated) {
       return NextResponse.json({ error: 'Lawyer not found for update' }, { status: 404 });
@@ -52,7 +52,7 @@ export async function DELETE(
   await connect();
   try {
     const { id } = context.params;
-    const deleted = await LawyerProfile.findByIdAndDelete(id);
+    const deleted = await LawyerProfiles.findByIdAndDelete(id);
 
     if (!deleted) {
       return NextResponse.json({ error: 'Lawyer not found for deletion' }, { status: 404 });

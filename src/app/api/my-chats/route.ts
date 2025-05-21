@@ -1,9 +1,9 @@
 // app/api/chat/list/route.ts
 import { connect } from "@/dbConfig/dbConfig";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
-import ChatSession from "@/models/ChatSession";
-import Message from "@/models/Message";
-import User from "@/models/userModel";
+import ChatSessions from "@/models/ChatSessions";
+import Messages from "@/models/Messages";
+import Users from "@/models/userModel";
 import { NextResponse } from "next/server";
 
 export async function GET() {
@@ -15,10 +15,10 @@ export async function GET() {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
-    const chats = await ChatSession.find({ client_id: userId })
+    const chats = await ChatSessions.find({ client_id: userId })
       .populate({
         path: 'lawyer_id',
-        populate: { path: 'user', model: User },
+        populate: { path: 'user', model: Users },
       })
       .populate('consultation_id') // fix spelling here too
       .sort({ created_at: -1 })
@@ -27,7 +27,7 @@ export async function GET() {
     const chatsWithLastMessage = await Promise.all(
       chats.map(async (chat: any) => {
         try {
-          const lastMsg = await Message.findOne({ chatId: chat._id })
+          const lastMsg = await Messages.findOne({ chatId: chat._id })
             .sort({ timestamp: -1 })
             .lean() as { content?: string }; // ✅ explicitly cast the expected shape
 

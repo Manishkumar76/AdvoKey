@@ -16,7 +16,7 @@ export interface FilterOptions {
   location: string;
 }
 
-export interface Location {
+export interface Locations {
   _id: string;
   city: string;
   state: string;
@@ -31,7 +31,7 @@ interface FilterSidebarProps {
 
 export default function FilterSidebar({ filters, setFilters, clearFilters }: FilterSidebarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [locations, setLocations] = useState<Location[]>([]);
+  const [locations, setLocations] = useState<Locations[]>([]);
 
   useEffect(() => {
     const fetchLocations = async () => {
@@ -69,10 +69,10 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
             Filters
           </h2>
 
-          {/* Specialization */}
+          {/* Specializations */}
           <div>
             <label className="flex items-center gap-2 text-sm font-medium mb-1 ">
-              <FaSearch /> Specialization
+              <FaSearch /> Specializations
             </label>
             <input
               type="text"
@@ -127,10 +127,10 @@ export default function FilterSidebar({ filters, setFilters, clearFilters }: Fil
             />
           </div>
 
-          {/* Location */}
+          {/* Locations */}
           <div>
             <label className="flex items-center gap-2 text-sm font-medium mb-1 ">
-              <FaMapMarkerAlt /> Location
+              <FaMapMarkerAlt /> Locations
             </label>
             <select
               value={filters.location}

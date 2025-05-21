@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaPen, FaTrash } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { User } from '@/helpers/interfaces/user';
+import { Users } from '@/helpers/interfaces/user';
 import CountUp from 'react-countup';
 import {
   BarChart,
@@ -20,8 +20,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 
 export default function UsersPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [filteredUsers, setFilteredUsers] = useState<User[]>([]);
+  const [users, setUsers] = useState<Users[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<Users[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);

@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import User from '@/models/userModel';
+import Users from '@/models/userModel';
 import bcrypt from 'bcryptjs';
 
 export async function PUT(
@@ -15,10 +15,10 @@ export async function PUT(
     const { currentPassword, password } = body;
 
     // Find user and get current hashed password
-    const user = await User.findById(userId).select('password');
+    const user = await Users.findById(userId).select('password');
     if (!user) {
       return NextResponse.json(
-        { message: 'User not found' },
+        { message: 'Users not found' },
         { status: 404 }
       );
     }
@@ -77,7 +77,7 @@ export async function PUT(
 
     // Hash new password
     const hashedPassword = await bcrypt.hash(password, 10);
-    await User.findByIdAndUpdate(userId, { password: hashedPassword });
+    await Users.findByIdAndUpdate(userId, { password: hashedPassword });
 
     return NextResponse.json({ message: 'Password updated successfully' });
   } catch (error) {

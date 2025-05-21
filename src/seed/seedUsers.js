@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
-import User from '../models/userModel.js';
+import Users from '../models/userModel.js';
 import bcryptjs from 'bcryptjs';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-async function seedUsers() {
+async function seedUserss() {
   try {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('Connected to MongoDB for seeding users');
@@ -32,8 +32,8 @@ async function seedUsers() {
       });
     }
 
-    await User.deleteMany({}); // Optional: clear existing users before seeding
-    await User.insertMany(users);
+    await Users.deleteMany({}); // Optional: clear existing users before seeding
+    await Users.insertMany(users);
     console.log('Inserted users data');
 
     await mongoose.disconnect();
@@ -45,4 +45,4 @@ async function seedUsers() {
   }
 }
 
-export default seedUsers;
+export default seedUserss;

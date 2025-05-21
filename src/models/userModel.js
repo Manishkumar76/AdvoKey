@@ -13,7 +13,7 @@ email:{
     },
 phone: { type: String },
 profile_image_url: { type: String },
-location_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
+location_id: { type: mongoose.Schema.Types.ObjectId, ref: 'Locations' },
 fullName:String,
 age:Number,
 password:{
@@ -38,6 +38,6 @@ verifyTokenExpiry:Date,
 createdAt:{type:Date,default:Date.now()}
 });
 
-const User= mongoose.models.User || mongoose.model('User',userSchema); 
+const Users= mongoose.models.Users || mongoose.model('Users',userSchema); 
 
-export default User; 
+export default Users; 

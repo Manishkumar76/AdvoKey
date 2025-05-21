@@ -1,12 +1,12 @@
 import { NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Consultation from '@/models/Consultation';
+import Consultations from '@/models/Consultations';
 
 export const GET = async () => {
   await connect();
 
-  // Pie chart data: Consultation count grouped by status
-  const statusCounts = await Consultation.aggregate([
+  // Pie chart data: Consultations count grouped by status
+  const statusCounts = await Consultations.aggregate([
     {
       $group: {
         _id: '$status',
@@ -16,7 +16,7 @@ export const GET = async () => {
   ]);
 
   // Line chart data: Monthly status count using `scheduledAt`
-  const timelineStats = await Consultation.aggregate([
+  const timelineStats = await Consultations.aggregate([
     {
       $group: {
         _id: {

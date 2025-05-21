@@ -15,7 +15,7 @@ export default function LandingPageSections() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 py-20" data-aos="fade-up">
         <h2 className="text-3xl sm:text-4xl font-bold text-center mb-12 text-white">How It Works</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {[{ icon: '🔍', title: 'Search a Lawyer' }, { icon: '📅', title: 'Book a Consultation' }, { icon: '📞', title: 'Talk to Your Lawyer' }, { icon: '💳', title: 'Pay Securely' }].map((step, idx) => (
+          {[{ icon: '🔍', title: 'Search a Lawyer' }, { icon: '📅', title: 'Book a Consultations' }, { icon: '📞', title: 'Talk to Your Lawyer' }, { icon: '💳', title: 'Pay Securely' }].map((step, idx) => (
             <div
               key={idx}
               className="flex flex-col items-center text-center p-6 rounded-xl shadow-lg bg-gray-600 bg-opacity-30 backdrop-blur-md hover:shadow-2xl transition"

@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Review from '../models/Review.js';
-import User from '../models/userModel.js';
-import LawyerProfile from '../models/LawyerProfile.js';
+import Reviews from '../models/Reviews.js';
+import Users from '../models/userModel.js';
+import LawyerProfiles from '../models/LawyerProfiles.js';
 
 dotenv.config();
 
@@ -19,9 +19,9 @@ async function seedReviews() {
     await mongoose.connect(process.env.MONGO_URI);
     console.log('✅ Connected to MongoDB for seeding reviews');
 
-    // Get clients and lawyers (lawyer ids come from LawyerProfile.user)
-    const clients = await User.find({ role: 'Client' }).select('_id');
-    const lawyerProfiles = await LawyerProfile.find().select('user');
+    // Get clients and lawyers (lawyer ids come from LawyerProfiles.user)
+    const clients = await Users.find({ role: 'Client' }).select('_id');
+    const lawyerProfiles = await LawyerProfiles.find().select('user');
 
     if (clients.length === 0 || lawyerProfiles.length === 0) {
       console.error('❌ Missing clients or lawyers');
@@ -29,7 +29,7 @@ async function seedReviews() {
     }
 
     // Clear existing reviews
-    await Review.deleteMany({});
+    await Reviews.deleteMany({});
     console.log('🗑️ Cleared existing reviews');
 
     const reviews = [];
@@ -43,7 +43,7 @@ async function seedReviews() {
       });
     }
 
-    await Review.insertMany(reviews);
+    await Reviews.insertMany(reviews);
     console.log(`✅ Inserted ${reviews.length} reviews`);
 
     await mongoose.disconnect();

@@ -1,17 +1,17 @@
 // /app/api/admin/dashboard/route.ts
 import { NextResponse } from 'next/server';
 import { connect } from "@/dbConfig/dbConfig";
-import User from '@/models/userModel';
-import Consultation from '@/models/Consultation';
-import Review from '@/models/Review';
+import Users from '@/models/userModel';
+import Consultations from '@/models/Consultations';
+import Reviews from '@/models/Reviews';
 
 export async function GET() {
   await connect();
 
-  const totalUsers = await User.countDocuments();
-  const totalLawyers = await User.countDocuments({ role: 'Lawyer' });
-  const totalAppointments = await Consultation.countDocuments();
-  const totalReviews = await Review.countDocuments();
+  const totalUsers = await Users.countDocuments();
+  const totalLawyers = await Users.countDocuments({ role: 'Lawyer' });
+  const totalAppointments = await Consultations.countDocuments();
+  const totalReviews = await Reviews.countDocuments();
 
   // Example consultation trend (last 7 days)
   const days = [...Array(7)].map((_, i) => {
@@ -20,7 +20,7 @@ export async function GET() {
     return date.toISOString().slice(0, 10);
   }).reverse();
 
-  const consultations = await Consultation.aggregate([
+  const consultations = await Consultations.aggregate([
     {
       $match: {
         createdAt: { $gte: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000) },

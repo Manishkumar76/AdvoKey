@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
 import { Trash2 } from 'lucide-react';
-import { Message } from '@/helpers/interfaces/message';
+import { Messages } from '@/helpers/interfaces/message';
 
 interface Chat {
   _id: string;
@@ -31,7 +31,7 @@ function formatTime(dateString: string) {
 export default function ChatLayoutPage() {
   const [chats, setChats] = useState<Chat[]>([]);
   const [selectedChatId, setSelectedChatId] = useState<string | null>(null);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<Messages[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -106,7 +106,7 @@ export default function ChatLayoutPage() {
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedChatId) return;
 
-    const message: Message = {
+    const message: Messages = {
       senderId: 'clientId123',
       receiverId: 'lawyerId456',
       chatId: selectedChatId,

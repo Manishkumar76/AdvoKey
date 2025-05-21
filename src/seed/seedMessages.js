@@ -1,8 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Message from '../models/Message.js';
-import ChatSession from '../models/ChatSession.js';
-import User from '../models/userModel.js';
+import Messages from '../models/Messages.js';
+import ChatSessions from '../models/ChatSessions.js';
+import Users from '../models/userModel.js';
 
 dotenv.config();
 
@@ -20,8 +20,8 @@ async function seedMessages() {
     console.log('✅ Connected to MongoDB for seeding messages');
 
     // Fetch some chat sessions and users to assign realistic IDs
-    const chats = await ChatSession.find().limit(50).select('_id client_id lawyer_id');
-    const users = await User.find().limit(50).select('_id');
+    const chats = await ChatSessions.find().limit(50).select('_id client_id lawyer_id');
+    const users = await Users.find().limit(50).select('_id');
 
     if (chats.length === 0 || users.length === 0) {
       console.error('❌ No chat sessions or users found to link messages');
@@ -29,7 +29,7 @@ async function seedMessages() {
     }
 
     // Clear existing messages
-    await Message.deleteMany({});
+    await Messages.deleteMany({});
     console.log('🗑️ Cleared existing messages');
 
     const messages = [];
@@ -51,7 +51,7 @@ async function seedMessages() {
       });
     }
 
-    await Message.insertMany(messages);
+    await Messages.insertMany(messages);
     console.log(`✅ Inserted ${messages.length} messages`);
 
     await mongoose.disconnect();

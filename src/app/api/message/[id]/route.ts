@@ -1,6 +1,6 @@
 // src/app/api/message/[id]/route.ts
 import { connect } from '@/dbConfig/dbConfig';
-import Message from '@/models/Message';
+import Messages from '@/models/Messages';
 import { NextRequest, NextResponse } from 'next/server';
 
 // GET messages for chatId
@@ -14,7 +14,7 @@ export async function GET(req: NextRequest, { params }: any) {
   }
 
   try {
-    const messages = await Message.find({ id }).sort({ timestamp: 1 });
+    const messages = await Messages.find({ id }).sort({ timestamp: 1 });
     return NextResponse.json(messages, { status: 200 });
   } catch (error) {
     console.error('GET messages error:', error);
@@ -36,7 +36,7 @@ export async function POST(req: NextRequest, { params }:any) {
   }
 
   try {
-    const newMessage = await Message.create({
+    const newMessage = await Messages.create({
       id,
       senderId,
       receiverId,

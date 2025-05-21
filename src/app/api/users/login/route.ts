@@ -1,5 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
-import User from "@/models/userModel";
+import Users from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 import bcryptjs from "bcryptjs";
 import jwt from 'jsonwebtoken';
@@ -11,10 +11,10 @@ try{
     const { email, password } = reqBody;
     console.log(reqBody);
 
-    const user= await User.findOne({email});
+    const user= await Users.findOne({email});
 
     if(!user){
-       return NextResponse.json({error:"User Not Exist!"},{status:401});
+       return NextResponse.json({error:"Users Not Exist!"},{status:401});
     }
 
 //check password

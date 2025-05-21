@@ -1,9 +1,9 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import ChatSession from '../models/ChatSession.js';
-import Consultation from '../models/Consultation.js';
-import LawyerProfile from '../models/LawyerProfile.js';
-import User from '../models/userModel.js';
+import ChatSessions from '../models/ChatSessions.js';
+import Consultations from '../models/Consultations.js';
+import LawyerProfiles from '../models/LawyerProfiles.js';
+import Users from '../models/userModel.js';
 
 dotenv.config();
 const MONGO_URI = process.env.MONGO_URI;
@@ -14,18 +14,18 @@ async function seedChatSessions() {
     console.log('✅ Connected to MongoDB');
 
     // Fetch data
-    const lawyerProfiles = await LawyerProfile.find().select('user'); // lawyer_id = user
-    const clients = await User.find({ role: 'Client' }).select('_id');
-    const consultations = await Consultation.find().select('_id lawyer_id client_id');
+    const lawyerProfiles = await LawyerProfiles.find().select('user'); // lawyer_id = user
+    const clients = await Users.find({ role: 'Client' }).select('_id');
+    const consultations = await Consultations.find().select('_id lawyer_id client_id');
 
     if (lawyerProfiles.length === 0 || clients.length === 0 || consultations.length === 0) {
-      console.error('❌ Not enough data in LawyerProfile, Client Users, or Consultations');
+      console.error('❌ Not enough data in LawyerProfiles, Client Users, or Consultations');
       return process.exit(1);
     }
 
     // Optional: Clear existing chat sessions
-    await ChatSession.deleteMany({});
-    console.log('🗑️ Cleared existing ChatSession records');
+    await ChatSessions.deleteMany({});
+    console.log('🗑️ Cleared existing ChatSessions records');
 
     // Seed 50 chat sessions
     const chatSessions = [];
@@ -47,7 +47,7 @@ async function seedChatSessions() {
       });
     }
 
-    await ChatSession.insertMany(chatSessions);
+    await ChatSessions.insertMany(chatSessions);
     console.log(`✅ Inserted ${chatSessions.length} chat sessions`);
 
     await mongoose.disconnect();

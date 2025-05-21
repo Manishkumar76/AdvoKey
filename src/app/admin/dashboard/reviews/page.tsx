@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { FaTrash } from 'react-icons/fa';
 import { motion } from 'framer-motion';
-import { Review } from '@/helpers/interfaces/review';
+import { Reviews } from '@/helpers/interfaces/review';
 import CountUp from 'react-countup';
 
 import {
@@ -19,7 +19,7 @@ import {
 } from 'recharts';
 
 export default function ReviewsPage() {
-    const [reviews, setReviews] = useState<Review[]>([]);
+    const [reviews, setReviews] = useState<Reviews[]>([]);
     const [loading, setLoading] = useState(true);
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [selectedReviewId, setSelectedReviewId] = useState<string | null>(null);

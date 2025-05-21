@@ -1,4 +1,4 @@
-import { User } from "./user";
+import { Users } from "./user";
 
 export interface Lawyer {
     _id: string;
@@ -7,8 +7,8 @@ export interface Lawyer {
     bio: string;
     availability: string;
     years_of_experience: number;
-    location:Location;
+    location:Locations;
     isVerified : boolean;
-    user: User;
+    user: Users;
     
   }

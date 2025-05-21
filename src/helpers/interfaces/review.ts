@@ -1,4 +1,4 @@
-export interface Review {
+export interface Reviews {
     _id: string;
     client_id: {
       _id: string;

@@ -2,10 +2,10 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { User } from '@/helpers/interfaces/user';
+import { Users } from '@/helpers/interfaces/user';
 
 const Topbar = () => {
-  const [user, setUser] = useState<User |null>(null);
+  const [user, setUser] = useState<Users |null>(null);
   const [loading, setLoading] = useState(true);
   const router = useRouter();
 

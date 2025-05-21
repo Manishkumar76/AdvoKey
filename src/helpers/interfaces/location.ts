@@ -1,5 +1,5 @@
 
-export interface Location{
+export interface Locations{
         city: string;
         state: string;
         country: string;

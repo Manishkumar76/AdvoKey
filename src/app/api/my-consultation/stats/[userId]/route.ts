@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Consultation from '@/models/Consultation';
+import Consultations from '@/models/Consultations';
 import mongoose from 'mongoose';
 
 export const GET = async (req: Request) => {
@@ -16,7 +16,7 @@ export const GET = async (req: Request) => {
   const userObjectId = new mongoose.Types.ObjectId(userId);
 
   // Pie chart: Status-wise consultation counts for the user
-  const statusCounts = await Consultation.aggregate([
+  const statusCounts = await Consultations.aggregate([
     { $match: { userId: userObjectId } },
     {
       $group: {
@@ -27,7 +27,7 @@ export const GET = async (req: Request) => {
   ]);
 
   // Line chart: Monthly consultation stats by status for the user
-  const timelineStats = await Consultation.aggregate([
+  const timelineStats = await Consultations.aggregate([
     { $match: { userId: userObjectId } },
     {
       $group: {

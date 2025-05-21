@@ -90,9 +90,9 @@ export default function LawyersPage() {
         </div>
       </div>
 
-      {/* Specialization Chart */}
+      {/* Specializations Chart */}
       <div className="bg-white shadow rounded-lg p-4 mb-8">
-        <h2 className="text-lg font-semibold text-gray-700 mb-4">Lawyers by Specialization</h2>
+        <h2 className="text-lg font-semibold text-gray-700 mb-4">Lawyers by Specializations</h2>
         <ResponsiveContainer width="100%" height={250}>
           <BarChart data={specializationStats}>
             <CartesianGrid strokeDasharray="3 3" />
@@ -125,7 +125,7 @@ export default function LawyersPage() {
                   <th className="px-6 py-3">Name</th>
                   <th className="px-6 py-3">Email</th>
                   <th className="px-6 py-3">Phone</th>
-                  <th className="px-6 py-3">Specialization</th>
+                  <th className="px-6 py-3">Specializations</th>
                   <th className="px-6 py-3">Verified</th>
                   <th className="px-6 py-3">Actions</th>
                 </tr>

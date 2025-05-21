@@ -1,12 +1,12 @@
 // app/api/lawyers/route.ts
 import { connect } from '@/dbConfig/dbConfig';
-import LawyerProfile from '@/models/LawyerProfile';
-import User from '@/models/userModel';
+import LawyerProfiles from '@/models/LawyerProfiles';
+import Users from '@/models/userModel';
 import cloudinary from '@/helpers/cloudinary';
 import { NextResponse } from 'next/server';
 
 
-// Define the structure of a LawyerProfile document to improve type safety
+// Define the structure of a LawyerProfiles document to improve type safety
 interface LawyerProfileInput {
   userId: string;
   bio: string;
@@ -33,14 +33,14 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
 
-    const existingUser = await User.findOne({"_id": userId });
+    const existingUser = await Users.findOne({"_id": userId });
     if (!existingUser) {
-      return NextResponse.json({ message: 'User not found' }, { status: 400 });
+      return NextResponse.json({ message: 'Users not found' }, { status: 400 });
     }
 
-    const existingProfile = await LawyerProfile.findOne({ user: existingUser._id });
+    const existingProfile = await LawyerProfiles.findOne({ user: existingUser._id });
     if (existingProfile) {
-      return NextResponse.json({ message: 'User is already registered as a lawyer' }, { status: 400 });
+      return NextResponse.json({ message: 'Users is already registered as a lawyer' }, { status: 400 });
     }
 
     const uploadedFiles: string[] = [];
@@ -60,7 +60,7 @@ export async function POST(request: Request) {
       uploadedFiles.push(uploadUrl);
     }
 
-    const profile = new LawyerProfile({
+    const profile = new LawyerProfiles({
       user: existingUser._id,
       bio,
       years_of_experience,
@@ -83,15 +83,15 @@ export async function GET() {
   try {
     await connect();
 
-    const lawyers = await LawyerProfile.find()
+    const lawyers = await LawyerProfiles.find()
       .populate({
         path: 'user',
-        model: 'User',
+        model: 'Users',
         select: '_id username phone profile_image_url location_id role isverify'
       })
       .populate({
         path: 'user.location_id',
-        model: 'Location',
+        model: 'Locations',
         select: 'city state country'
       });
 

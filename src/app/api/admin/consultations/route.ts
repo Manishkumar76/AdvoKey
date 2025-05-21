@@ -1,9 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
-import Consultation from '@/models/Consultation';
+import Consultations from '@/models/Consultations';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 import { FaArrowAltCircleLeft } from 'react-icons/fa';
-import ChatSession from '@/models/ChatSession';
+import ChatSessions from '@/models/ChatSessions';
 import mongoose from 'mongoose';
 
 export async function GET(req: NextRequest) {
@@ -12,12 +12,12 @@ export async function GET(req: NextRequest) {
   try {
    
 
-    const consultations = await Consultation.find()
+    const consultations = await Consultations.find()
       .populate('client_id')
       .populate({
         path: 'lawyer_id',
-        model: 'LawyerProfile',
-        populate: { path: 'user', model: 'User' },
+        model: 'LawyerProfiles',
+        populate: { path: 'user', model: 'Users' },
       })
       .lean();
 

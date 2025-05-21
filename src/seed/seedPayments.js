@@ -1,10 +1,10 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import Payment from '../models/Payment.js';
-import User from '../models/userModel.js';
-import Consultation from '../models/Consultation.js';
-import ChatSession from '../models/ChatSession.js';
-import LawyerProfile from '../models/LawyerProfile.js';
+import Payments from '../models/Payments.js';
+import Users from '../models/userModel.js';
+import Consultations from '../models/Consultations.js';
+import ChatSessions from '../models/ChatSessions.js';
+import LawyerProfiles from '../models/LawyerProfiles.js';
 
 dotenv.config();
 
@@ -16,12 +16,12 @@ async function seedPayments() {
     console.log('✅ Connected to MongoDB for seeding payments');
 
     // Fetch users by role (clients only)
-    const clients = await User.find({ role: 'Client' }).select('_id');
-    // Fetch lawyer IDs from LawyerProfile (the user field)
-    const lawyerProfiles = await LawyerProfile.find().select('user');
+    const clients = await Users.find({ role: 'Client' }).select('_id');
+    // Fetch lawyer IDs from LawyerProfiles (the user field)
+    const lawyerProfiles = await LawyerProfiles.find().select('user');
     // Fetch consultations and chat sessions
-    const consultations = await Consultation.find().select('_id');
-    const chatSessions = await ChatSession.find().select('_id');
+    const consultations = await Consultations.find().select('_id');
+    const chatSessions = await ChatSessions.find().select('_id');
 
     if (
       clients.length === 0 ||
@@ -34,7 +34,7 @@ async function seedPayments() {
     }
 
     // Clear existing payments
-    await Payment.deleteMany({});
+    await Payments.deleteMany({});
     console.log('🗑️ Cleared existing payments');
 
     const payments = [];
@@ -52,7 +52,7 @@ async function seedPayments() {
       });
     }
 
-    await Payment.insertMany(payments);
+    await Payments.insertMany(payments);
     console.log(`✅ Inserted ${payments.length} payments`);
 
     await mongoose.disconnect();

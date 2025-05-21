@@ -4,15 +4,15 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 // Import your models
-import User from '../models/userModel.js';
-import LawyerProfile from '../models/LawyerProfile.js';
-import Consultation from '../models/Consultation.js';
-import ChatSession from '../models/ChatSession.js';
-import Message from '../models/Message.js';
-import Payment from '../models/Payment.js';
-import Review from '../models/Review.js';
+import Users from '../models/userModel.js';
+import LawyerProfiles from '../models/LawyerProfiles.js';
+import Consultations from '../models/Consultations.js';
+import ChatSessions from '../models/ChatSessions.js';
+import Messages from '../models/Messages.js';
+import Payments from '../models/Payments.js';
+import Reviews from '../models/Reviews.js';
 import TimeSlot from '../models/TimeSlot.js';
-import LawyerSpecialization from '../models/LawyerSpecialization.js';
+import LawyerSpecializations from '../models/LawyerSpecializations.js';
 
 async function clearAllData() {
   try {
@@ -25,15 +25,15 @@ async function clearAllData() {
 
     // Delete all documents from collections
     await Promise.all([
-      User.deleteMany({}),
-      LawyerProfile.deleteMany({}),
-      Consultation.deleteMany({}),
-      ChatSession.deleteMany({}),
-      Message.deleteMany({}),
-      Payment.deleteMany({}),
-      Review.deleteMany({}),
+      Users.deleteMany({}),
+      LawyerProfiles.deleteMany({}),
+      Consultations.deleteMany({}),
+      ChatSessions.deleteMany({}),
+      Messages.deleteMany({}),
+      Payments.deleteMany({}),
+      Reviews.deleteMany({}),
      
-      LawyerSpecialization.deleteMany({})
+      LawyerSpecializations.deleteMany({})
     ]);
 
     console.log('All collections cleared successfully');

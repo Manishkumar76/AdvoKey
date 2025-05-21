@@ -10,13 +10,13 @@ import gsap from "gsap";
 import "aos/dist/aos.css";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import toast, { Toaster } from "react-hot-toast";
-import { Review } from "@/helpers/interfaces/review";
+import { Reviews } from "@/helpers/interfaces/review";
 
 const LawyerDetail = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const [lawyer, setLawyer] = useState<Lawyer | null>(null);
-  const [reviews, setReviews] = useState<Review[]>([]);
+  const [reviews, setReviews] = useState<Reviews[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [userId, setUserId] = useState<string | null>(null);
@@ -53,7 +53,7 @@ const LawyerDetail = () => {
         return;
       }
   
-      toast.success("Consultation booked successfully!");
+      toast.success("Consultations booked successfully!");
       setIsBookingModalOpen(false);
       setConsultDate("");
       setConsultTime("");
@@ -105,7 +105,7 @@ const LawyerDetail = () => {
     try {
       const res = await axios.get("/api/reviews");
       const lawyerReviews = res.data.filter(
-        (r: Review) => r.lawyer_id && r.lawyer_id._id === id
+        (r: Reviews) => r.lawyer_id && r.lawyer_id._id === id
       );
       setReviews(lawyerReviews);
     } catch (err) {
@@ -139,7 +139,7 @@ const LawyerDetail = () => {
       setIsModalOpen(false);
       setComment("");
       setRating(5);
-      toast.success("Review submitted successfully!");
+      toast.success("Reviews submitted successfully!");
     } catch (err) {
       console.error("Failed to submit review:", err);
       toast.error("Failed to submit review.");
@@ -249,7 +249,7 @@ const LawyerDetail = () => {
               className="mt-4 px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded"
               onClick={() => setIsBookingModalOpen(true)}
             >
-              Book Consultation
+              Book Consultations
             </button>
             
              <button
@@ -288,7 +288,7 @@ const LawyerDetail = () => {
                     onClick={() => setIsModalOpen(true)}
                     className="bg-blue-600 text-white px-4 py-1 rounded hover:bg-blue-800"
                   >
-                    + Add Review
+                    + Add Reviews
                   </button>)
 
               )}
@@ -315,11 +315,11 @@ const LawyerDetail = () => {
         </div>
       </div>
 
-      {/* Modal for Review Submission */}
+      {/* Modal for Reviews Submission */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
           <div className="bg-gray-200 text-black rounded-lg w-full max-w-md p-6 shadow-lg">
-            <h3 className="text-lg font-semibold mb-4">Write a Review</h3>
+            <h3 className="text-lg font-semibold mb-4">Write a Reviews</h3>
 
             <label className="block text-sm font-medium mb-2">Rating</label>
             <div className="flex items-center mb-4 space-x-1 text-2xl">
@@ -360,11 +360,11 @@ const LawyerDetail = () => {
           </div>
         </div>
       )}
-      {/* Modal for Consultation Booking */}
+      {/* Modal for Consultations Booking */}
       {owner === false && isBookingModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70">
           <div className="bg-white text-black rounded-lg w-full max-w-md p-6 shadow-xl">
-            <h3 className="text-lg font-semibold mb-4">Book a Consultation</h3>
+            <h3 className="text-lg font-semibold mb-4">Book a Consultations</h3>
 
             <label className="block text-sm font-medium mb-1">Date</label>
             <input

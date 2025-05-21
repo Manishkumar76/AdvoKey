@@ -1,5 +1,5 @@
 import { connect } from "@/dbConfig/dbConfig";
-import User from "@/models/userModel";
+import Users from "@/models/userModel";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET user by ID
@@ -12,14 +12,14 @@ export async function GET(
 
     const userId = context.params.id;
 
-    const user = await User.findById(userId).select("-password");
+    const user = await Users.findById(userId).select("-password");
 
     if (!user) {
-      return NextResponse.json({ message: "User not found" }, { status: 404 });
+      return NextResponse.json({ message: "Users not found" }, { status: 404 });
     }
 
     return NextResponse.json({
-      message: "User details fetched successfully!",
+      message: "Users details fetched successfully!",
       data: user,
     });
   } catch (error: any) {
@@ -38,7 +38,7 @@ export async function PUT(
     const userId = params.params.id;
     const body = await req.json();
 
-    const updatedUser = await User.findByIdAndUpdate(
+    const updatedUser = await Users.findByIdAndUpdate(
       userId,
       {
         username: body.username,
@@ -63,9 +63,9 @@ export async function DELETE(
     await connect();
 
     const userId = params.params.id;
-    await User.findByIdAndDelete(userId);
+    await Users.findByIdAndDelete(userId);
 
-    return NextResponse.json({ message: "User deleted successfully" });
+    return NextResponse.json({ message: "Users deleted successfully" });
   } catch (error: any) {
     return NextResponse.json({ error: "Failed to delete user" }, { status: 500 });
   }

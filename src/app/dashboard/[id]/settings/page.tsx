@@ -94,7 +94,7 @@ export default function SettingsPage() {
     e.preventDefault();
     try {
       await axios.put(`/api/users/location`, { location_id: form.location_id });
-      toast.success('Location updated successfully!');
+      toast.success('Locations updated successfully!');
     } catch (err) {
       console.error(err);
       toast.error('Failed to update location.');
@@ -194,9 +194,9 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      {/* 🧑 Update User Details */}
+      {/* 🧑 Update Users Details */}
       <div className="bg-gray-800 p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold mb-2">🧑 Update User Details</h2>
+        <h2 className="text-xl font-semibold mb-2">🧑 Update Users Details</h2>
         <form onSubmit={updateDetails} className="space-y-4">
           <input type="text" name="fullName" value={form.fullName} onChange={handleChange} placeholder="Full Name" className="w-full px-4 py-2 rounded text-black" />
           <input type="number" name="age" value={form.age} onChange={handleChange} placeholder="Age" className="w-full px-4 py-2 rounded text-black" />
@@ -219,12 +219,12 @@ export default function SettingsPage() {
         </form>
       </div>
 
-      {/* 📍 Update Location */}
+      {/* 📍 Update Locations */}
       <div className="bg-gray-800 p-6 rounded-lg shadow space-y-4">
-        <h2 className="text-xl font-semibold mb-2">📍 Update Location</h2>
+        <h2 className="text-xl font-semibold mb-2">📍 Update Locations</h2>
         <form onSubmit={updateLocation} className="space-y-4">
           <select name="location_id" value={form.location_id} onChange={handleChange} className="w-full px-4 py-2 text-black rounded">
-            <option value="">Select Location</option>
+            <option value="">Select Locations</option>
             {locations.map((loc: any) => (
               <option key={loc._id} value={loc._id}>
                 {loc.city}, {loc.state}, {loc.country}
@@ -232,7 +232,7 @@ export default function SettingsPage() {
             ))}
           </select>
           <button type="submit" className="bg-green-600 hover:bg-green-700 px-4 py-2 rounded font-semibold">
-            Update Location
+            Update Locations
           </button>
         </form>
       </div>
