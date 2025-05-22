@@ -53,14 +53,20 @@ export default function LawyersPage() {
   const verifiedLawyers = lawyers.filter((l) => l.isVerified).length;
   const pendingLawyers = totalLawyers - verifiedLawyers;
 
-  const specializationStats = Object.values(
-    lawyers.reduce((acc: Record<string, { specialization: string; count: number }>, curr) => {
-      const key = curr.specialization || 'Other';
-      if (!acc[key]) acc[key] = { specialization: key, count: 0 };
-      acc[key].count += 1;
-      return acc;
-    }, {})
-  );
+  const specializationStats = lawyers.reduce((acc: Record<string, { specialization: string; count: number }>, lawyer) => {
+    const specialization = lawyer.specialization_id?.name.trim() || "Other";
+
+    if (!acc[specialization]) {
+      acc[specialization] = { specialization, count: 1 };
+    } else {
+      acc[specialization].count += 1;
+    }
+
+    return acc;
+  }, {});
+
+  const statsArray = Object.values(specializationStats);
+
 
   return (
     <div className="p-6">
@@ -94,7 +100,7 @@ export default function LawyersPage() {
       <div className="bg-white shadow rounded-lg p-4 mb-8">
         <h2 className="text-lg font-semibold text-gray-700 mb-4">Lawyers by Specializations</h2>
         <ResponsiveContainer width="100%" height={250}>
-          <BarChart data={specializationStats}>
+          <BarChart data={Object.values(specializationStats)}>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="specialization" />
             <YAxis allowDecimals={false} />
@@ -102,6 +108,7 @@ export default function LawyersPage() {
             <Bar dataKey="count" fill="#4f46e5" />
           </BarChart>
         </ResponsiveContainer>
+
       </div>
 
       {/* Table */}
@@ -136,7 +143,7 @@ export default function LawyersPage() {
                     <td className="px-6 py-4 whitespace-nowrap">{lawyer.user?.username}</td>
                     <td className="px-6 py-4">{lawyer.user?.email}</td>
                     <td className="px-6 py-4">{lawyer.user?.phone}</td>
-                    <td className="px-6 py-4">{lawyer?.specialization || 'N/A'}</td>
+                    <td className="px-6 py-4">{lawyer?.specialization_id?.name || 'N/A'}</td>
                     <td className="px-6 py-4">
                       <span
                         className={`px-2 py-1 rounded-full text-xs font-medium ${lawyer.isVerified ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
