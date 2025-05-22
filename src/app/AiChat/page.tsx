@@ -26,7 +26,7 @@ export default function AdvokeyChatPage() {
     const checkAvailability = () => {
       const now = new Date();
       const hour = now.getHours();
-      const available = hour >= 9 && hour < 18;
+      const available = true;
       setIsAvailable(available);
     };
 

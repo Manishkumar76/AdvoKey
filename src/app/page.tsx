@@ -8,7 +8,7 @@ import AdvoKey_Logo from '@/app/assets/images/Advokey.png';
 export default function HomePage() {
   return (
     <>
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
 
       {/* Hero Section */}
       <div className="relative w-full flex items-center justify-center py-20 px-6 bg-black">

@@ -28,7 +28,8 @@ export async function POST(request: Request) {
     const hourly_rate = parseInt(formData.get('hourly_rate') as string, 10);
     const level = formData.get('level') as string;
     const files = formData.getAll('proof_documents') as File[];
-
+    const specification = formData.get('specialization_id') as string;
+    
     if (!userId || !bio || isNaN(years_of_experience) || isNaN(hourly_rate) || !level || files.length === 0) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
     }
@@ -68,6 +69,7 @@ export async function POST(request: Request) {
       level,
       proof_documents: uploadedFiles,
       isVerified: false,
+      specialization_id: specification
     });
 
     const data = await profile.save();
@@ -93,7 +95,13 @@ export async function GET() {
         path: 'user.location_id',
         model: 'Locations',
         select: 'city state country'
-      });
+      })
+      .populate({
+        path: 'specialization_id',
+        model: 'Specializations',
+        select: '_id name'
+      })
+      ;
 
     return NextResponse.json(lawyers, { status: 200 });
   } catch (error: any) {

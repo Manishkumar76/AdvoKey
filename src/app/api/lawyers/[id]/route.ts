@@ -11,7 +11,7 @@ export async function GET(
   await connect();
   try {
     const { id } = context.params;
-    const lawyer = await LawyerProfiles.findById(id).populate('user');
+    const lawyer = await LawyerProfiles.findById(id).populate('user').populate('specialization_id');
 
     if (!lawyer) {
       return NextResponse.json({ error: 'Lawyer not found' }, { status: 404 });

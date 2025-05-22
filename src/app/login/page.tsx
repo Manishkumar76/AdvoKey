@@ -115,7 +115,7 @@ export default function Login() {
     return (
         <div className="h-screen bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800">
             {/* Add the Toaster component */}
-            <Toaster position="top-right" />
+            <Toaster position="top-center" />
 
             {/* Animated Cursor */}
             <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 "></div>

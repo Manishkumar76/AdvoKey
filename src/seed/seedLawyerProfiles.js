@@ -1,30 +1,63 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-import LawyerProfiles from '../models/LawyerProfiles.js';
-import Users from '../models/userModel.js';
 
 dotenv.config();
+
+// MongoDB URI
 const MONGO_URI = process.env.MONGO_URI;
 
+// Define User model
+const userSchema = new mongoose.Schema({
+  role: String,
+});
+const Users = mongoose.model('Users', userSchema, 'users');
+
+// Define Specialization model
+const specializationSchema = new mongoose.Schema({});
+const Specializations = mongoose.model('Specializations', specializationSchema, 'specializations');
+
+// Define Lawyer Profile model
+const lawyerProfileSchema = new mongoose.Schema({
+  user: mongoose.Schema.Types.ObjectId,
+  address: String,
+  education: String,
+  certifications: [String],
+  languages: [String],
+  hourly_rate: Number,
+  isVerified: Boolean,
+  availability: [String],
+  specialization_id: mongoose.Schema.Types.ObjectId,
+  createdAt: Date,
+});
+const LawyerProfiles = mongoose.model('LawyerProfiles', lawyerProfileSchema, 'lawyerprofiles');
+
+// Seeder function
 async function seedLawyerProfiles() {
   try {
     await mongoose.connect(MONGO_URI);
     console.log('✅ Connected to MongoDB');
 
-    // Get all users with role: "Lawyer"
+    // Fetch lawyers
     const lawyerUsers = await Users.find({ role: 'Lawyer' }).select('_id');
-    if (lawyerUsers.length === 0) {
-      console.error('❌ No lawyers found in the database');
+    if (!lawyerUsers.length) {
+      console.error('❌ No lawyers found');
       return process.exit(1);
     }
 
-    console.log(`👨‍⚖️ Found ${lawyerUsers.length} lawyer users`);
+    // Fetch specializations
+    const specializations = await Specializations.find().select('_id');
+    if (!specializations.length) {
+      console.error('❌ No specializations found');
+      return process.exit(1);
+    }
 
-    // Clear existing profiles
+    console.log(`👨‍⚖️ Found ${lawyerUsers.length} lawyers`);
+
+    // Delete existing profiles
     await LawyerProfiles.deleteMany({});
-    console.log('🗑️ Cleared existing LawyerProfiles records');
+    console.log('🗑️ Cleared old lawyer profiles');
 
-    // Create a unique profile for each lawyer
+    // Create new profiles
     const lawyerProfiles = lawyerUsers.map((lawyer, index) => ({
       user: lawyer._id,
       address: `123${index + 1} Legal St, City${index + 1}`,
@@ -32,21 +65,22 @@ async function seedLawyerProfiles() {
       certifications: ['Bar Association Certificate', 'Certified Mediator'],
       languages: ['English', 'Spanish'],
       hourly_rate: 150 + index,
-      isVerified: Math.random() < 0.5, // Random true/false
+      isVerified: Math.random() < 0.5,
       availability: ['Monday', 'Wednesday', 'Friday'],
+      specialization_id:
+        specializations[Math.floor(Math.random() * specializations.length)]._id,
       createdAt: new Date(Date.now() - Math.floor(Math.random() * 1e10)),
     }));
 
     await LawyerProfiles.insertMany(lawyerProfiles);
-    console.log(`✅ Inserted ${lawyerProfiles.length} unique lawyer profiles`);
+    console.log(`✅ Inserted ${lawyerProfiles.length} lawyer profiles`);
 
     await mongoose.disconnect();
     console.log('🔌 Disconnected from MongoDB');
-    
   } catch (err) {
-    console.error('❌ Seeding lawyer profiles failed:', err);
+    console.error('❌ Error:', err);
     process.exit(1);
   }
 }
 
-export default seedLawyerProfiles;
+seedLawyerProfiles();

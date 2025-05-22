@@ -26,10 +26,8 @@ export default function ChatBubble({
     const lines = parseMessage(message);
 
     if (isUser) {
-      // Show full user message immediately
       setDisplayText(lines);
     } else {
-      // Typing animation for assistant
       setDisplayText([]);
 
       let currentLine = 0;
@@ -58,18 +56,39 @@ export default function ChatBubble({
   }, [message, isUser]);
 
   const renderFormattedLine = (line: string, index: number) => {
+    // Match bold text: **text**
     const boldRegex = /\*\*(.*?)\*\*/g;
+    // Match inline code: `code`
+    const inlineCodeRegex = /`([^`]+)`/g;
 
-    const parts = line.split(boldRegex).map((part, idx) => {
-      if (idx % 2 === 1) {
+    const parts = line.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, idx) => {
+      if (boldRegex.test(part)) {
         return (
           <strong key={idx} className="font-semibold">
-            {part}
+            {part.replace(/\*\*/g, "")}
           </strong>
         );
+      } else if (inlineCodeRegex.test(part)) {
+        return (
+          <code
+            key={idx}
+            className="bg-gray-200 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded text-xs"
+          >
+            {part.replace(/`/g, "")}
+          </code>
+        );
+      } else {
+        return part;
       }
-      return part;
     });
+
+    if (/^(\d+\.)/.test(line)) {
+      return (
+        <li key={index} className="ml-4 list-decimal">
+          {parts}
+        </li>
+      );
+    }
 
     if (line.trim().startsWith("-") || line.trim().startsWith("•")) {
       return (
@@ -79,12 +98,23 @@ export default function ChatBubble({
       );
     }
 
+    if (line.startsWith("```") && line.endsWith("```")) {
+      return (
+        <pre
+          key={index}
+          className="bg-gray-200 dark:bg-gray-800 text-sm rounded p-2 overflow-x-auto"
+        >
+          <code>{line.slice(3, -3)}</code>
+        </pre>
+      );
+    }
+
     return <p key={index}>{parts}</p>;
   };
 
   return (
     <div
-      className={`max-w-xl my-2 px-4 py-2 rounded-xl shadow-md backdrop-blur-lg
+      className={`max-w-xl my-2 px-4 py-2 rounded-xl shadow-md backdrop-blur-lg transition-all
         ${
           isUser
             ? darkMode

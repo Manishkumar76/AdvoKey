@@ -217,7 +217,7 @@ const LawyerDetail = () => {
 
   return (
     <div className="min-h-screen bg-gray-900 text-white px-4 pt-20 pb-10">
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
       <div
         className="max-w-6xl mx-auto flex flex-col md:flex-row gap-8 bg-gradient-to-br from-gray-800 via-gray-900 to-gray-800 p-6 rounded-2xl shadow-lg "
         ref={gsapRef}
@@ -230,7 +230,7 @@ const LawyerDetail = () => {
             className="w-48 h-48 rounded-full object-cover border-4 border-gray-700 mb-4"
           />
           <h1 className="text-2xl font-bold mb-1">{lawyer.user?.username}</h1>
-          <p className="text-gray-400">{lawyer.specialization}</p>
+          <p className="text-gray-400">{lawyer?.specialization_id?.name}</p>
           <p className="text-gray-500">{lawyer.years_of_experience} years experience</p>
           <p className="text-yellow-400 mt-2 font-medium">
             ⭐ {typeof lawyer.rating === "number" ? lawyer.rating.toFixed(1) : "N/A"} / 5

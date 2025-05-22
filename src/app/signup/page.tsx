@@ -105,7 +105,7 @@ export default function Signup() {
 
   return (
     <div className="relative min-h-screen">
-      <Toaster position="top-right" />
+      <Toaster position="top-center" />
       {/* Skeleton loader background */}
       <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none"></div>
       <div className="h-screen bg-gray-900 flex items-center justify-center relative">

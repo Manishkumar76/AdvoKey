@@ -55,9 +55,8 @@ const LawyersPage: React.FC = () => {
       const location = user?.location;
 
       return (
-        (!filters.specialization || lawyer.specialization?.toLowerCase().includes(filters.specialization.toLowerCase())) &&
+        (!filters.specialization || lawyer.specialization_id?.name.toLowerCase().includes(filters.specialization.toLowerCase())) &&
         (!filters.rating || lawyer.rating >= filters.rating) &&
-        (!filters.availability || lawyer.availability === filters.availability) &&
         (!filters.experience || lawyer.years_of_experience >= filters.experience) &&
         (!filters.location ||
           (location?.city?.toLowerCase().includes(filters.location.toLowerCase()) ||
@@ -157,9 +156,8 @@ const LawyersPage: React.FC = () => {
                 {/* Lawyer Info */}
                 <div className="flex-1 text-center md:text-left space-y-1">
                   <h3 className="text-2xl font-extrabold text-blue-400">{lawyer?.user?.username}</h3>
-                  <p className="text-sm text-gray-300">📘 Specializations: <span className="text-white">{lawyer.specialization}</span></p>
+                  <p className="text-sm text-gray-300">📘 Specializations: <span className="text-white">{lawyer.specialization_id?.name}</span></p>
                   <p className="text-sm text-gray-300">⭐ Rating: <span className="text-white">{lawyer.rating}</span></p>
-                  <p className="text-sm text-gray-300">📅 Availability: <span className="text-white">{lawyer.availability}</span></p>
                   <p className="text-sm text-gray-300">⏳ Experience: <span className="text-white">{lawyer.years_of_experience} years</span></p>
                   <p className="text-sm text-gray-300">
                     📍 Locations: <span className="text-white">
