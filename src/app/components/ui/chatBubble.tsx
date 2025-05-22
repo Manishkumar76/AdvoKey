@@ -14,7 +14,31 @@ export default function ChatBubble({
   const [displayText, setDisplayText] = useState<string[]>([]);
 
   const parseMessage = (text: string): string[] => {
-    return text.split("\n").filter((line) => line.trim() !== "");
+    const lines = text.split("\n");
+    const parsed: string[] = [];
+
+    let inCodeBlock = false;
+    let codeBuffer: string[] = [];
+
+    for (const line of lines) {
+      if (line.trim().startsWith("```")) {
+        inCodeBlock = !inCodeBlock;
+
+        if (!inCodeBlock) {
+          parsed.push("```" + codeBuffer.join("\n") + "```");
+          codeBuffer = [];
+        }
+        continue;
+      }
+
+      if (inCodeBlock) {
+        codeBuffer.push(line);
+      } else if (line.trim() !== "") {
+        parsed.push(line);
+      }
+    }
+
+    return parsed;
   };
 
   useEffect(() => {
@@ -29,12 +53,9 @@ export default function ChatBubble({
       setDisplayText(lines);
     } else {
       setDisplayText([]);
-
       let currentLine = 0;
       let currentChar = 0;
       let tempLines: string[] = Array(lines.length).fill("");
-
-      const intervalDelay = 15;
 
       const interval = setInterval(() => {
         if (currentLine < lines.length) {
@@ -49,38 +70,50 @@ export default function ChatBubble({
         } else {
           clearInterval(interval);
         }
-      }, intervalDelay);
+      }, 15);
 
       return () => clearInterval(interval);
     }
   }, [message, isUser]);
 
   const renderFormattedLine = (line: string, index: number) => {
-    // Match bold text: **text**
     const boldRegex = /\*\*(.*?)\*\*/g;
-    // Match inline code: `code`
     const inlineCodeRegex = /`([^`]+)`/g;
 
-    const parts = line.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, idx) => {
-      if (boldRegex.test(part)) {
-        return (
-          <strong key={idx} className="font-semibold">
-            {part.replace(/\*\*/g, "")}
-          </strong>
-        );
-      } else if (inlineCodeRegex.test(part)) {
-        return (
-          <code
-            key={idx}
-            className="bg-gray-200 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded text-xs"
-          >
-            {part.replace(/`/g, "")}
-          </code>
-        );
-      } else {
-        return part;
-      }
-    });
+    if (line.startsWith("```")) {
+      const codeContent = line.replace(/```/g, "").trim();
+      return (
+        <pre
+          key={index}
+          className="bg-gray-200 dark:bg-gray-800 text-sm rounded p-2 overflow-x-auto"
+        >
+          <code>{codeContent}</code>
+        </pre>
+      );
+    }
+
+    const parts = line
+      .split(/(\*\*[^*]+\*\*|`[^`]+`)/g)
+      .map((part, idx) => {
+        if (boldRegex.test(part)) {
+          return (
+            <strong key={idx} className="font-semibold">
+              {part.replace(/\*\*/g, "")}
+            </strong>
+          );
+        } else if (inlineCodeRegex.test(part)) {
+          return (
+            <code
+              key={idx}
+              className="bg-gray-200 dark:bg-gray-800 text-red-600 dark:text-red-400 px-1 py-0.5 rounded text-xs"
+            >
+              {part.replace(/`/g, "")}
+            </code>
+          );
+        } else {
+          return part;
+        }
+      });
 
     if (/^(\d+\.)/.test(line)) {
       return (
@@ -95,17 +128,6 @@ export default function ChatBubble({
         <li key={index} className="ml-4 list-disc">
           {parts}
         </li>
-      );
-    }
-
-    if (line.startsWith("```") && line.endsWith("```")) {
-      return (
-        <pre
-          key={index}
-          className="bg-gray-200 dark:bg-gray-800 text-sm rounded p-2 overflow-x-auto"
-        >
-          <code>{line.slice(3, -3)}</code>
-        </pre>
       );
     }
 
@@ -126,7 +148,10 @@ export default function ChatBubble({
         }
       `}
     >
-      <div className="font-semibold">{isUser ? "You" : "Advokey AI"}</div>
+      {/* 🔵 Blue colored heading */}
+      <div className="font-semibold text-blue-600 dark:text-blue-400">
+        {isUser ? "You" : "Advokey AI"}
+      </div>
       <div className="text-sm text-gray-500">
         {isUser ? "" : new Date().toLocaleString()}
       </div>
