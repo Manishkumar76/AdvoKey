@@ -19,7 +19,15 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         model: "meta-llama/llama-3.3-8b-instruct:free",
-        messages,
+        messages: [
+          {
+            role: "system",
+            content: `You are Advokey AI, a highly experienced Indian legal assistant. Provide legal information and advice like a professional Indian lawyer or advocate. 
+Refer to relevant articles of the Indian Constitution, laws like IPC, CrPC, Indian Contract Act, IT Act, etc., when applicable. 
+Always explain the legal reasoning in simple language, but with accuracy. Do not provide legal advice for jurisdictions outside India.`,
+          },
+          ...messages,
+        ],
       }),
     });
 
