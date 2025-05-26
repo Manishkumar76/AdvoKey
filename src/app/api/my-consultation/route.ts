@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { connect } from '@/dbConfig/dbConfig';
 import Consultations from '@/models/Consultations';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
+import LawyerProfiles from '@/models/LawyerProfiles';
 
 export async function GET() {
     await connect();
@@ -11,21 +12,17 @@ export async function GET() {
     if (!userId) {
         return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
-
+     const Lawyer= await LawyerProfiles.findOne({ user: userId });
     try {
-        const consultations = await Consultations.find({ client: userId })
+        const consultations = await Consultations.find({ 'lawyer_id': Lawyer?._id })
             .populate({
-                path: 'lawyer',
-                select:'isVerified',
-                populate: {
-                    path: 'user',
-                    select: 'username',
-                },
+                path: 'lawyer_id',
+                model: 'LawyerProfiles',
+            }).
+            populate({
+                path: 'client_id',
+                model: 'Users',
             })
-            .populate( {
-                path:'timeslot',
-                select: 'start_time end_time',
-             } )
             .sort({ scheduledAt: -1 });
 
         return NextResponse.json(consultations);

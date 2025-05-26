@@ -17,7 +17,6 @@ export async function GET(req: NextRequest) {
       .populate({
         path: 'lawyer_id',
         model: 'LawyerProfiles',
-        populate: { path: 'user', model: 'Users' },
       })
       .lean();
 

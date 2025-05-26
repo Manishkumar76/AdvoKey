@@ -80,6 +80,16 @@ export async function POST(request: Request) {
     });
 
     const data = await profile.save();
+    if (!data) {
+      return NextResponse.json({ message: 'Failed to create lawyer profile' }, { status: 500 });
+    }
+    // Update the user's role to 'Lawyer'
+   const UpdateUser= await Users.updateOne({ _id: existingUser._id }, { $set: { role: 'Lawyer'} });
+
+    if (!UpdateUser) {
+      return NextResponse.json({ message: 'Failed to update user role' }, { status: 500 });
+    }
+    
 
     return NextResponse.json({ message: 'Application submitted successfully', data }, { status: 201 });
   } catch (error: any) {

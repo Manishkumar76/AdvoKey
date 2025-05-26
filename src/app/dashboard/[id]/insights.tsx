@@ -16,7 +16,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 
-type Status = 'completed' | 'scheduled' | 'cancelled';
+type Status = 'Completed' | 'Scheduled' | 'Cancelled';
 
 interface StatusCountItem {
   _id: Status;
@@ -34,18 +34,31 @@ interface TimelineRawItem {
 
 interface TimelineFormattedItem {
   date: string;
-  completed?: number;
-  scheduled?: number;
-  cancelled?: number;
+  Completed?: number;
+  Scheduled?: number;
+  Cancelled?: number;
 }
 
-const COLORS = ['#22c55e', '#6366f1', '#facc15'];
+const STATUS_COLORS: Record<Status, string> = {
+  Completed: '#22c55e', // green
+  Scheduled: '#facc15', // yellow
+  Cancelled: '#6366f1', // indigo
+};
 
 interface Props {
-  userId: string;
+  clientId?: string;
+  lawyerId?: string;
 }
 
-export default function ConsultationCharts({ userId }: Props) {
+const normalizeStatus = (status: string): Status => {
+  const s = status.toLowerCase();
+  if (s === 'completed') return 'Completed';
+  if (s === 'scheduled') return 'Scheduled';
+  if (s === 'cancelled') return 'Cancelled';
+  throw new Error(`Invalid status: ${status}`);
+};
+
+export default function ConsultationCharts({ clientId, lawyerId }: Props) {
   const [statusCounts, setStatusCounts] = useState<StatusCountItem[]>([]);
   const [timelineStats, setTimelineStats] = useState<TimelineFormattedItem[]>([]);
   const [hasMounted, setHasMounted] = useState(false);
@@ -55,14 +68,26 @@ export default function ConsultationCharts({ userId }: Props) {
   }, []);
 
   useEffect(() => {
-    if (!userId) return;
+    if (!clientId && !lawyerId) return;
 
     const fetchStats = async () => {
       try {
-        const res = await axios.get(`/api/my-consultation/stats?userId=${userId}`);
+        const params = new URLSearchParams();
+        if (clientId) params.append('clientId', clientId);
+        if (lawyerId) params.append('lawyerId', lawyerId);
 
+        const res = await axios.get(`/api/my-consultation/stats?${params.toString()}`);
+
+        // Defensive checks in case data is missing
+        if (!res.data.statusCounts || !res.data.timelineStats) {
+          setStatusCounts([]);
+          setTimelineStats([]);
+          return;
+        }
+
+        // Normalize status counts to match Status type casing
         const normalized = res.data.statusCounts.map((item: any) => ({
-          _id: item._id.toLowerCase(),
+          _id: normalizeStatus(item._id),
           count: item.count,
         }));
 
@@ -70,26 +95,29 @@ export default function ConsultationCharts({ userId }: Props) {
         setTimelineStats(formatTimelineData(res.data.timelineStats));
       } catch (error) {
         console.error('Failed to fetch consultation stats:', error);
+        setStatusCounts([]);
+        setTimelineStats([]);
       }
     };
 
     fetchStats();
-  }, [userId]);
-
-  const isValidStatus = (status: string): status is Status =>
-    ['completed', 'scheduled', 'cancelled'].includes(status.toLowerCase());
+  }, [clientId, lawyerId]);
 
   const formatTimelineData = (data: TimelineRawItem[]): TimelineFormattedItem[] => {
     const grouped: Record<string, TimelineFormattedItem> = {};
 
     data.forEach(({ _id, count }) => {
       const key = `${_id.month}/${_id.year}`;
-      const status = _id.status.toLowerCase();
+      let status: Status;
+      try {
+        status = normalizeStatus(_id.status);
+      } catch {
+        // Ignore invalid statuses
+        return;
+      }
 
       if (!grouped[key]) grouped[key] = { date: key };
-      if (isValidStatus(status)) {
-        grouped[key][status] = count;
-      }
+      grouped[key][status] = count;
     });
 
     return Object.values(grouped);
@@ -115,7 +143,7 @@ export default function ConsultationCharts({ userId }: Props) {
                 label
               >
                 {statusCounts.map((entry, index) => (
-                  <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                  <Cell key={`cell-${index}`} fill={STATUS_COLORS[entry._id]} />
                 ))}
               </Pie>
               <Tooltip />
@@ -135,9 +163,9 @@ export default function ConsultationCharts({ userId }: Props) {
               <YAxis />
               <Tooltip />
               <Legend />
-              <Bar dataKey="completed" stackId="a" fill="#22c55e" />
-              <Bar dataKey="scheduled" stackId="a" fill="#6366f1" />
-              <Bar dataKey="cancelled" stackId="a" fill="#facc15" />
+              <Bar dataKey="Completed" stackId="a" fill={STATUS_COLORS.Completed} />
+              <Bar dataKey="Scheduled" stackId="a" fill={STATUS_COLORS.Scheduled} />
+              <Bar dataKey="Cancelled" stackId="a" fill={STATUS_COLORS.Cancelled} />
             </BarChart>
           </ResponsiveContainer>
         </div>

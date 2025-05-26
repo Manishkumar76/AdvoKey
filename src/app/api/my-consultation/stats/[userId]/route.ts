@@ -17,7 +17,7 @@ export const GET = async (req: Request) => {
 
   // Pie chart: Status-wise consultation counts for the user
   const statusCounts = await Consultations.aggregate([
-    { $match: { userId: userObjectId } },
+    { $match: { 'client_id': userObjectId } },
     {
       $group: {
         _id: '$status',

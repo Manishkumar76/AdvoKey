@@ -33,7 +33,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
   const lawyerLinks= [
     {name:'My Consultations', href:`/dashboard/${userData?._id}/my-consultations`},
     {name:'Documents', href:`/dashboard/${userData?._id}/documents`},
-    {name:'Billing & Invoices', href:`/dashboard/${userData?._id}/billing-invoices`},
+    {name:'Billing & Invoices', href:`/dashboard/${userData?._id}/billing-invoice`},
   ]
 
   const handleNavClick = () => {

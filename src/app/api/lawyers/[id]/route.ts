@@ -2,16 +2,18 @@ import { connect } from '@/dbConfig/dbConfig';
 import LawyerProfiles from '@/models/LawyerProfiles';
 import { NextRequest, NextResponse } from 'next/server';
 
-
-
 export async function GET(
   req: NextRequest,
-  context:any
+  context: any
 ) {
   await connect();
   try {
     const { id } = context.params;
-    const lawyer = await LawyerProfiles.findById(id).populate('user').populate('specialization_id');
+
+    // Find lawyer by ID and populate user and specialization_id refs
+    const lawyer = await LawyerProfiles.findById(id)
+      .populate({ path: 'user', model: 'Users' })
+      .populate('specialization_id');
 
     if (!lawyer) {
       return NextResponse.json({ error: 'Lawyer not found' }, { status: 404 });
@@ -32,13 +34,15 @@ export async function PUT(
   try {
     const { id } = context.params;
     const data = await req.json();
+
+    // Find lawyer by ID and update with new data, return the new document
     const updated = await LawyerProfiles.findByIdAndUpdate(id, data, { new: true });
 
     if (!updated) {
       return NextResponse.json({ error: 'Lawyer not found for update' }, { status: 404 });
     }
 
-    return NextResponse.json(updated);
+    return NextResponse.json({ data: updated }, { status: 200 });
   } catch (error: any) {
     console.error('PUT error:', error);
     return NextResponse.json({ error: error.message }, { status: 500 });
@@ -58,6 +62,7 @@ export async function DELETE(
       return NextResponse.json({ error: 'Lawyer not found for deletion' }, { status: 404 });
     }
 
+    // 204 No Content with empty response body
     return new NextResponse(null, { status: 204 });
   } catch (error: any) {
     console.error('DELETE error:', error);

@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 
-export default function ConsultationsPage() {
+export default function LawyerConsultationsPage() {
   const [consultations, setConsultations] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState<string>('all');
@@ -12,7 +12,8 @@ export default function ConsultationsPage() {
   useEffect(() => {
     const fetchConsultations = async () => {
       try {
-        const res = await axios.get('/api/admin/consultations');
+        
+        const res = await axios.get('/api/my-consultation');
         setConsultations(res.data);
       } catch (err) {
         console.error('Error fetching consultations:', err);
@@ -46,7 +47,7 @@ export default function ConsultationsPage() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-semibold mb-6 text-gray-800">Consultations</h1>
+      <h1 className="text-2xl font-semibold mb-6 text-gray-800">My Consultations</h1>
 
       {loading ? (
         <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -107,8 +108,7 @@ export default function ConsultationsPage() {
             <table className="min-w-full divide-y divide-gray-200 text-sm">
               <thead className="bg-gray-100 text-gray-700">
                 <tr>
-                  <th className="px-6 py-3 text-left">Users</th>
-                  <th className="px-6 py-3 text-left">Lawyer</th>
+                  <th className="px-6 py-3 text-left">Client</th>
                   <th className="px-6 py-3 text-left">Date</th>
                   <th className="px-6 py-3 text-left">Time</th>
                   <th className="px-6 py-3 text-left">Duration</th>
@@ -118,7 +118,7 @@ export default function ConsultationsPage() {
               <tbody className="divide-y divide-gray-200">
                 {filteredConsultations.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="text-center py-6 text-gray-500">
+                    <td colSpan={5} className="text-center py-6 text-gray-500">
                       No consultations found.
                     </td>
                   </tr>
@@ -127,8 +127,9 @@ export default function ConsultationsPage() {
                     const statusKey = c.status.toLowerCase();
                     return (
                       <tr key={c._id} className="hover:bg-gray-50 text-gray-900">
-                        <td className="px-6 py-4 whitespace-nowrap">{c.client_id?.username || 'Users'}</td>
-                        <td className="px-6 py-4 whitespace-nowrap">{c.lawyer_id?.user?.username || 'Lawyer'}</td>
+                        <td className="px-6 py-4 whitespace-nowrap">
+                          {c.client_id?.username || 'Client'}
+                        </td>
                         <td className="px-6 py-4 whitespace-nowrap">
                           {new Date(c.scheduledAt).toLocaleDateString()}
                         </td>
@@ -137,7 +138,8 @@ export default function ConsultationsPage() {
                         <td className="px-6 py-4">
                           <span
                             className={`px-2 py-1 rounded-full text-xs font-medium capitalize ${
-                              statusColors[statusKey as keyof typeof statusColors] || 'bg-gray-100 text-gray-700'
+                              statusColors[statusKey as keyof typeof statusColors] ||
+                              'bg-gray-100 text-gray-700'
                             }`}
                           >
                             {c.status}

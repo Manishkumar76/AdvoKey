@@ -28,7 +28,7 @@ const SkeletonCard = () => (
 );
 
 const ConsultationsWithLawyer = () => {
-  const { id: lawyerId } = useParams<{ id: string }>();
+  const { id } = useParams<{ id: string }>();
   const [consultations, setConsultations] = useState<Consultations[]>([]);
   const [loading, setLoading] = useState(true);
   const [search, setSearch] = useState("");
@@ -45,7 +45,7 @@ const ConsultationsWithLawyer = () => {
 
         if (!Array.isArray(all)) throw new Error("Invalid data format");
 
-        const filtered = all.filter((c) => c.lawyer_id._id === lawyerId);
+        const filtered = all.filter((c) => c.lawyer_id._id === id);
         setConsultations(filtered);
       } catch (err) {
         console.error(err);
@@ -56,7 +56,7 @@ const ConsultationsWithLawyer = () => {
     };
 
     fetchConsultations();
-  }, [lawyerId]);
+  }, [id]);
 
   const filteredConsultations = consultations.filter((c) => {
     const name = c.lawyer_id.user?.username?.toLowerCase() || "";

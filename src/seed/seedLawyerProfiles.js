@@ -53,7 +53,7 @@ async function seedLawyerProfiles() {
       availability: ['Monday', 'Wednesday', 'Friday'],
       proof_documents:[""],
       specialization_id:
-      specializations[index % specializations.length]._id,
+      specializations[Math.floor(Math.random()*specializations.length)]._id,
 
       createdAt: new Date(Date.now() - Math.floor(Math.random() * 1e10)),
     }));
