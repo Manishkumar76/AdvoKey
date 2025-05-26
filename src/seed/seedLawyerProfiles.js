@@ -1,35 +1,15 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
-
+import LawyerProfiles from '../models/LawyerProfiles.js';
+import Specializations from '../models/Specializations.js';
+import Users from '../models/userModel.js';
 dotenv.config();
 
 // MongoDB URI
 const MONGO_URI = process.env.MONGO_URI;
 
-// Define User model
-const userSchema = new mongoose.Schema({
-  role: String,
-});
-const Users = mongoose.model('Users', userSchema, 'users');
 
-// Define Specialization model
-const specializationSchema = new mongoose.Schema({});
-const Specializations = mongoose.model('Specializations', specializationSchema, 'specializations');
 
-// Define Lawyer Profile model
-const lawyerProfileSchema = new mongoose.Schema({
-  user: mongoose.Schema.Types.ObjectId,
-  address: String,
-  education: String,
-  certifications: [String],
-  languages: [String],
-  hourly_rate: Number,
-  isVerified: Boolean,
-  availability: [String],
-  specialization_id: mongoose.Schema.Types.ObjectId,
-  createdAt: Date,
-});
-const LawyerProfiles = mongoose.model('LawyerProfiles', lawyerProfileSchema, 'lawyerprofiles');
 
 // Seeder function
 async function seedLawyerProfiles() {
@@ -60,15 +40,21 @@ async function seedLawyerProfiles() {
     // Create new profiles
     const lawyerProfiles = lawyerUsers.map((lawyer, index) => ({
       user: lawyer._id,
-      address: `123${index + 1} Legal St, City${index + 1}`,
+      bio:`${lawyer.username} `,
+      years_of_experience: 4 + index,
+      Office_Address: `123${index + 1} Legal St, City${index + 1}`,
       education: 'Harvard Law School',
       certifications: ['Bar Association Certificate', 'Certified Mediator'],
       languages: ['English', 'Spanish'],
       hourly_rate: 150 + index,
+      level :['junior', 'mid-level', 'senior'][Math.floor(Math.random()*3)],
+      profile_Status:['pending', 'approved', 'rejected'][Math.floor(Math.random()*3)],
       isVerified: Math.random() < 0.5,
       availability: ['Monday', 'Wednesday', 'Friday'],
+      proof_documents:[""],
       specialization_id:
-        specializations[Math.floor(Math.random() * specializations.length)]._id,
+      specializations[index % specializations.length]._id,
+
       createdAt: new Date(Date.now() - Math.floor(Math.random() * 1e10)),
     }));
 
@@ -83,4 +69,4 @@ async function seedLawyerProfiles() {
   }
 }
 
-seedLawyerProfiles();
+export default seedLawyerProfiles;

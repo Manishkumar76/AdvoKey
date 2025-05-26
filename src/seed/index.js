@@ -24,9 +24,9 @@ async function main() {
     // Run each seeder
     await seedUsers();
     await seedLocations();
+    await seedSpecializations();
     await seedLawyerProfiles();
     await seedConsultations();
-    await seedSpecializations();
     await seedChatSessions();
     await seedMessages();
     await seedPayments();

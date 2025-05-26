@@ -4,6 +4,7 @@ import LawyerProfiles from '@/models/LawyerProfiles';
 import Users from '@/models/userModel';
 import cloudinary from '@/helpers/cloudinary';
 import { NextResponse } from 'next/server';
+import Specializations from '@/models/Specializations';
 
 
 // Define the structure of a LawyerProfiles document to improve type safety
@@ -29,6 +30,12 @@ export async function POST(request: Request) {
     const level = formData.get('level') as string;
     const files = formData.getAll('proof_documents') as File[];
     const specification = formData.get('specialization_id') as string;
+
+    const getVerifySpecialization= await Specializations.findById(specification);
+
+    if(!getVerifySpecialization){
+      return NextResponse.json({message:'Specialization Not Exist!'},{status:400});
+    }
     
     if (!userId || !bio || isNaN(years_of_experience) || isNaN(hourly_rate) || !level || files.length === 0) {
       return NextResponse.json({ message: 'Missing required fields' }, { status: 400 });
@@ -69,7 +76,7 @@ export async function POST(request: Request) {
       level,
       proof_documents: uploadedFiles,
       isVerified: false,
-      specialization_id: specification
+      specialization_id: getVerifySpecialization._id
     });
 
     const data = await profile.save();

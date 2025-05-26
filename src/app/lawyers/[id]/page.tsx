@@ -69,7 +69,6 @@ const LawyerDetail = () => {
   useEffect(() => {
     Aos.init({ duration: 1000 });
     fetchLawyerData();
-    fetchReviews();
     fetchUserId();
   }, []);
 
@@ -78,19 +77,27 @@ const LawyerDetail = () => {
       setOwner(true);
     }
   }, [lawyer, userId]);
+   
+ const fetchLawyerData=  async ()=>{
+  try {
+    const [lawyerData,reviewsData]= await Promise.all([
+       axios.get(`/api/lawyers/${id}`),
+       axios.get("/api/reviews")
+    ])
+    setLawyer(lawyerData!.data);
+    const lawyerReviews = reviewsData.data.filter(
+      (r: Reviews) => r.lawyer_id && r.lawyer_id._id === id
+    );
+    setReviews(lawyerReviews);
 
-  const fetchLawyerData = async () => {
-    try {
-      const { data } = await axios.get(`/api/lawyers/${id}`);
-      setLawyer(data.data);
-    } catch (err: any) {
-      setError("Failed to fetch lawyer data");
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
+  } catch (error:any) {
+    setError("Failed to fetch lawyer data");
+      console.error(error);
+  }
+  finally{
+    setLoading(false);
+  }
+ }
   const fetchUserId = async () => {
     try {
       const id = (await getDataFromToken()).id;
@@ -100,19 +107,6 @@ const LawyerDetail = () => {
       console.error(err);
     }
   };
-
-  const fetchReviews = async () => {
-    try {
-      const res = await axios.get("/api/reviews");
-      const lawyerReviews = res.data.filter(
-        (r: Reviews) => r.lawyer_id && r.lawyer_id._id === id
-      );
-      setReviews(lawyerReviews);
-    } catch (err) {
-      console.error("Failed to fetch reviews:", err);
-    }
-  };
-
 
   const handleSubmitReview = async () => {
     try {
@@ -229,7 +223,7 @@ const LawyerDetail = () => {
             alt={lawyer.user?.username}
             className="w-48 h-48 rounded-full object-cover border-4 border-gray-700 mb-4"
           />
-          <h1 className="text-2xl font-bold mb-1">{lawyer.user?.username}</h1>
+          <h1 className="text-2xl font-bold mb-1">{lawyer?.user?.username}</h1>
           <p className="text-gray-400">{lawyer?.specialization_id?.name}</p>
           <p className="text-gray-500">{lawyer.years_of_experience} years experience</p>
           <p className="text-yellow-400 mt-2 font-medium">

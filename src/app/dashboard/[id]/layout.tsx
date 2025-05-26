@@ -30,6 +30,11 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     { name: 'Chat', href: `/dashboard/${userData?._id}/chat` },
     { name: 'Settings', href: `/dashboard/${userData?._id}/settings` },
   ];
+  const lawyerLinks= [
+    {name:'My Consultations', href:`/dashboard/${userData?._id}/my-consultations`},
+    {name:'Documents', href:`/dashboard/${userData?._id}/documents`},
+    {name:'Billing & Invoices', href:`/dashboard/${userData?._id}/billing-invoices`},
+  ]
 
   const handleNavClick = () => {
     setSidebarOpen(false); // close sidebar on nav click (mobile)
@@ -80,11 +85,32 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
                     ? 'bg-gray-300 text-black'
                     : 'hover:bg-gray-200 hover:text-black'
                 }`}
+                
               >
                 <span className="w-5 h-5 bg-gray-400 rounded-full mr-3" />
                 {name}
               </Link>
             ))}
+
+            
+           { 
+           userData?.role==="Lawyer"? lawyerLinks.map((({ name, href }) => (
+              <Link
+                key={name}
+                href={href}
+                onClick={handleNavClick}
+                className={`flex items-center p-2 rounded-md transition-colors duration-200 ${
+                  pathname === href
+                    ? 'bg-gray-300 text-black'
+                    : 'hover:bg-gray-200 hover:text-black'
+                }`}
+                
+              >
+                <span className="w-5 h-5 bg-gray-400 rounded-full mr-3" />
+                {name}
+              </Link>
+            ))):null
+          }
           </nav>
         </aside>
 
