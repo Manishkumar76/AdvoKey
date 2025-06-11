@@ -41,7 +41,7 @@ interface TimelineFormattedItem {
 
 const STATUS_COLORS: Record<Status, string> = {
   Completed: '#22c55e', // green
-  Scheduled: '#facc15', // yellow
+  Scheduled: '#facc15', // blue
   Cancelled: '#6366f1', // indigo
 };
 

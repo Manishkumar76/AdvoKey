@@ -122,12 +122,19 @@ export default function Login() {
             <div className={`h-screen flex items-center justify-center relative `}>
                 <img src="/auth_bg.png" alt="" className="h-screen absolute w-full " />
                 {
-    loading && (
-        <div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 flex items-center justify-center">
-            <div className="w-16 h-16 border-4 border-white border-t-transparent rounded-full animate-spin"></div>
-        </div>
-    )
-}
+   loading && (
+    <div
+      className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+      role="dialog"
+      aria-modal="true"
+    >
+      <svg className="animate-spin h-12 w-12 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+        <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+      </svg>
+    </div>
+  )}
+
 
                 <div className="flex flex-col items-center w-96 p-6 rounded-lg shadow-lg bg-gray-600 text-white shadow-blue-600 bg-opacity-10 backdrop-blur">
                     <h1 className="text-xl font-bold mb-4">Login</h1>

@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function GET(_: any, { params }: any) {
   await connect();
   try {
-    const consult = await Consultations.findById(params.id).populate('client lawyer');
+    const consult = await Consultations.findById(params.id).populate('client_id').populate({path:'lawyer_id',model:'LawyerProfiles'});
     if (!consult) {
       return NextResponse.json({ error: 'Consultations not found' }, { status: 404 });
     }

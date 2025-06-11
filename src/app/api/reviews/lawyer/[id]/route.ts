@@ -4,10 +4,10 @@ import Reviews from '@/models/Reviews';
 
 export async function GET(req: NextRequest, context: any) {
   await connect();
-    const { id } = context.params; // Extract lawyer ID from request parameters
+    const { id } = context.params; 
   try {
-    const reviews = await Reviews.find({'lawyer_id': id }) // Replace with actual lawyer ID
-      .populate('client_id', 'username email') // Populate only needed fields
+    const reviews = await Reviews.find({'lawyer_id': id }) 
+      .populate('client_id', 'username email') 
       .populate({
         path: 'lawyer_id',
         populate: {
@@ -17,7 +17,10 @@ export async function GET(req: NextRequest, context: any) {
         },
       });
 
-    return NextResponse.json(reviews);
+      //claculate average rating
+    const totalReviews = reviews.length;
+    const totalRating = reviews.reduce((sum, review) => sum + review.rating, 0);
+    return NextResponse.json({reviews, averageRating: totalReviews > 0 ? totalRating / totalReviews : 0 }, { status: 200 });
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }

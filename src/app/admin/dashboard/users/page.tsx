@@ -183,7 +183,7 @@ export default function UsersPage() {
                         className={`px-2 py-1 rounded-full text-xs font-medium ${
                           user.isverify
                             ? 'bg-green-100 text-green-700'
-                            : 'bg-yellow-100 text-yellow-700'
+                            : 'bg-blue-100 text-blue-700'
                         }`}
                       >
                         {user.isverify ? 'Verified' : 'Pending'}

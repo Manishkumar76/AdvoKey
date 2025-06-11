@@ -40,7 +40,7 @@ export default function PaymentsPage() {
 
   const statusColors = {
     successful: 'bg-green-100 text-green-700',
-    pending: 'bg-yellow-100 text-yellow-700',
+    pending: 'bg-blue-100 text-blue-700',
     failed: 'bg-red-100 text-red-600',
   };
 

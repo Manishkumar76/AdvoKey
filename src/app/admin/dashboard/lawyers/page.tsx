@@ -146,7 +146,7 @@ export default function LawyersPage() {
                     <td className="px-6 py-4">{lawyer?.specialization_id?.name || 'N/A'}</td>
                     <td className="px-6 py-4">
                       <span
-                        className={`px-2 py-1 rounded-full text-xs font-medium ${lawyer.isVerified ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'
+                        className={`px-2 py-1 rounded-full text-xs font-medium ${lawyer.isVerified ? 'bg-green-100 text-green-700' : 'bg-blue-100 text-blue-700'
                           }`}
                       >
                         {lawyer.isVerified ? 'Verified' : 'Pending'}

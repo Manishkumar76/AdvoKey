@@ -110,14 +110,18 @@ export default function Signup() {
       <div className="cursor w-6 h-6 rounded-full bg-white fixed z-50 pointer-events-none"></div>
       <div className="h-screen bg-gray-900 flex items-center justify-center relative">
       <img src="/auth_bg.png" alt="" className="h-screen absolute w-full " />
-        {loading && (
-          <div className="absolute bg-black bg-opacity-50 h-screen w-full z-50 flex items-center justify-center">
-            {/* Skeleton Animation */}
-            <div className="w-1/3">
-              <Skeleton height={50} width="100%" count={3} />
-            </div>
-          </div>
-        )}
+      {loading && (
+                <div
+                  className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+                  role="dialog"
+                  aria-modal="true"
+                >
+                  <svg className="animate-spin h-12 w-12 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+                  </svg>
+                </div>
+              )}
         <div className="flex flex-col items-center w-96 p-6 rounded-lg bg-gray-600 text-white bg-opacity-30 backdrop-blur">
           <h1 className="text-xl font-bold mb-4">Signup Page</h1>
 

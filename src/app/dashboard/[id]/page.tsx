@@ -167,7 +167,7 @@ export default function DashboardPage() {
                         c.status === 'Completed'
                           ? 'bg-green-600'
                           : c.status === 'Scheduled'
-                          ? 'bg-yellow-500'
+                          ? 'bg-blue-500'
                           : c.status === 'Cancelled'
                           ? 'bg-blue-500'
                           : 'bg-red-500'

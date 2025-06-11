@@ -6,7 +6,7 @@ export interface Specialization {
   name: string;
 }
 
-export interface Lawyer {
+export interface Lawyers {
   _id: string;
   rating: number;
   bio: string;
@@ -19,7 +19,7 @@ export interface Lawyer {
   Office_Address?: string;
   education?: string;
   certifications?: string[];
-  hourly_rate?: number;
+  Consultation_price?: number;
   level?: 'junior' | 'mid-level' | 'senior';
   profile_status?: 'pending' | 'approved' | 'rejected';
   proof_documents?: string[];

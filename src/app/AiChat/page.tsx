@@ -129,7 +129,7 @@ export default function AdvokeyChatPage() {
 
           {/* Availability Banner */}
           {!isAvailable && (
-            <div className="text-center bg-yellow-100 text-yellow-800 p-2 text-sm font-medium">
+            <div className="text-center bg-blue-100 text-blue-800 p-2 text-sm font-medium">
               Chat is only available between 9:00 AM and 6:00 PM.
             </div>
           )}

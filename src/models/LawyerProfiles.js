@@ -7,7 +7,7 @@ const lawyerProfileSchema = new mongoose.Schema({
   education:String,
   years_of_experience: Number,
   certifications:[String],
-  hourly_rate: Number,
+  Consultation_price: Number,
   availability:[String],
   specialization_id:{type:mongoose.Schema.Types.ObjectId,ref:'Specializations'},
   level: { type: String, enum: ['junior', 'mid-level', 'senior'] },

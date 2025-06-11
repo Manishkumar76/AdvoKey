@@ -213,7 +213,7 @@ export default function SettingsPage() {
         <form onSubmit={updatePassword} className="space-y-4">
           <input type="password" name="currentPassword" value={form.currentPassword} onChange={handleChange} placeholder="Current Password" className="w-full px-4 py-2 rounded text-black" required />
           <input type="password" name="password" value={form.password} onChange={handleChange} placeholder="New Password" className="w-full px-4 py-2 rounded text-black" required />
-          <button type="submit" className="bg-yellow-600 hover:bg-yellow-700 px-4 py-2 rounded font-semibold">
+          <button type="submit" className="bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded font-semibold">
             Change Password
           </button>
         </form>

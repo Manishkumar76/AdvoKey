@@ -86,7 +86,7 @@ export default function LawyerDocumentsPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-gray-900 via-gray-950 to-black text-gray-100 p-8 font-sans flex flex-col gap-10">
-      <h1 className="text-5xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-purple-600 select-none drop-shadow-lg">
+      <h1 className="text-5xl font-extrabold tracking-wide bg-clip-text text-transparent bg-gradient-to-r from-indigo-400 to-blue-600 select-none drop-shadow-lg">
         📁 Lawyer Documents
       </h1>
 
@@ -176,7 +176,7 @@ export default function LawyerDocumentsPage() {
                       doc.type === 'Contract'
                         ? 'bg-indigo-600 text-indigo-50'
                         : doc.type === 'Agreement'
-                        ? 'bg-purple-600 text-purple-50'
+                        ? 'bg-blue-600 text-blue-50'
                         : doc.type === 'Pleading'
                         ? 'bg-red-600 text-red-50'
                         : doc.type === 'Invoice'

@@ -39,7 +39,7 @@ export default function ConsultationsPage() {
       : consultations.filter((c) => c.status.toLowerCase() === filter);
 
   const statusColors = {
-    scheduled: 'bg-yellow-100 text-yellow-700',
+    scheduled: 'bg-blue-100 text-blue-700',
     completed: 'bg-green-100 text-green-700',
     cancelled: 'bg-red-100 text-red-600',
   };

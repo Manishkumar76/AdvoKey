@@ -31,6 +31,7 @@ const ConsultationSchema = new mongoose.Schema({
     enum: ['Scheduled', 'Completed', 'Cancelled'],
     default: 'Scheduled',
   },
+  fee:String,
 });
 
 export default mongoose.models.Consultations || mongoose.model('Consultations', ConsultationSchema);

@@ -105,7 +105,7 @@ export default function DashboardPage() {
     {
       title: 'Reviews',
       value: stats.totalReviews,
-      icon: <FaComments className="text-yellow-600" size={28} />,
+      icon: <FaComments className="text-blue-600" size={28} />,
     },
   ];
 

@@ -9,11 +9,9 @@ export async function GET(
   await connect();
   try {
     const { id } = context.params;
-
-    // Find lawyer by ID and populate user and specialization_id refs
     const lawyer = await LawyerProfiles.findById(id)
       .populate({ path: 'user', model: 'Users' })
-      .populate('specialization_id');
+      .populate({path:'specialization_id',model:'Specializations'});
 
     if (!lawyer) {
       return NextResponse.json({ error: 'Lawyer not found' }, { status: 404 });

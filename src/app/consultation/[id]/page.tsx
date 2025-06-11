@@ -8,7 +8,7 @@ import { getDataFromToken } from "@/helpers/getDataFromToken";
 import {Consultations} from '@/helpers/interfaces/consultation';
 
 const statusColorMap: Record<string, string> = {
-  pending: "bg-yellow-500 animate-pulse",
+  pending: "bg-blue-500 animate-pulse",
   completed: "bg-green-500",
   cancelled: "bg-red-500",
 };

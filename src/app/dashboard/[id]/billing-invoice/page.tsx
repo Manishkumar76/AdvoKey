@@ -45,7 +45,7 @@ export default function LawyerBillingPage() {
 
   return (
     <div className="min-h-screen bg-gradient-to-tr from-gray-900 via-gray-950 to-black text-gray-100 p-8 flex flex-col gap-12 font-sans">
-      <h1 className="text-5xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-purple-600 select-none drop-shadow-lg">
+      <h1 className="text-5xl font-extrabold tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-blue-600 select-none drop-shadow-lg">
         🧾 Lawyer Billing & Invoices
       </h1>
 
@@ -130,7 +130,7 @@ export default function LawyerBillingPage() {
                         inv.status === 'Paid'
                           ? 'bg-green-600 text-green-50'
                           : inv.status === 'Unpaid'
-                          ? 'bg-yellow-500 text-yellow-50'
+                          ? 'bg-blue-500 text-blue-50'
                           : 'bg-red-600 text-red-50'
                       } select-none`}
                     >
@@ -166,7 +166,7 @@ export default function LawyerBillingPage() {
                         selectedInvoice.status === 'Paid'
                           ? 'bg-green-600 text-green-50'
                           : selectedInvoice.status === 'Unpaid'
-                          ? 'bg-yellow-500 text-yellow-50'
+                          ? 'bg-blue-500 text-blue-50'
                           : 'bg-red-600 text-red-50'
                       } select-none`}
                     >

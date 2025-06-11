@@ -6,7 +6,7 @@ import 'aos/dist/aos.css';
 import FilterPanel, { FilterOptions } from '@/app/components/core/lawyers_page/FilterPanel';
 import axios from 'axios';
 import { useRouter } from 'next/navigation';
-import { Lawyer } from '@/helpers/interfaces/lawyer';
+import { Lawyers } from '@/helpers/interfaces/lawyer';
 
 const defaultFilters: FilterOptions = {
   specialization: '',
@@ -20,8 +20,8 @@ const LawyersPage: React.FC = () => {
   const router = useRouter();
   const [filters, setFilters] = useState<FilterOptions>(defaultFilters);
   const [searchTerm, setSearchTerm] = useState('');
-  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
-  const [filteredLawyers, setFilteredLawyers] = useState<Lawyer[]>([]);
+  const [lawyers, setLawyers] = useState<Lawyers[]>([]);
+  const [filteredLawyers, setFilteredLawyers] = useState<Lawyers[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -74,34 +74,20 @@ const LawyersPage: React.FC = () => {
     setSearchTerm('');
   };
 
+
   if (loading) {
     return (
-      <div className="min-h-screen bg-gray-900 p-6 pt-20">
-        <h1 className="text-3xl font-bold mb-6 text-center text-white">Find Lawyers</h1>
-
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-          <div className="hidden md:block" />
-          {/* Loading Skeletons */}
-          <div className="md:col-span-3 space-y-6">
-            {[...Array(4)].map((_, idx) => (
-              <div
-                key={idx}
-                className="animate-pulse flex flex-col md:flex-row items-center md:items-start gap-6 text-white bg-gray-800/70 border border-gray-700 p-6 rounded-xl shadow-xl"
-              >
-                <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-gray-700 flex-shrink-0" />
-                <div className="flex-1 space-y-2">
-                  <div className="h-6 bg-gray-700 rounded w-3/4" />
-                  <div className="h-4 bg-gray-700 rounded w-1/2" />
-                  <div className="h-4 bg-gray-700 rounded w-1/3" />
-                  <div className="h-4 bg-gray-700 rounded w-2/3" />
-                  <div className="h-4 bg-gray-700 rounded w-1/2" />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+      <div
+        className="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50"
+        role="dialog"
+        aria-modal="true"
+      >
+        <svg className="animate-spin h-12 w-12 text-blue-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
+          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v8z" />
+        </svg>
       </div>
-    );
+    )
   }
 
   if (error || !lawyers) {
@@ -123,7 +109,7 @@ const LawyersPage: React.FC = () => {
           placeholder="Search by name..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-purple-500 transition"
+          className="w-full p-3 bg-gray-800 text-white border border-gray-700 rounded-lg placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
         />
       </div>
 

@@ -44,7 +44,7 @@ export default function LandingPageSections() {
               />
               <h3 className="font-bold text-xl text-white">John Doe</h3>
               <p className="text-sm text-gray-300">Criminal Law Specialist</p>
-              <div className="text-yellow-400 mt-2 mb-4">★★★★★</div>
+              <div className="text-blue-400 mt-2 mb-4">★★★★★</div>
               <Link
                 href="/book"
                 className="bg-blue-500 hover:bg-blue-600 transition px-4 py-2 rounded-lg font-semibold text-white inline-block"
