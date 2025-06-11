@@ -14,10 +14,10 @@ import {
   ResponsiveContainer,
   CartesianGrid,
 } from 'recharts';
-import { Lawyer } from '@/helpers/interfaces/lawyer';
+import { Lawyers } from '@/helpers/interfaces/lawyer';
 
 export default function LawyersPage() {
-  const [lawyers, setLawyers] = useState<Lawyer[]>([]);
+  const [lawyers, setLawyers] = useState<Lawyers[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedLawyerId, setSelectedLawyerId] = useState<string | null>(null);
