@@ -10,7 +10,7 @@ import toast from 'react-hot-toast';
 import { Users } from '@/helpers/interfaces/user';
 import { Consultations } from '@/helpers/interfaces/consultation';
 import ConsultationCharts from './insights';
-import { Lawyer } from '@/helpers/interfaces/lawyer';
+import { Lawyers } from '@/helpers/interfaces/lawyer';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -38,7 +38,7 @@ export default function DashboardPage() {
         setConsultations(allConsultations);
 
         // Find lawyer ID if user is lawyer
-        const lawyers: Lawyer[] = lawyersRes.data || [];
+        const lawyers: Lawyers[] = lawyersRes.data || [];
         const matchedLawyer = lawyers.find((l) => l.user._id === user._id);
         if (matchedLawyer) {
           setLawyerId(matchedLawyer._id);
