@@ -2,184 +2,170 @@
 
 import { useEffect, useRef, useState } from "react";
 import ChatBubble from "@/app/components/ui/chatBubble";
-import { SunIcon, MoonIcon } from "lucide-react";
 
-type Messages = {
+type Message = {
+  id: number;
   role: "user" | "assistant";
   content: string;
+  typing?: boolean;
 };
 
-const ADVOKEYAGENT = {
-  name: "Advokey AI",
-  image: "lawyer_vector.jpeg",
+type ChatSession = {
+  id: number;
+  title: string;
+  messages: Message[];
 };
 
 export default function AdvokeyChatPage() {
-  const [messages, setMessages] = useState<Messages[]>([]);
+  const [chatSessions, setChatSessions] = useState<ChatSession[]>([
+    { id: 1, title: "New Chat", messages: [] },
+  ]);
+  const [activeSessionId, setActiveSessionId] = useState(1);
   const [input, setInput] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [darkMode, setDarkMode] = useState(false);
-  const [isAvailable, setIsAvailable] = useState(true);
-  const chatContainerRef = useRef<HTMLDivElement | null>(null);
+  const [counter, setCounter] = useState(0);
+  const chatContainerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const checkAvailability = () => {
-      const now = new Date();
-      const hour = now.getHours();
-      const available = true;
-      setIsAvailable(available);
-    };
-
-    checkAvailability();
-    const interval = setInterval(checkAvailability, 60 * 1000);
-    return () => clearInterval(interval);
-  }, []);
+  const activeSession = chatSessions.find((s) => s.id === activeSessionId)!;
+  const messages = activeSession.messages;
 
   const handleSend = async () => {
-    if (!input.trim() || !isAvailable) return;
+    if (!input.trim()) return;
+    const userId = counter + 1;
+    setCounter(userId);
 
-    const userMessage: Messages = { role: "user", content: input };
-    const newMessages: Messages[] = [...messages, userMessage];
-
-    setMessages(newMessages);
+    const userMessage: Message = { id: userId, role: "user", content: input };
+    updateSessionMessages([...messages, userMessage]);
     setInput("");
-    setLoading(true);
+
+    const loadingId = userId + 1;
+    setCounter(loadingId);
+
+    updateSessionMessages((prev) => [...prev, { id: loadingId, role: "assistant", content: "", typing: true }]);
 
     try {
       const res = await fetch("/api/aiChat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ messages: newMessages }),
+        body: JSON.stringify({ messages: [...messages, userMessage] }),
       });
 
       const data = await res.json();
-      const assistantMessage: Messages = {
-        role: "assistant",
-        content: typeof data.message === "string" ? data.message : "Sorry, I couldn't understand.",
-      };
+      const assistantContent =
+        typeof data.message === "string" ? data.message : "Sorry, I couldn't understand.";
 
-      setMessages((prev) => [...prev, assistantMessage]);
+      updateSessionMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === loadingId ? { ...msg, content: assistantContent, typing: false } : msg
+        )
+      );
     } catch {
-      setMessages((prev) => [
-        ...prev,
-        { role: "assistant", content: "Error: failed to fetch AI response." },
-      ]);
-    } finally {
-      setLoading(false);
+      updateSessionMessages((prev) =>
+        prev.map((msg) =>
+          msg.id === loadingId
+            ? { ...msg, content: "Error: Failed to fetch AI response.", typing: false }
+            : msg
+        )
+      );
     }
+  };
+
+  const updateSessionMessages = (
+    newMessages:
+      | Message[]
+      | ((prev: Message[]) => Message[])
+  ) => {
+    setChatSessions((prevSessions) =>
+      prevSessions.map((session) =>
+        session.id === activeSessionId
+          ? {
+              ...session,
+              messages:
+                typeof newMessages === "function"
+                  ? newMessages(session.messages)
+                  : newMessages,
+            }
+          : session
+      )
+    );
+  };
+
+  const handleNewChat = () => {
+    const newId = chatSessions.length + 1;
+    setChatSessions([...chatSessions, { id: newId, title: `Chat ${newId}`, messages: [] }]);
+    setActiveSessionId(newId);
   };
 
   useEffect(() => {
     if (chatContainerRef.current) {
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight;
     }
-  }, [messages, loading]);
+  }, [messages]);
 
   return (
-    <div className={`${darkMode ? "dark" : ""}`}>
-      <div className="flex flex-col md:flex-row h-screen w-screen overflow-hidden p-4 bg-gray-100 dark:bg-gray-900 text-black dark:text-white transition-colors duration-300 pt-16">
-        
-        {/* Sidebar (Hidden on mobile) */}
-        <aside className="hidden md:flex w-64 flex-col bg-white/30 dark:bg-white/10 backdrop-blur-lg shadow-lg border-r border-gray-200 dark:border-gray-700">
-          <div className="flex flex-col items-center p-6 border-b dark:border-gray-700">
-            <img
-              src={ADVOKEYAGENT.image}
-              alt="Profile"
-              className="w-16 h-16 rounded-full mb-2"
-            />
-            <div className="text-lg font-semibold">{ADVOKEYAGENT.name}</div>
-          </div>
+    <div className="flex h-screen pt-16">
 
-          <div className="flex-grow overflow-auto p-4 space-y-2">
-            <div className="text-sm font-semibold text-gray-600 dark:text-gray-300 mb-2">
-              Chat History
-            </div>
-            {messages.length === 0 ? (
-              <div className="text-gray-400 text-sm">No chats yet.</div>
-            ) : (
-              messages
-                .filter((msg) => msg.role === "user")
-                .map((msg, idx) => (
-                  <div
-                    key={idx}
-                    className="text-sm p-2 bg-gray-100 dark:bg-gray-700 rounded hover:bg-gray-200 dark:hover:bg-gray-600 transition"
-                  >
-                    {msg.content.slice(0, 40)}...
-                  </div>
-                ))
-            )}
-          </div>
-        </aside>
+      {/* Sidebar */}
+      <div className="w-64 bg-gray-800 text-white border-r border-gray-700 flex flex-col">
+        <div className="p-4 border-b border-gray-700">
+          <h2 className="text-lg font-semibold">Chat History</h2>
+        </div>
 
-        {/* Main Chat Area */}
-        <main className="flex flex-col flex-grow bg-gray-100 dark:bg-gray-900">
-          {/* Header */}
-          <div className="flex items-center justify-between bg-white dark:bg-gray-800 shadow px-4 md:px-6 py-4 border-b dark:border-gray-700">
-            <h1 className="text-xl md:text-2xl font-bold text-blue-600 dark:text-blue-400">
-              Legal AI Chat
-            </h1>
+        <div className="flex-1 overflow-y-auto">
+          {chatSessions.map((session) => (
             <button
-              onClick={() => setDarkMode((prev) => !prev)}
-              className="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-200 hover:text-blue-600"
-            >
-              {darkMode ? <SunIcon size={18} /> : <MoonIcon size={18} />}
-              {darkMode ? "Light Mode" : "Dark Mode"}
-            </button>
-          </div>
-
-          {/* Availability Banner */}
-          {!isAvailable && (
-            <div className="text-center bg-blue-100 text-blue-800 p-2 text-sm font-medium">
-              Chat is only available between 9:00 AM and 6:00 PM.
-            </div>
-          )}
-
-          {/* Chat Messages */}
-          <div
-            ref={chatContainerRef}
-            className="flex flex-col flex-grow p-3 md:p-4 overflow-y-auto"
-          >
-            {messages.map((msg, i) =>
-              msg.content ? (
-                <ChatBubble
-                  key={i}
-                  message={msg.content}
-                  isUser={msg.role === "user"}
-                  darkMode={darkMode}
-                />
-              ) : null
-            )}
-
-            {loading && <ChatBubble message="Thinking..." isUser={false} />}
-          </div>
-
-          {/* Input Box */}
-          <div className="flex border-t bg-white dark:bg-gray-800 px-3 py-2 md:px-4 md:py-3 border-gray-200 dark:border-gray-700">
-            <input
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={
-                isAvailable
-                  ? "Ask a legal question..."
-                  : "Chat is available from 9:00 AM to 6:00 PM"
-              }
-              disabled={!isAvailable}
-              className="flex-grow px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-l-md bg-white dark:bg-gray-700 text-black dark:text-white disabled:opacity-50 text-sm"
-              onKeyDown={(e) => isAvailable && e.key === "Enter" && handleSend()}
-            />
-            <button
-              onClick={handleSend}
-              disabled={!isAvailable}
-              className={`px-4 md:px-6 py-2 rounded-r-md text-white text-sm ${
-                isAvailable
-                  ? "bg-blue-600 hover:bg-blue-700"
-                  : "bg-gray-400 cursor-not-allowed"
+              key={session.id}
+              onClick={() => setActiveSessionId(session.id)}
+              className={`block w-full text-left px-4 py-2 hover:bg-gray-700 ${
+                session.id === activeSessionId ? "bg-gray-700" : ""
               }`}
             >
-              Send
+              {session.title}
             </button>
-          </div>
-        </main>
+          ))}
+        </div>
+
+        <div className="p-4 border-t border-gray-700">
+          <button
+            onClick={handleNewChat}
+            className="w-full bg-blue-600 hover:bg-blue-700 px-4 py-2 rounded text-sm"
+          >
+            + New Chat
+          </button>
+        </div>
+      </div>
+
+      {/* Main Chat Window */}
+      <div className="flex-1 flex flex-col">
+        <div className="flex items-center justify-between bg-white dark:bg-gray-800 shadow px-4 py-3 border-b dark:border-gray-700">
+          <h1 className="text-xl font-bold text-blue-600 dark:text-blue-400">Legal AI Chat</h1>
+        </div>
+
+        <div ref={chatContainerRef} className="flex-1 overflow-y-auto p-3 bg-gray-100 dark:bg-gray-900">
+          {messages.map((msg) => (
+            <ChatBubble
+              key={msg.id}
+              message={msg.content}
+              isUser={msg.role === "user"}
+              thinking={msg.typing}
+            />
+          ))}
+        </div>
+
+        <div className="flex border-t bg-white dark:bg-gray-800 px-3 py-2">
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => e.key === "Enter" && handleSend()}
+            placeholder="Ask a legal question..."
+            className="flex-grow px-4 py-2 border rounded-l-md bg-white dark:bg-gray-700 text-sm"
+          />
+          <button
+            onClick={handleSend}
+            className="px-6 py-2 rounded-r-md bg-blue-600 hover:bg-blue-700 text-white text-sm"
+          >
+            Send
+          </button>
+        </div>
       </div>
     </div>
   );
