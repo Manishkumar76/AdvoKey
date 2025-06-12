@@ -7,8 +7,6 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 This project demonstrates how to build a modern web application using Next.js, MongoDB, and React. It includes the following features:
 
-## Project Features
-
 - **Users Authentication**: Signup and login functionality with password hashing.
 - **Form Validation**: Real-time validation for email, password, and username fields.
 - **Toast Notifications**: Success and error messages using `react-hot-toast`.
