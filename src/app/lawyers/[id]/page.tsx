@@ -10,6 +10,7 @@ import "aos/dist/aos.css";
 import { getDataFromToken } from "@/helpers/getDataFromToken";
 import toast, { Toaster } from "react-hot-toast";
 import { Reviews } from "@/helpers/interfaces/review";
+import Link from "next/link";
 
 const LawyerDetail = () => {
   const { id } = useParams<{ id: string }>();
@@ -84,6 +85,12 @@ const LawyerDetail = () => {
       });
     }
   }, [pageLoading]);
+
+  useEffect(() => {
+    console.log("👨‍⚖️ Lawyer fetched:", lawyer);
+    console.log("🆔 Lawyer ID:", lawyer?._id);
+  }, [lawyer]);
+  
 
   // Handle review submission
   const handleSubmitReview = async () => {
@@ -199,22 +206,16 @@ const LawyerDetail = () => {
             >
               Go to Dashboard
             </button>
-          ) : (
-            <button
-              onClick={() => {
-                if (!userId) {
-                  toast.error("You must be logged in to book a consultation.");
-                  return;
-                }
-                toast.success("Redirecting to booking page...");
-                  router.push(`/lawyers/consultation-booking/${id}`);
-                
-               
-              }}
-              className="mt-6 bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-400 transition"
-            >
-              Book Consultation
-            </button>
+          ) : 
+            lawyer?._id && (
+              <Link href={`/consultation-booking/${lawyer._id}`}>
+                <button className="mt-6 bg-yellow-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-yellow-400 transition">
+                  Book Consultation
+                </button>
+              </Link>
+            
+
+
           )}
         </div>
 
@@ -241,14 +242,14 @@ const LawyerDetail = () => {
             <h1 className="text-2xl font-semibold mb-4 flex justify-between items-center">
               {reviews.length > 0 && (
                 <div>
-                <span className="text-gray-500 text-sm">
-                  Average Rating:{" "}
+                  <span className="text-gray-500 text-sm">
+                    Average Rating:{" "}
                   </span><span className="text-yellow-300 text-sm">
-                  {(
-                    reviews.reduce((acc, review) => acc + review.rating, 0) /
-                    reviews.length
-                  ).toFixed(1)}
-                </span>
+                    {(
+                      reviews.reduce((acc, review) => acc + review.rating, 0) /
+                      reviews.length
+                    ).toFixed(1)}
+                  </span>
                 </div>
               )}
             </h1>
@@ -266,7 +267,7 @@ const LawyerDetail = () => {
                       <h3 className="font-semibold">{review.client_id.username}</h3>
                       <div className="flex">
                         {[1, 2, 3, 4, 5].map((star) => (
-                          <span key={star} className={`${star <= review.rating? "text-yellow-400":"text-white"} `}>
+                          <span key={star} className={`${star <= review.rating ? "text-yellow-400" : "text-white"} `}>
                             {star <= review.rating ? "★" : "☆"}
                           </span>
                         ))}

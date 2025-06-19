@@ -8,9 +8,7 @@ import { toast } from 'react-hot-toast';
 import { getDataFromToken } from '@/helpers/getDataFromToken';
 
 export default function ConsultationBookingPage() {
-    const params= useParams<{ id: string }>();
-    const { id } = params;
-
+    const { id } = useParams<{ id: string }>();
     const router = useRouter();
 
     const [consultDate, setConsultDate] = useState('');
@@ -30,15 +28,15 @@ export default function ConsultationBookingPage() {
     const [consultationId, setConsultationId] = useState<string | null>(null);
 
     useEffect(() => {
+        if (!id) return; // wait until id is available
+        console.log("Router param ID:", id);
         const fetchLawyer = async () => {
             setLoading(true);
+            
             try {
-               
                 const res = await axios.get(`/api/lawyers/${id}`);
-
-                if (res.status !== 200) throw new Error('Failed to fetch lawyer details');
                 if (res.data) {
-                    setLawyer(res.data);
+                    setLawyer(res?.data.data);
                 }
             } catch (err) {
                 toast.error('Failed to fetch lawyer details.');
@@ -46,8 +44,10 @@ export default function ConsultationBookingPage() {
                 setLoading(false);
             }
         };
+    
         fetchLawyer();
     }, [id]);
+    
 
     useEffect(() => {
         const fetchUserId = async () => {
@@ -71,7 +71,7 @@ export default function ConsultationBookingPage() {
             setIsBookingLoading(true);
             const response = await axios.post('/api/consultation', {
                 client_id: userId,
-                lawyer_id: id,
+                lawyer_id: lawyer?._id,
                 scheduledAt: consultDate,
                 time: consultTime,
                 durationMinutes,
