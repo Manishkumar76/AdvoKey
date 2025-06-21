@@ -105,8 +105,14 @@ export default function ConsultationBookingPage() {
             await fetch('/api/payment', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ consultationId, amount: totalAmount }),
+                body: JSON.stringify({
+                    consultationId,
+                    amount: totalAmount,
+                    client_id: userId,
+                    lawyer_id: lawyer?._id,
+                }),
             });
+            
             await fetch('/api/chat-session/start', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

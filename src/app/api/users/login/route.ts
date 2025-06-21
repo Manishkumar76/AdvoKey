@@ -33,7 +33,7 @@ try{
     };
     
       const token = jwt.sign(tokenData, process.env.TOKEN_SECRET!, {
-        expiresIn: '1week' // Token expiration time,
+        expiresIn:  '5d'  // Token expiration 5 days time,
       });
     
       const response = NextResponse.json({

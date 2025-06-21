@@ -25,16 +25,14 @@ export function middleware(request: NextRequest) {
 
 export const config = {
     matcher: [
-        '/',
-        '/login',
-        '/signup',
-        '/dashboard',
-        '/api/socket/io',
-        '/verify-email',
-        '/dashboard/:path*',
-        '/lawyers/:path*',
-        '/consultation/:path*',
-        '/AiChat/:path*',
-        '/AiChat'
+        '/src/app/login',
+        '/src/app/signup',
+        '/src/app/dashboard',
+        '/src/app/verify-email',
+        '/src/app/dashboard/:path*',
+        '/src/app/lawyers/:path*',
+        '/src/app/consultation/:path*',
+        '/src/app/AiChat/:path*',
+        '/src/app/AiChat'
         ],
 };

@@ -56,7 +56,9 @@ const LawyerDetail = () => {
       const id = (await getDataFromToken()).id;
       setUserId(id);
     } catch (err: any) {
-      setError("Failed to fetch user ID");
+      toast.error("Failed to fetch user ID. Please log in again.");
+      router.replace("/login");
+
       console.error(err);
     }
   };
