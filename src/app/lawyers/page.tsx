@@ -114,7 +114,7 @@ const LawyersPage: React.FC = () => {
       </div>
 
       {/* Filter Panel and Lawyer Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6 fixed">
         <FilterPanel
           filters={filters}
           setFilters={setFilters}
